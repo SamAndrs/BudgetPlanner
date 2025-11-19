@@ -1,4 +1,4 @@
-﻿using BudgetPlanner.Data;
+﻿using BudgetPlanner.DataAccessLayer;
 using BudgetPlanner.DomainLayer.Services;
 using BudgetPlanner.PresentationLayer.ViewModels;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +23,7 @@ namespace BudgetPlanner
 
             // 1. Build configuration
             var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
+                .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
             Configuration = builder.Build();
