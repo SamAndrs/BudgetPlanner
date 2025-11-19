@@ -1,12 +1,7 @@
 ﻿using BudgetPlanner.DomainLayer.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace BudgetPlanner.Data
+namespace BudgetPlanner.DataAccessLayer
 {
     public class AppDbContext : DbContext
     {
@@ -17,12 +12,7 @@ namespace BudgetPlanner.Data
         public AppDbContext(DbContextOptions options) : base(options)
         {
         }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            base.OnConfiguring(optionsBuilder);
-        }
-
+               
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -34,25 +24,44 @@ namespace BudgetPlanner.Data
                 .HasForeignKey(bp => bp.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // Set precision/ scale for entities
+            modelBuilder.Entity<BudgetPost>()
+                .Property(p => p.Amount)
+                .HasPrecision(18, 2); // total 18 digits, 2 decimals
+
+            modelBuilder.Entity<Prognosis>()
+                .Property(p => p.TotalIncome)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<Prognosis>()
+                .Property(p => p.TotalExpenses)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<Prognosis>()
+                .Property(p => p.TotalSum)
+                .HasPrecision(18, 2);
+
+
+
             // Seed database
             modelBuilder.Entity<Category>().HasData(
                 // Expenses
-                new Category { Name = "Food" },
-                new Category { Name = "Transport" },
-                new Category { Name = "Clothing" },
-                new Category { Name = "Taxes" },
-                new Category { Name = "House" },
-                new Category { Name = "Hobbies" },
-                new Category { Name = "Kids" },
-                new Category { Name = "TV" },
-                new Category { Name = "SaaS" },
-                new Category {  Name = "Subscriptions" },
+                new Category { Id = 1, Name = "Food" },
+                new Category { Id = 2, Name = "Transport" },
+                new Category { Id = 3, Name = "Clothing" },
+                new Category { Id = 4, Name = "Taxes" },
+                new Category { Id = 5, Name = "House" },
+                new Category { Id = 6, Name = "Hobbies" },
+                new Category { Id = 7, Name = "Kids" },
+                new Category { Id = 8, Name = "TV" },
+                new Category { Id = 9, Name = "SaaS" },
+                new Category { Id = 10, Name = "Subscriptions" },
                 
                 // Income
-                new Category { Name = "Salary" },
-                new Category { Name = "Allowance" },
-                new Category { Name = "ExtraIncome" },
-                new Category { Name = "Undefined" }
+                new Category { Id = 11, Name = "Salary" },
+                new Category { Id = 12, Name = "Allowance" },
+                new Category { Id = 13, Name = "ExtraIncome" },
+                new Category { Id = 14, Name = "Undefined" }
                 );
         }
     }
