@@ -12,6 +12,7 @@ namespace BudgetPlanner.Data
     {
         public DbSet<BudgetPost> BudgetPosts { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Prognosis> Prognoses { get; set; }
 
         public AppDbContext(DbContextOptions options) : base(options)
         {
@@ -35,18 +36,22 @@ namespace BudgetPlanner.Data
 
             // Seed database
             modelBuilder.Entity<Category>().HasData(
+                // Expenses
                 new Category { Name = "Food" },
                 new Category { Name = "Transport" },
                 new Category { Name = "Clothing" },
                 new Category { Name = "Taxes" },
-                new Category { Name = "Salary" },
                 new Category { Name = "House" },
                 new Category { Name = "Hobbies" },
                 new Category { Name = "Kids" },
                 new Category { Name = "TV" },
                 new Category { Name = "SaaS" },
                 new Category {  Name = "Subscriptions" },
+                
+                // Income
+                new Category { Name = "Salary" },
                 new Category { Name = "Allowance" },
+                new Category { Name = "ExtraIncome" },
                 new Category { Name = "Undefined" }
                 );
         }

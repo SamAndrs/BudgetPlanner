@@ -14,8 +14,8 @@ namespace BudgetPlanner
     /// </summary>
     public partial class App : Application
     {
-        public static IServiceProvider ServiceProvider { get; private set; }
-        public static IConfiguration Configuration { get; private set; }
+        public static IServiceProvider? ServiceProvider { get; private set; }
+        public static IConfiguration? Configuration { get; private set; }
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -37,17 +37,18 @@ namespace BudgetPlanner
 
             services.AddSingleton<BudgetPostService>();
             services.AddSingleton<CategoryService>();
+            services.AddSingleton<PrognosisService>();
             services.AddSingleton<ViewModelBase>();
 
             ServiceProvider = services.BuildServiceProvider();
 
             // 3. Start MainWindow
-            var mainWindow = new MainWindow()
-            {
-                DataContext = ServiceProvider.GetService<ViewModelBase>()
-            };
+            //var mainWindow = new MainWindow()
+            //{
+            //    DataContext = ServiceProvider.GetService<ViewModelBase>()
+            //};
 
-            mainWindow.Show();
+            //mainWindow.Show();
         }
     }
 
