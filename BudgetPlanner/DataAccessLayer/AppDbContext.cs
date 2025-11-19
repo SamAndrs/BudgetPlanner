@@ -35,16 +35,19 @@ namespace BudgetPlanner.Data
 
             // Seed database
             modelBuilder.Entity<Category>().HasData(
-                new Category { Id = 1,Name = "Food" },
-                new Category { Id = 2, Name = "Transport" },
-                new Category { Id = 3, Name = "Clothing" },
-                new Category { Id = 4, Name = "Taxes" },
-                new Category { Id = 5, Name = "House" },
-                new Category { Id = 6, Name = "Hobbies" },
-                new Category { Id = 7, Name = "Kids" },
-                new Category { Id = 8, Name = "TV" },
-                new Category { Id = 9, Name = "SaaS" },
-                new Category { Id = 10, Name = "Subscriptions" }
+                new Category { Name = "Food" },
+                new Category { Name = "Transport" },
+                new Category { Name = "Clothing" },
+                new Category { Name = "Taxes" },
+                new Category { Name = "Salary" },
+                new Category { Name = "House" },
+                new Category { Name = "Hobbies" },
+                new Category { Name = "Kids" },
+                new Category { Name = "TV" },
+                new Category { Name = "SaaS" },
+                new Category {  Name = "Subscriptions" },
+                new Category { Name = "Allowance" },
+                new Category { Name = "Undefined" }
                 );
         }
     }
