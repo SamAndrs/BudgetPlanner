@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.IO;
 using System.Windows;
+using Wpf.Ui.Appearance;
 
 namespace BudgetPlanner
 {
@@ -49,6 +50,8 @@ namespace BudgetPlanner
             //};
 
             //mainWindow.Show();
+
+            ApplicationThemeManager.Apply(ApplicationTheme.Dark); // or Light
         }
     }
 

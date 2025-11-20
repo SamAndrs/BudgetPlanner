@@ -13,7 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="PresentationLayer\Views\" />
+    <Folder Include="DomainLayer\Calculators\" />
+    <Folder Include="PresentationLayer\Controls\" />
   </ItemGroup>
 
   <ItemGroup>
