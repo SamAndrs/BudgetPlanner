@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="BudgetPlanner.PresentationLayer.Views.BudgetPostsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BudgetPlanner.PresentationLayer.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+
+        <!--
+        Syfte:
+Visa alla budgetposter i en filtrerbar, sökbar och kategoriserad lista.
+
+⭐ Innehåll:
+
+Lista i ListView, DataGrid eller WPF UI DataGrid
+
+Filter:
+
+Datumintervall
+
+Endast inkomster / endast utgifter
+
+Kategori
+
+Sökfält
+
+Knapp: ”Ny budgetpost”
+
+Edit/Delete-knappar på varje rad
+
+🧩 Rekommenderad layout:
+
+WPF UI DataGrid eller ItemsRepeater + Cards för modernt utseende
+        
+        -->
+    </Grid>
+</UserControl>

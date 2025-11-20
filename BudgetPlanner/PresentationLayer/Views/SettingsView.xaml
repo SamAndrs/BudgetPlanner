@@ -1,0 +1,37 @@
+﻿<Page x:Class="BudgetPlanner.PresentationLayer.Views.SettingsView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:BudgetPlanner.PresentationLayer.Views"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="SettingsView">
+
+    <Grid>
+        <!--
+        Syfte:
+Hantera användarens grundvärden som påverkar prognosen.
+
+⭐ Fält:
+
+Årsinkomst
+
+Årsarbetstid
+
+Timpenning (kan beräknas)
+
+Val av tema (WPF UI stöder Light/Dark)
+
+Databasväg (frivilligt)
+
+WPF UI-komponenter:
+
+ui:Card
+
+ui:NumberBox
+
+ui:ToggleSwitch
+        -->
+    </Grid>
+</Page>

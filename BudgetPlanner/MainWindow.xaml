@@ -5,10 +5,36 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BudgetPlanner"
         xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        
+        xmlns:test="clr-namespace:BudgetPlanner.PresentationLayer.Views"
+        xmlns:views="clr-namespace:BudgetPlanner.PresentationLayer.Views"
+        
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="600" Width="800">
     <Grid>
+        <ui:NavigationView
+            x:Name="RootNavigation"
+            PaneDisplayMode="Left">
+            
+            <ui:NavigationView.MenuItems>
+                <ui:NavigationViewItem Content="Översikt" Icon="Home" TargetPageTag="dashboard"/>
+                <ui:NavigationViewItem Content="Budgetposter" Icon="List" TargetPageTag="budgetposts"/>
+                <ui:NavigationViewItem Content="Kategorier" Icon="Tag" TargetPageTag="categories"/>
+                <ui:NavigationViewItem Content="Prognos" Icon="Chart" TargetPageTag="prognosis"/>
+                <ui:NavigationViewItem Content="Inställningar" Icon="Settings" TargetPageTag="settings"/>
+            </ui:NavigationView.MenuItems>
+
+            <ui:NavigationView.ContentOverlay>
+                <views:DashboardView />
+                <views:BudgetPostsView />
+                <views:CategoriesView />
+                <views:PrognosisView />
+                <views:SettingsView />
+            </ui:NavigationView.ContentOverlay>
+        </ui:NavigationView>
+        
         <ui:SymbolIcon Symbol="Fluent24" />
+        <test:BudgetPostTestView/>
 
     </Grid>
 </Window>

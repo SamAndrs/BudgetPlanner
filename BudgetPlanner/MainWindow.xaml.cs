@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using Wpf.Ui.Appearance;
 
 namespace BudgetPlanner
 {
@@ -9,6 +10,9 @@ namespace BudgetPlanner
     {
         public MainWindow()
         {
+            // Watch for system theme changes (WPF UI)
+            SystemThemeWatcher.Watch(this);
+
             InitializeComponent();
         }
     }
