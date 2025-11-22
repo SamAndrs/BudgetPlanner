@@ -7,27 +7,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <!-- 
-        Syfte:
-Administrera kategorier användaren kan välja.
-
-⭐ Funktionalitet:
-
-Visa lista över kategorier
-
-Lägg till kategori
-
-Redigera namn
-
-Ta bort kategori (om inte använd)
-
-MVVM-design:
-
-CategoryService → GetAll, Add, Rename, Delete
-
-CategoryViewModel → Commands för Add/Delete
-        
-        -->
+        <TextBox>CategoriesView
+        </TextBox>
+       
 
     </Grid>
 </UserControl>

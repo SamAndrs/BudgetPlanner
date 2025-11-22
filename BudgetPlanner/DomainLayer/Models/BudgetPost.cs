@@ -11,10 +11,12 @@ namespace BudgetPlanner.DomainLayer.Models
         public int CategoryId { get; set; }
         public Category Category { get; set; }
 
+        public string Description { get; set; } = string.Empty;
+
         public Recurring Reccuring { get; set; } = Recurring.None;
 
         public DateTime Date { get; set; } = DateTime.UtcNow;
 
-        public TransactionType TransactionType { get; set; } = TransactionType.Expense;
+        public BudgetPostType PostType { get; set; }
     }
 }

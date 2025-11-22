@@ -7,27 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <!-- 
-           Formulär för att lägga till eller redigera en post.
-
-⭐ Fält:
-
-Amount
-
-Category (ComboBox)
-
-TransactionType (Income/Expense)
-
-Recurring (None, Monthly, Yearly, etc.)
-
-Date (DatePicker)
-
-🧩 Bäst UI?
-
-Ett ui:Dialog (flyout) är mycket snyggt
-eller
-
-En fullständig sida om du vill använda navigation 
-        -->
+        <TextBox>AddEditBudgetPostVew</TextBox>
+        
     </Grid>
 </UserControl>
