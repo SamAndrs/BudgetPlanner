@@ -6,10 +6,19 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                
+                <!-- Global styles -->
                 <ResourceDictionary Source="PresentationLayer/Resources/Colors.xaml" />
                 <ResourceDictionary Source="PresentationLayer/Resources/Styles.xaml" />
+
+                <!-- Global Converters -->
+                <ResourceDictionary Source="PresentationLayer/Resources/Converters.xaml" />
+
+                <!-- Global DataTemplates -->
                 <ResourceDictionary Source="PresentationLayer/Resources/BudgetPostTemplates.xaml" />
                 <ResourceDictionary Source="PresentationLayer/Resources/ViewToVM_Mapping.xaml" />
+                
+               
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

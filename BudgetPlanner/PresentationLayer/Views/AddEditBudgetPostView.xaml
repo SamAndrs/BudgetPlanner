@@ -6,74 +6,97 @@
              xmlns:local="clr-namespace:BudgetPlanner.PresentationLayer.Views"
              >
 
-    <Canvas Width="150" Height="500" Background="{StaticResource TextDark}">
-        <Grid Margin="20" Background="{StaticResource TextDark}">
+    <Border Padding="20"
+            Background="{StaticResource BackgroundDark}"
+            CornerRadius="8">
+
+        <Grid Width="400" VerticalAlignment="Center">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
+            
+            <!-- Rubrik -->
+            <TextBlock Text="{Binding DialogTitle}"
+                       FontSize="20"
+                       FontWeight="Bold"
+                       Foreground="{StaticResource TextLight}"
+                       Margin="0,0,0,20"
+                       Grid.Row="0"/>
+            
+            <!-- FORM FIELDS -->
+            <StackPanel Grid.Row="1" Margin="0,0,0,10">
+                
+                <!-- Amount -->
+                <TextBlock Text="Belopp" Style="{StaticResource DialogTextStyle}"/>
+                <TextBox Text="{Binding Amount}" Margin="0,5,0,15"/>
+                
+                <!-- Category -->
+                <TextBlock Text="Kategori" Style="{StaticResource DialogTextStyle}"/>
+                <ComboBox ItemsSource="{Binding Categories}"
+                          DisplayMemberPath="Name"
+                          SelectedItem="{Binding Category}"
+                          Margin="0,5,0,15"/>
+                
+                <!-- Post type -->
+                <TextBlock Text="Typ" Style="{StaticResource DialogTextStyle}"/>
+                <ComboBox ItemsSource="{Binding BudgetPostTypes}"
+                          SelectedItem="{Binding PostType}"
+                          Margin="0,5,0,15">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource EnumDescription}}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                
+                <!-- Recurring -->
+                <TextBlock Text="Återkommande" Style="{StaticResource DialogTextStyle}"/>
+                <ComboBox ItemsSource="{Binding RecurringOptions}"
+                          SelectedItem="{Binding Recurring}"
+                          Margin="0,5,0,15">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource EnumDescription}}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                
+                <!-- Date -->
+                <TextBlock Text="Datum" Style="{StaticResource DialogTextStyle}"/>
+                <DatePicker SelectedDate="{Binding Date}"
+                            Margin="0,5,0,15"/>
 
+                <!-- Description -->
+                <TextBlock Text="Beskrivning" Style="{StaticResource DialogTextStyle}"/>
+                <TextBox Text="{Binding Description}"
+                         Height="80"
+                         Margin="0,5,0,10"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"/>
 
-
-            <!-- Amount -->
-            <TextBlock Text="Belopp" Style="{StaticResource LabelTextStyle}"/>
-            <TextBox Grid.Row="1" Text="{Binding Amount}" Margin="0,5,0,15"/>
-
-            <!-- Category -->
-            <TextBlock Grid.Row="2" Text="Kategori" Style="{StaticResource LabelTextStyle}"/>
-            <ComboBox Grid.Row="3"
-              ItemsSource="{Binding Categories}"
-              DisplayMemberPath="Name"
-              SelectedItem="{Binding Category}"
-              Margin="0,5,0,15"/>
-
-            <!-- PostType -->
-            <TextBlock Grid.Row="4" Text="Typ" Style="{StaticResource LabelTextStyle}"/>
-            <ComboBox Grid.Row="5"
-              ItemsSource="{Binding BudgetPostTypes}"
-              SelectedItem="{Binding PostType}"
-              Margin="0,5,0,15"/>
-
-            <!-- Reccurring -->
-            <TextBlock Grid.Row="6" Text="Återkommande" Style="{StaticResource LabelTextStyle}"/>
-            <ComboBox Grid.Row="7"
-              ItemsSource="{Binding ReccuringOptions}"
-              SelectedItem="{Binding Reccuring}"
-              Margin="0,5,0,15"/>
-
-            <!-- Date -->
-            <TextBlock Grid.Row="8" Text="Datum" Style="{StaticResource LabelTextStyle}"/>
-            <DatePicker Grid.Row="9"
-                SelectedDate="{Binding Date}"
-                Margin="0,5,0,15"/>
-
-            <!-- Description -->
-            <TextBlock Grid.Row="10" Text="Beskrivning" Style="{StaticResource LabelTextStyle}"/>
-            <TextBox Grid.Row="11"
-             Text="{Binding Description}"
-             Margin="0,5,0,20"
-             Height="80"
-             TextWrapping="wrap"
-             AcceptsReturn="True"/>
-
-            <!-- Buttons -->
-            <StackPanel Grid.Row="12" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
-                <Button Content="Avbryt" Command="{Binding CancelCommand}" Margin="0,0,10,0"/>
-                <Button Content="Spara" Command="{Binding SaveCommand}" Background="{StaticResource PrimaryBlue}" Foreground="White"/>
             </StackPanel>
 
+            <!-- Buttons -->
+            <StackPanel Grid.Row="3"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        Margin="0,20,0,0">
+                
+                <Button Content="Avbryt"
+                        Width="80"
+                        Command="{Binding CancelCommand}"/>
+                
+                <Button Content="Spara"
+                       Width="80"
+                        Command="{Binding SaveCommand}"
+                        Background="{StaticResource PrimaryBlue}"
+                        Foreground="White"
+                        Margin="10,0,0,0"/>
+            </StackPanel>
         </Grid>
-    </Canvas>
+    </Border>
     
 </UserControl>

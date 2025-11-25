@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace BudgetPlanner.PresentationLayer.Resources
+namespace BudgetPlanner.PresentationLayer.Resources.Converters
 {
     public class PostTypeToBrushConverter : IValueConverter
     {

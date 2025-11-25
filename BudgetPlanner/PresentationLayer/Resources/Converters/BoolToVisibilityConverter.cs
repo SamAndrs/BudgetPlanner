@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Data;
 
-namespace BudgetPlanner.PresentationLayer.Resources
+namespace BudgetPlanner.PresentationLayer.Resources.Converters
 {
     public class BoolToVisibilityConverter : IValueConverter
     {

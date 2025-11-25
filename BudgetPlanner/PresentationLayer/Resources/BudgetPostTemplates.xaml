@@ -4,12 +4,7 @@
                     xmlns:local="clr-namespace:BudgetPlanner.PresentationLayer.Resources"
                     xmlns:models="clr-namespace:BudgetPlanner.DomainLayer.Models"
                     >
-    <!-- Converters -->
-    <local:PostTypeToBrushConverter x:Key="PostTypeToBrushConverter" />
-    <local:PostTypeAmountConverter x:Key="PostTypeAmountConverter" />
-    <local:BoolToVisibilityConverter x:Key="BoolToVisibility" />
-    
-    
+
     <!-- BudgetPost Listview Template -->
     <DataTemplate x:Key="BudgetPostTemplate" DataType="{x:Type models:BudgetPost}">
         <Grid Margin="4">

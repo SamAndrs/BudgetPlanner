@@ -7,6 +7,7 @@
     <Color x:Key="PrimaryBlueDarkColor">#364FC7</Color>
 
     <Color x:Key="BackgroundLightColor">#F8F9FA</Color>
+    <Color x:Key="BackgroundDarkColor">#2C3E50</Color>
     <Color x:Key="CardBackgroundColor">#FFFFFF</Color>
     <Color x:Key="BorderLightColor">#E9ECEF</Color>
 
@@ -24,6 +25,7 @@
     <SolidColorBrush x:Key="PrimaryBlueDark" Color="{StaticResource PrimaryBlueDarkColor}" />
 
     <SolidColorBrush x:Key="BackgroundLight" Color="{StaticResource BackgroundLightColor}" />
+    <SolidColorBrush x:Key="BackgroundDark" Color="{StaticResource BackgroundDarkColor}" />
     <SolidColorBrush x:Key="CardBackground" Color="{StaticResource CardBackgroundColor}" />
     <SolidColorBrush x:Key="BorderLight" Color="{StaticResource BorderLightColor}" />
 

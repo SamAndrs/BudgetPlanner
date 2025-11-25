@@ -3,7 +3,7 @@ using BudgetPlanner.DomainLayer.Models;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace BudgetPlanner.PresentationLayer.Resources
+namespace BudgetPlanner.PresentationLayer.Resources.Converters
 {
     public class PostTypeAmountConverter : IValueConverter
     {

@@ -1,17 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace BudgetPlanner.DomainLayer.Enums
 {
     public enum Recurring
     {
+        [Description("Inget")]
         None,
+
+        [Description("Dagligen")]
         Daily,
+
+        [Description("Veckovis")]
         Weekly,
+
+        [Description("Månadsvis")]
         Monthly,
+
+        [Description("Årligen")]
         Yearly,
     }
 }
