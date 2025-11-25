@@ -3,60 +3,194 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:BudgetPlanner.PresentationLayer.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="800">
-    <Grid Margin="20">
-        <StackPanel>
+             xmlns:local="clr-namespace:BudgetPlanner.PresentationLayer.Resources"
+             mc:Ignorable="d">
 
-            <TextBlock Text="{Binding Title}"
-                       FontSize="26"
-                       FontWeight="Bold"
-                       Margin="0 0 0 20"/>
+    <UserControl.Resources>
+        <!-- Converter för Income/ Expense color -->
+        <local:PostTypeToBrushConverter x:Key="PostTypeToBrushConverter" />
+    </UserControl.Resources>
 
-            <TextBlock Text="Senaste poster:"
-                       FontSize="18"
-                       FontWeight="SemiBold"
-                       Margin="0 0 0 10" />
+    <Border Background="{StaticResource BackgroundLight}" Padding="24">
+        <Grid>
 
-            <ItemsControl ItemsSource="{Binding RecentItems}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border BorderBrush="#DDD" BorderThickness="0 0 0 1" Padding="5">
-                            <TextBlock Text="{Binding}" FontSize="16" />
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
+            <!-- HEADER -->
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Text="Dashboard"
+                        Style="{StaticResource HeaderTextStyle}"/>
 
+                <TextBlock Text="{Binding NotifyOnSourceUpdated, StringFormat='({0:MMMM yyyy})'}" 
+                        VerticalAlignment="Center"
+                        Margin="12,0,0,0"
+                        Foreground="{StaticResource TextMedium}"/>
+            </StackPanel>
 
-        </StackPanel>
-        
-        <!-- 
-Innehåll:
+            <!-- SUMMARY CARDS -->
+            <Grid Grid.Row="1" Margin="0,24,0,24">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-Kort med: ”Totala inkomster denna månad”
+                <!-- Income Card -->
+                <Border Grid.Column="0" Style="{StaticResource CardStyle}" Margin="0,0,12,0">
+                    <StackPanel>
+                        <TextBlock Text="Inkomster"
+                                Foreground="{StaticResource TextMedium}"
+                                FontSize="14"/>
+                        <TextBlock Text="{Binding TotalIncomeThisMonth, StringFormat='{}{0:C0}'}"
+                                Foreground="{StaticResource IncomeGreen}"
+                                FontSize="26" FontWeight="Bold"/>
+                    </StackPanel>
+                </Border>
 
-Kort med: ”Totala utgifter denna månad”
+                <!-- Expense Card -->
+                <Border Grid.Column="1" Style="{StaticResource CardStyle}" Margin="12,0,12,0">
+                    <StackPanel>
+                        <TextBlock Text="Ugifter"
+                                Foreground="{StaticResource TextMedium}"
+                                FontSize="14"
+                                />
+                        <TextBlock Text="{Binding TotalExpensesThisMonth, StringFormat='{}{0:C0}'}"
+                                Foreground="{StaticResource ExpenseRed}"
+                                FontSize="26" FontWeight="Bold"
+                                />
+                    </StackPanel>
+                </Border>
 
-Kort med: ”Saldo”
+                <!-- Net balance Card -->
+                <Border Grid.Column="2" Style="{StaticResource CardStyle}" Margin="12,0">
+                    <StackPanel>
+                        <TextBlock Text="Balans (netto)"
+                                Foreground="{StaticResource TextMedium}"
+                                FontSize="14"
+                                />
+                        <TextBlock Text="{Binding NetBalanceThisMonth, StringFormat='{}{0:C0}'}"
+                                Foreground="{StaticResource TextDark}"
+                                FontSize="26" FontWeight="Bold"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
 
-Mini-prognoswidget: ”Nästa månad: +/− XX kr”
+            <!-- MAIN CONTENT -->
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-Pie chart: Utgifter per kategori
+                <!-- Left Side: Recent transactions -->
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Senaste transaktioner"
+                            Style="{StaticResource HeaderTextStyle}"
+                            FontSize="18" Margin="0,0,0,12"
+                            />
 
-Snabblänkar: ”Lägg till utgift”, ”Lägg till inkomst”
+                    <Border Style="{StaticResource CardStyle}">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding RecentPosts}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Margin="0,4"
+                                             Background="{StaticResource CardBackground}"
+                                             Padding="8"
+                                             CornerRadius="8"
+                                             BorderBrush="{StaticResource BorderLight}"
+                                             BorderThickness="1">
 
-🧩 WPF UI-komponenter:
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
 
-ui:Card
+                                                <!-- Small color dot -->
+                                                <Ellipse Width="12" Height="12"
+                                                      Fill="{Binding PostType, Converter={StaticResource PostTypeToBrushConverter}}"
+                                                      VerticalAlignment="Center"
+                                                      />
 
-ui:ProgressRing
+                                                <!-- Description + Date -->
+                                                <StackPanel Margin="12,0" Grid.Column="1">
+                                                    <TextBlock Text="{Binding Description}"
+                                                            Foreground="{StaticResource TextDark}"
+                                                            FontSize="14"
+                                                            />
+                                                    <TextBlock Text="{Binding Date, StringFormat='{}{0:yyyy-MM-dd}'}"
+                                                            Foreground="{StaticResource TextLight}"
+                                                            FontSize="12"
+                                                            />
+                                                </StackPanel>
 
-ui:SymbolIcon
+                                                <!-- Amount -->
+                                                <TextBlock Grid.Column="2"
+                                                        Text="{Binding Amount, StringFormat='{}{0:C0}'}"
+                                                        Foreground="{Binding PostType, Converter={StaticResource PostTypeToBrushConverter}}"
+                                                        VerticalAlignment="Center"
+                                                        FontWeight="Bold"                                                          
+                                                        />
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Border>
+                </StackPanel>
 
-NavigationViewItem för routing
--->
-    </Grid>
+                <!-- RIGHT SIDE: CATEGORY SUMMARY -->
+                <StackPanel Grid.Column="1" Margin="24,0,0,0">
+                    <TextBlock Text="Kategori"
+                            Style="{StaticResource HeaderTextStyle}"
+                            FontSize="18" Margin="0,0,0,12"                               
+                            />
+
+                    <Border Style="{StaticResource CardStyle}">
+                        <ItemsControl ItemsSource="{Binding CategorySummaries}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="0,4">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="•"
+                                                    Foreground="{StaticResource PrimaryBlue}"
+                                                    FontSize="22"
+                                                    Margin="0,-6,8,0"
+                                                    
+                                                    />
+                                            <TextBlock Text="{Binding CategoryName}"
+                                                    Foreground="{StaticResource TextDark}"
+                                                    FontSize="14"
+                                                    />
+                                        </StackPanel>
+
+                                        <TextBlock Grid.Column="1"
+                                                Text="{Binding Total, StringFormat='{}{0:C0}'}"
+                                                Foreground="{StaticResource TextDark}"
+                                                FontWeight="Bold"                                                   
+                                                />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+
+                        </ItemsControl>
+                    </Border>
+                </StackPanel>
+            </Grid>
+
+        </Grid>
+    </Border>
+
 </UserControl>

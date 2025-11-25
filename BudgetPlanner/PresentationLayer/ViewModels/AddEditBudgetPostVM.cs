@@ -1,36 +1,82 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BudgetPlanner.DomainLayer.Enums;
+using BudgetPlanner.DomainLayer.Models;
+using BudgetPlanner.PresentationLayer.Commands;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace BudgetPlanner.PresentationLayer.ViewModels
 {
-    internal class AddEditBudgetPostVM
+    public class AddEditBudgetPostVM : ViewModelBase
     {
+        private BudgetPost _model;
+
+        // Lists for ComboBoxes
+        public ObservableCollection<Category> Categories { get; }
+        public Array BudgetPostTypes => Enum.GetValues(typeof(BudgetPostType));
+        public Array ReccurringOptions => Enum.GetValues(typeof(Recurring));
+
+        // Properties
+        public double Amount
+        {
+            get { return _model.Amount; }
+            set { _model.Amount = value; RaisePropertyChanged(); }
+        }
+
+        public Category Category
+        {
+            get { return _model.Category; }
+            set { _model.Category = value; RaisePropertyChanged(); }
+        }
+
+        public BudgetPostType PostType
+        {
+            get { return _model.PostType; }
+            set { _model.PostType = value; RaisePropertyChanged(); }
+        }
+
+        public Recurring Recurring
+        {
+            get { return _model.Recurring; }
+            set { _model.Recurring = value; RaisePropertyChanged(); }
+        }
+
+        public DateTime Date
+        {
+            get { return _model.Date; }
+            set { _model.Date = value; RaisePropertyChanged(); }
+        }
+
+        public string Description 
+        { 
+            get { return _model.Description;  } 
+            set { _model.Description = value; RaisePropertyChanged(); }
+        }
+
+        // Commands
+        public ICommand SaveCommand { get; }
+        public ICommand CancelCommand { get; }
+
+        // Event to close the dialog or navigate back
+        public event Action<bool, BudgetPost>? CloseRequested;
+
+
+        public AddEditBudgetPostVM(BudgetPost model, ObservableCollection<Category> categories)
+        {
+            _model = model;
+            Categories = categories;
+
+            SaveCommand = new DelegateCommand(_ => Save());
+            CancelCommand = new DelegateCommand(_ => Cancel());
+        }
+
+        private void Cancel()
+        {
+            CloseRequested?.Invoke(false, _model);
+        }
+
+        private void Save()
+        {
+            CloseRequested?.Invoke(true, _model);
+        }
     }
 }
-
-/*
-Formulär för att lägga till eller redigera en post.
-
-⭐ Fält:
-
-Amount
-
-Category (ComboBox)
-
-TransactionType (Income/Expense)
-
-Recurring (None, Monthly, Yearly, etc.)
-
-Date (DatePicker)
-
-🧩 Bäst UI?
-
-Ett ui:Dialog (flyout) är mycket snyggt
-eller
-
-En fullständig sida om du vill använda navigation 
-
- */

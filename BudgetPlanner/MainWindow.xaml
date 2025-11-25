@@ -3,14 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:BudgetPlanner"
-        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-        
+        xmlns:local="clr-namespace:BudgetPlanner"     
 
         xmlns:views="clr-namespace:BudgetPlanner.PresentationLayer.Views"
         
         mc:Ignorable="d"
-        Title="Budget Planner" Height="600" Width="800">
+        Title="Budgetplaneraren" Height="600" Width="800">
 
     <Window.Resources>
         <Style x:Key="NavButtonStyle" TargetType="Button">
@@ -42,42 +40,82 @@
             <ColumnDefinition Width="*" />
             <!-- Main Content -->
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
+        <!-- Top bar-->
+        <Rectangle Grid.Column="1" Grid.Row="0" Fill="#2C3E50"></Rectangle>
+        <TextBlock Grid.Column="1" Grid.Row="0" Text="BudgetPlaneraren"
+                 FontSize="35" HorizontalAlignment="Left"
+                 Margin="10,0,0,10"
+                   Foreground="white" />
+
+        <Rectangle Grid.Column="0" Grid.Row="0" Fill="Black"></Rectangle>
+        
         <!-- LEFT SIDEBAR -->
-        <StackPanel Grid.Column="0" Background="#2C3E50">
+        <StackPanel Grid.Column="0" Grid.Row="1" Background="#2C3E50">
 
             <Button Style="{StaticResource NavButtonStyle}"
-                    Content="🏠"
+                    FontFamily="Segoe MDL2 Assets"
+                    Content="&#xE80F;"
                     ToolTip="Dashboard"
-                    Command="{Binding NavigateDashboardCommand}"/>
+                    Foreground="{StaticResource PrimaryBlueLight}"
+                    Command="{Binding NavigateDashboardCommand}"
+                    HorizontalAlignment="Center"/>
 
             <Button Style="{StaticResource NavButtonStyle}"
-                     Content="📘"
+                     Content="💰"
                      ToolTip="Budgetöversikt"
-                     Command="{Binding NavigateBudgetPostsCommand}"/>
+                    Foreground="{StaticResource PrimaryBlueLight}"
+                     Command="{Binding NavigateBudgetPostsCommand}"
+                    HorizontalAlignment="Center"/>
 
             <Button Style="{StaticResource NavButtonStyle}"
-                     Content="📘"
+                     Content="🗂️"
                      ToolTip="Kategorier"
-                     Command="{Binding NavigateCategoriesCommand}"/>
+                    Foreground="{StaticResource PrimaryBlueLight}"
+                     Command="{Binding NavigateCategoriesCommand}"
+                    HorizontalAlignment="Center"/>
 
             <Button Style="{StaticResource NavButtonStyle}"
-                     Content="📘"
+                     Content="📈"
                      ToolTip="Prognoser"
-                     Command="{Binding NavigatePrognosisCommand}"/>
+                    Foreground="{StaticResource PrimaryBlueLight}"
+                     Command="{Binding NavigatePrognosisCommand}"
+                    HorizontalAlignment="Center"/>
 
             <Button Style="{StaticResource NavButtonStyle}"
-         Content="📘"
-         ToolTip="Inställningar"
-         Command="{Binding NavigateSettingsCommand}"/>
-
+                    FontFamily="Segoe MDL2 Assets"
+                     Content="&#xE713;"
+                     ToolTip="Inställningar"
+                     Foreground="{StaticResource PrimaryBlueLight}"
+                     Command="{Binding NavigateSettingsCommand}"
+                    HorizontalAlignment="Center"/>
 
         </StackPanel>
 
+       
 
         <!-- CONTENT AREA -->
-        <ContentControl Grid.Column="1"
+        <ContentControl Grid.Column="1" Grid.Row="1"
                         Content="{Binding CurrentView}" />
+
+        <!-- Modal backdrop -->
+        <Border Grid.ColumnSpan="2" Grid.RowSpan="2"
+        Background="#80000000"
+        Visibility="{Binding DataContext.IsDialogOpen, RelativeSource={RelativeSource AncestorType=Window},
+                             Converter={StaticResource BoolToVisibility}}" />
+
+
+        <ContentControl x:Name="DialogHost"
+                Grid.ColumnSpan="2" Grid.RowSpan="2"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Content="{Binding CurrentDialog}"
+                Visibility="{Binding IsDialogOpen, Converter={StaticResource BoolToVisibility}}" />
+
 
     </Grid>
 </Window>

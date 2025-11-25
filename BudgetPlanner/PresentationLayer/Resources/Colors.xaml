@@ -1,22 +1,38 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    
-    <!-- Primary colors (using DynamicResource in controls) -->
-    <Color x:Key="PrimaryColor">#FF0B5FFF</Color>
-    <Color x:Key="PrimaryForegroundColor">#FFFFFFFF</Color>
-    
-    <!-- Neutral -->
-    <Color x:Key="BackgroundColor">#FFF7F9FC</Color>
-    <Color x:Key="SurfaceColor">#FFFFFFFF</Color>
-    <Color x:Key="TextPrimary">#FF1F2937</Color>
-    <Color x:Key="TextSecondary">#FF6B7280</Color>
-    
+
+    <!-- Colors -->
+    <Color x:Key="PrimaryBlueColor">#4C6EF5</Color>
+    <Color x:Key="PrimaryBlueLightColor">#EDF2FF</Color>
+    <Color x:Key="PrimaryBlueDarkColor">#364FC7</Color>
+
+    <Color x:Key="BackgroundLightColor">#F8F9FA</Color>
+    <Color x:Key="CardBackgroundColor">#FFFFFF</Color>
+    <Color x:Key="BorderLightColor">#E9ECEF</Color>
+
+    <Color x:Key="TextDarkColor">#212529</Color>
+    <Color x:Key="TextMediumColor">#495057</Color>
+    <Color x:Key="TextLightColor">#868E96</Color>
+
+    <Color x:Key="IncomeGreenColor">#40C057</Color>
+    <Color x:Key="ExpenseRedColor">#F03E3E</Color>
+    <Color x:Key="WarningYellowColor">#FAB005</Color>
+
     <!-- Brushes -->
-    <SolidColorBrush x:Key="PrimaryBrush" Color="{DynamicResource PrimaryColor}" />
-    <SolidColorBrush x:Key="PrimaryForegroundBrush" Color="{DynamicResource PrimaryForegroundColor}" />
-    <SolidColorBrush x:Key="BackgroundBrush" Color="{DynamicResource BackgroundColor}" />
-    <SolidColorBrush x:Key="SurfaceBrush" Color="{DynamicResource SurfaceColor}" />
-    <SolidColorBrush x:Key="TextPrimaryBrush" Color="{DynamicResource TextPrimary}" />
-    <SolidColorBrush x:Key="TextSecondaryBrush" Color="{DynamicResource TextSecondary}" />
+    <SolidColorBrush x:Key="PrimaryBlue" Color="{StaticResource PrimaryBlueColor}" />
+    <SolidColorBrush x:Key="PrimaryBlueLight" Color="{StaticResource PrimaryBlueLightColor}" />
+    <SolidColorBrush x:Key="PrimaryBlueDark" Color="{StaticResource PrimaryBlueDarkColor}" />
+
+    <SolidColorBrush x:Key="BackgroundLight" Color="{StaticResource BackgroundLightColor}" />
+    <SolidColorBrush x:Key="CardBackground" Color="{StaticResource CardBackgroundColor}" />
+    <SolidColorBrush x:Key="BorderLight" Color="{StaticResource BorderLightColor}" />
+
+    <SolidColorBrush x:Key="TextDark" Color="{StaticResource TextDarkColor}" />
+    <SolidColorBrush x:Key="TextMedium" Color="{StaticResource TextMediumColor}" />
+    <SolidColorBrush x:Key="TextLight" Color="{StaticResource TextLightColor}" />
+
+    <SolidColorBrush x:Key="IncomeGreen" Color="{StaticResource IncomeGreenColor}" />
+    <SolidColorBrush x:Key="ExpenseRed" Color="{StaticResource ExpenseRedColor}" />
+    <SolidColorBrush x:Key="WarningYellow" Color="{StaticResource WarningYellowColor}" />
 
 </ResourceDictionary>

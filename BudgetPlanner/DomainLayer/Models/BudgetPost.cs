@@ -13,7 +13,7 @@ namespace BudgetPlanner.DomainLayer.Models
 
         public string Description { get; set; } = string.Empty;
 
-        public Recurring Reccuring { get; set; } = Recurring.None;
+        public Recurring Recurring { get; set; } = Recurring.None;
 
         public DateTime Date { get; set; } = DateTime.UtcNow;
 

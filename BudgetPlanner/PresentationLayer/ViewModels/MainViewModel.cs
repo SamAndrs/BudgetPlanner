@@ -7,6 +7,23 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
     {
         private ViewModelBase _currentView;
 
+        private bool _isDialogOpen;
+
+        public bool IsDialogOpen
+        {
+            get { return _isDialogOpen; }
+            set { _isDialogOpen = value; RaisePropertyChanged(); }
+        }
+
+        private object _currentDialog;
+
+        public object CurrentDialog
+        {
+            get { return _currentDialog; }
+            set { _currentDialog = value; RaisePropertyChanged(); }
+        }
+
+
         public ViewModelBase CurrentView
         {
             get { return _currentView; }
@@ -25,7 +42,7 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
         public BudgetPostsViewVM BudgetPostsViewVM { get; }
         public CategoriesViewVM CategoriesViewVM { get; }
         public PrognosisViewVM PrognosisViewVM { get; set; }
-        public SettingsViewVM SettingsViewVM { get; set; }
+        public SettingsViewVM SettingsViewVM { get; set; }             
 
 
         public MainViewModel()
@@ -41,15 +58,29 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
             NavigatePrognosisCommand = new DelegateCommand(_ => CurrentView = PrognosisViewVM);
             NavigateSettingsCommand = new DelegateCommand(_ => CurrentView = SettingsViewVM);
 
+            // koppla VM -> dialoghantering
+            BudgetPostsViewVM.RequestOpenDialog = vm => OpenDialog(vm);
+            BudgetPostsViewVM.RequestCloseDialog = () => CloseDialog();
+
             // StandardView
             CurrentView = DashboardVM;
         }
 
         private void NavigateToDashboard()
         {
-            System.Diagnostics.Debug.WriteLine("Navigating to Dashboard View");
             CurrentView = DashboardVM;
         }
 
+        public void OpenDialog(object dialogVm)
+        {
+           CurrentDialog = dialogVm;
+              IsDialogOpen = true;
+        }
+
+        public void CloseDialog()
+        {
+            IsDialogOpen = false;
+            CurrentDialog = null;
+        }
     }
 }

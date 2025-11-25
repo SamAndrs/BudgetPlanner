@@ -1,8 +1,6 @@
 ﻿using BudgetPlanner.DomainLayer.Services;
 using BudgetPlanner.PresentationLayer.ViewModels;
 using System.Windows;
-using Wpf.Ui.Appearance;
-using Wpf.Ui.Controls;
 
 namespace BudgetPlanner
 {
@@ -14,9 +12,6 @@ namespace BudgetPlanner
 
         public MainWindow()
         {
-            // Watch for system theme changes (WPF UI)
-            SystemThemeWatcher.Watch(this);
-
             InitializeComponent();
             DataContext = new MainViewModel();
 
