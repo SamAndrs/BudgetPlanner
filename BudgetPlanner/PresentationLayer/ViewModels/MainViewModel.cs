@@ -50,6 +50,7 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
             // Initialize VMs
             DashboardVM = new DashboardViewVM();
             BudgetPostsViewVM = new BudgetPostsViewVM();
+            PrognosisViewVM = new PrognosisViewVM();
 
             // Initialize Commands
             NavigateDashboardCommand = new DelegateCommand(_ => NavigateToDashboard());

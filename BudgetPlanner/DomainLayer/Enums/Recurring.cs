@@ -4,7 +4,7 @@ namespace BudgetPlanner.DomainLayer.Enums
 {
     public enum Recurring
     {
-        [Description("Inget")]
+        [Description("Tillfälligt")]
         None,
 
         [Description("Dagligen")]

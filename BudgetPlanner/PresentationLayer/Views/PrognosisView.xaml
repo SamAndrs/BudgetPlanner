@@ -4,11 +4,162 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BudgetPlanner.PresentationLayer.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <TextBox>PrognosisView
-        </TextBox>
-       
+             >
+    <Grid Background="{StaticResource BackgroundLight}">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />  <!-- Header row -->
+            <RowDefinition Height="Auto" />  <!-- Month selection row -->
+            <RowDefinition Height="Auto" />  <!-- Summary cards row -->
+            <RowDefinition Height="*" />     <!-- Bottom content row -->
+        </Grid.RowDefinitions>
+
+       <!-- HEADER -->
+        <TextBlock Grid.Row="0"
+                   Text="Månadsprognos"
+                   Style="{StaticResource HeaderTextStyle}"
+                   Margin="10,0,0,16"/>
+        
+        <!-- Month Selection + Navigation bar -->
+        <Grid Grid.Row="1" Margin="0,0,0,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <!-- Previous month button -->
+            <Button Grid.Column="0"
+                    Content="◀"
+                    Width="40"
+                    Height="32"
+                    Command="{Binding SelectPreviousMonthCommand}"
+                    Margin="10,0" />
+            
+            <!-- Month selection box -->
+            <ComboBox Grid.Column="1"
+                      ItemsSource="{Binding MonthlyPrognoses}"
+                      SelectedItem="{Binding SelectedPrognosis}"
+                      DisplayMemberPath="Month"
+                      HorizontalAlignment="Center"
+                      Width="200"
+                      FontSize="16"
+                      Margin="0,0,0,0"/>
+
+
+            <!-- Next month button -->
+            <Button Grid.Column="2"
+                    Content="▶"
+                    Width="40"
+                    Height="32"
+                    Command="{Binding SelectNextMonthCommand}"
+                    Margin="10,0" />
+
+        </Grid>
+        
+        <!-- TOP SUMMARY CARDS -->
+        <Grid Grid.Row="2" Margin="0,0,0,24">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
+            <!-- Total Income -->
+            <Border Grid.Column="0" Grid.Row="0" Style="{StaticResource CardStyle}" Padding="16" Margin="0,0,16,0">
+                <StackPanel>
+                    <TextBlock Text="Inkomster (totalt)" Foreground="{StaticResource TextMedium}" FontSize="14"/>
+                    <TextBlock Text="{Binding TotalIncome, StringFormat={}{0:N0} kr}"
+                               Foreground="{StaticResource IncomeGreen}"
+                               FontSize="26" FontWeight="Bold" Margin="0,4,0,0"/>
+                </StackPanel>
+            </Border>
+            
+            <!-- Total Expense -->
+            <Border Grid.Column="1" Grid.Row="0" Style="{StaticResource CardStyle}" Padding="16" Margin="0,0,16,0">
+                <StackPanel>
+                    <TextBlock Text="Utgifter (totalt)" Foreground="{StaticResource TextMedium}" FontSize="14"/>
+                    <TextBlock Text="{Binding TotalExpense, StringFormat={}{0:N0} kr}"
+                               Foreground="{StaticResource ExpenseRed}"
+                               FontSize="26" FontWeight="Bold" Margin="0,4,0,0"/>
+                </StackPanel>
+            </Border>
+            
+            <!-- Prognosis -->
+            <Border Grid.Column="2" Style="{StaticResource CardStyle}" Padding="16">
+                <StackPanel>
+                    <TextBlock Text="Prognos (saldo)" Foreground="{StaticResource TextMedium}" FontSize="14"/>
+                    <TextBlock Text="{Binding SelectedPrognosis.TotalSum, StringFormat={}{0:N0} kr}"
+                               Foreground="{StaticResource PrimaryBlueDark}"
+                               FontSize="26" FontWeight="Bold" Margin="0,4,0,0"/>
+                </StackPanel>
+            </Border>
+            
+            <!-- MAIN CONTENT -->
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="3*"/>
+                </Grid.ColumnDefinitions>
+                
+                <!-- LEFT SIDE: Salary Calculator -->
+                <Border Style="{StaticResource CardStyle}" Padding="16" Grid.Column="0" Margin="0,0,16,0">
+                    <StackPanel>
+
+                        <TextBlock Text="Beräkna Månadsinkomst" 
+                                   Style="{StaticResource LabelTextStyle}" Margin="0,0,0,12"/>
+
+                        <TextBlock Text="Årsinkomst" Foreground="{StaticResource TextMedium}"/>
+                        <TextBox Text="{Binding YearlyIncome, UpdateSourceTrigger=PropertyChanged}" Margin="0,4,0,12"/>
+
+                        <TextBlock Text="Årsarbetstid (timmar)" Foreground="{StaticResource TextMedium}"/>
+                        <TextBox Text="{Binding YearlyWorkHours, UpdateSourceTrigger=PropertyChanged}" Margin="0,4,0,12"/>
+
+                        <TextBlock Text="Månadsinkomst"
+                                   Foreground="{StaticResource TextLight}" Margin="0,4,0,4"/>
+
+                        <TextBlock Text="{Binding CalculatedMonthlyIncome, StringFormat={}{0:N0} kr}"
+                                   FontSize="22" FontWeight="Bold"
+                                   Foreground="{StaticResource PrimaryBlueDark}"/>
+                    </StackPanel>
+                </Border>
+                
+                <!-- __ RIGHT SIDE: Recurring Forecast -->
+                <Border Style="{StaticResource CardStyle}" Padding="16" Grid.Column="1">
+                    <StackPanel>
+                        
+                        <TextBlock Text="Återkommande poster per månad"
+                                   Style="{StaticResource LabelTextStyle}"
+                                   Margin="0,0,0,12"/>
+                        
+                        <ItemsControl ItemsSource="{Binding SelectedPrognosis.BudgetPosts}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="0,4">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Text="{Binding Description}" 
+                                                   Foreground="{StaticResource TextDark}"/>
+                                        
+                                        <TextBlock Grid.Column="1"
+                                                   Text="{Binding Amount, StringFormat={}{0:N0} kr}"
+                                                   Foreground="{Binding PostType, 
+                                                                Converter={StaticResource PostTypeToBrushConverter}}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
+
     </Grid>
 </UserControl>

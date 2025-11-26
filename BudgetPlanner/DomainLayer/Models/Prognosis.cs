@@ -12,12 +12,16 @@ namespace BudgetPlanner.DomainLayer.Models
 
         public virtual List<BudgetPost> BudgetPosts { get; set; } = new();
 
-        public decimal TotalIncome { get; set; }
+        public decimal TotalIncome { get; set; } = 0;
 
-        public decimal TotalExpenses { get; set; }
+        public decimal TotalExpenses { get; set; } = 0;
 
-        public decimal TotalSum { get; set; }
+        public decimal TotalSum { get; set; } = 0;
 
-        public DateTime Date { get; set; }
+        public DateTime FromDate { get; set; } = DateTime.Now;
+
+        public DateTime ToDate { get; set; }
+
+        public string Month { get; set; } = string.Empty;
     }
 }

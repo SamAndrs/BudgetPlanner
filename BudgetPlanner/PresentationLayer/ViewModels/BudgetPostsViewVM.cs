@@ -13,6 +13,7 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
         private string _searchText = "";
         private Category _selectedCategory;
         private BudgetPostType _selectedType;
+        private Recurring _recurring;
         private DateTime? _fromDate;
         private DateTime? _toDate;
 
@@ -43,6 +44,17 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
                 ApplyFilters();
             }
         }
+
+
+        public Recurring Recurring
+        {
+            get { return _recurring; }
+            set { _recurring = value; 
+                RaisePropertyChanged();
+                ApplyFilters();
+            }
+        }
+
 
         public DateTime? FromDate
         {
@@ -97,16 +109,17 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
                 new Category { Id = 2, Name = "Transport" },
                 new Category { Id = 3, Name = "Lön" },
                 new Category { Id = 4, Name = "Underhållning" },
-                new Category { Id = 5, Name = "Boende" }
+                new Category { Id = 5, Name = "Boende" },
+                new Category { Id = 6, Name = "Alla" }
             };
 
             AllPosts = new ObservableCollection<BudgetPost>
             {
-                new BudgetPost { Id = 1, Amount = 3200, Category = Categories[0], Description = "Veckohandling", Date = DateTime.UtcNow.AddDays(-2), PostType = BudgetPostType.Expense },
-                new BudgetPost { Id = 2, Amount = 8500, Category = Categories[4], Description = "Månadshyra", Date = DateTime.UtcNow.AddDays(-10), PostType = BudgetPostType.Expense },
-                new BudgetPost { Id = 3, Amount = 28500, Category = Categories[2], Description = "Lön för Juni", Date = DateTime.UtcNow.AddDays(-15), PostType = BudgetPostType.Income },
-                new BudgetPost { Id = 4, Amount = 1200, Category = Categories[1], Description = "Busskort", Date = DateTime.UtcNow.AddDays(-5), PostType = BudgetPostType.Expense },
-                new BudgetPost { Id = 5, Amount = 5000, Category = Categories[3], Description = "Biobesök", Date = DateTime.UtcNow.AddDays(-7), PostType = BudgetPostType.Expense }
+                new BudgetPost { Id = 1, Amount = 3200, Category = Categories[0], Description = "Veckohandling", Date = DateTime.UtcNow.AddDays(-2), PostType = BudgetPostType.Expense, Recurring = Recurring.Weekly },
+                new BudgetPost { Id = 2, Amount = 8500, Category = Categories[4], Description = "Månadshyra", Date = DateTime.UtcNow.AddDays(-10), PostType = BudgetPostType.Expense, Recurring = Recurring.Monthly },
+                new BudgetPost { Id = 3, Amount = 28500, Category = Categories[2], Description = "Lön för Juni", Date = DateTime.UtcNow.AddDays(-15), PostType = BudgetPostType.Income, Recurring = Recurring.Monthly },
+                new BudgetPost { Id = 4, Amount = 1200, Category = Categories[1], Description = "Busskort", Date = DateTime.UtcNow.AddDays(-5), PostType = BudgetPostType.Expense, Recurring = Recurring.Monthly },
+                new BudgetPost { Id = 5, Amount = 5000, Category = Categories[3], Description = "Biobesök", Date = DateTime.UtcNow.AddDays(-7), PostType = BudgetPostType.Expense, Recurring = Recurring.None }
             };
 
             FilteredPosts = new ObservableCollection<BudgetPost>(AllPosts);
@@ -189,20 +202,28 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
         {
             var result = AllPosts.AsEnumerable();
 
+            // Söktext
             if (!string.IsNullOrWhiteSpace(SearchText))
-                result = result.Where(x => x.Category.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase));
-
-            if (SelectedCategory != null)
+            {
+                result = result.Where(x => 
+                    x.Category.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ||
+                    x.Description.Contains(SearchText, StringComparison.OrdinalIgnoreCase));
+            }
+            
+            // Kategori: Hoppa över om 'Alla' är vald eller null
+            if (SelectedCategory != null && SelectedCategory.Id != 6) // TODO: Ändra till 1
                 result = result.Where(x => x.Category.Id == SelectedCategory.Id);
 
-            if (SelectedType != null)
-                result = result.Where(x => x.PostType == SelectedType);
-
+            // Datumintervall
             if (FromDate != null)
                 result = result.Where(x => x.Date >= FromDate);
 
             if (ToDate != null)
                 result = result.Where(x => x.Date <= ToDate);
+
+            // Inkomst/Utgift
+            //if (SelectedType != null)
+            result = result.Where(x => x.PostType == SelectedType);
 
             FilteredPosts.Clear();
             foreach (var item in result)

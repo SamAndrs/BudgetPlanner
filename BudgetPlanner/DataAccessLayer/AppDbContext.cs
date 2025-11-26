@@ -46,22 +46,23 @@ namespace BudgetPlanner.DataAccessLayer
             // Seed database
             modelBuilder.Entity<Category>().HasData(
                 // Expenses
-                new Category { Id = 1, Name = "Food" },
-                new Category { Id = 2, Name = "Transport" },
-                new Category { Id = 3, Name = "Clothing" },
-                new Category { Id = 4, Name = "Taxes" },
-                new Category { Id = 5, Name = "House" },
-                new Category { Id = 6, Name = "Hobbies" },
-                new Category { Id = 7, Name = "Kids" },
-                new Category { Id = 8, Name = "TV" },
-                new Category { Id = 9, Name = "SaaS" },
-                new Category { Id = 10, Name = "Subscriptions" },
+                new Category { Id = 1, Name = "Alla" },
+                new Category { Id = 2, Name = "Food" },
+                new Category { Id = 3, Name = "Transport" },
+                new Category { Id = 4, Name = "Clothing" },
+                new Category { Id = 5, Name = "Taxes" },
+                new Category { Id = 6, Name = "House" },
+                new Category { Id = 7, Name = "Hobbies" },
+                new Category { Id = 8, Name = "Kids" },
+                new Category { Id = 9, Name = "TV" },
+                new Category { Id = 10, Name = "SaaS" },
+                new Category { Id = 11, Name = "Subscriptions" },
                 
                 // Income
-                new Category { Id = 11, Name = "Salary" },
-                new Category { Id = 12, Name = "Allowance" },
-                new Category { Id = 13, Name = "ExtraIncome" },
-                new Category { Id = 14, Name = "Undefined" }
+                new Category { Id = 12, Name = "Salary" },
+                new Category { Id = 13, Name = "Allowance" },
+                new Category { Id = 14, Name = "ExtraIncome" },
+                new Category { Id = 15, Name = "Undefined" }
                 );
         }
     }

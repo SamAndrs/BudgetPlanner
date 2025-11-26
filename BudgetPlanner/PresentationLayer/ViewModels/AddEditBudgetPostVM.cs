@@ -44,7 +44,7 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
 
         public DateTime Date
         {
-            get { return _model.Date; }
+            get { return (DateTime)_model.Date; }
             set { _model.Date = value; RaisePropertyChanged(); }
         }
 

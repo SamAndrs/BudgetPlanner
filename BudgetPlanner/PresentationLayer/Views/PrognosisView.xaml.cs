@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BudgetPlanner.PresentationLayer.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,7 @@ namespace BudgetPlanner.PresentationLayer.Views
         public PrognosisView()
         {
             InitializeComponent();
+
         }
     }
 }

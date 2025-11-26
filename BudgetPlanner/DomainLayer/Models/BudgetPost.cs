@@ -15,7 +15,7 @@ namespace BudgetPlanner.DomainLayer.Models
 
         public Recurring Recurring { get; set; } = Recurring.None;
 
-        public DateTime Date { get; set; } = DateTime.UtcNow;
+        public DateTime? Date { get; set; } = DateTime.UtcNow;
 
         public BudgetPostType PostType { get; set; }
     }
