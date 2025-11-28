@@ -7,5 +7,6 @@
     <conv:PostTypeAmountConverter x:Key="PostTypeAmountConverter" />
     <conv:BoolToVisibilityConverter x:Key="BoolToVisibility" />
     <conv:EnumDescriptionConverter x:Key="EnumDescription" />
+    <conv:CategoryToIconConverter x:Key="IconConverter" />
 
 </ResourceDictionary>

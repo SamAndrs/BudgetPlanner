@@ -1,5 +1,7 @@
 ﻿using BudgetPlanner.PresentationLayer.Commands;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace BudgetPlanner.PresentationLayer.ViewModels
 {
@@ -81,7 +83,12 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
         public void CloseDialog()
         {
             IsDialogOpen = false;
-            CurrentDialog = null;
+
+            // Delay removal so binding cycle hinner uppdateras
+            Application.Current.Dispatcher.InvokeAsync(() =>
+            {
+                CurrentDialog = null;
+            }, DispatcherPriority.Background);
         }
     }
 }

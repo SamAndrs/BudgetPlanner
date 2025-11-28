@@ -47,22 +47,25 @@ namespace BudgetPlanner.DataAccessLayer
             modelBuilder.Entity<Category>().HasData(
                 // Expenses
                 new Category { Id = 1, Name = "Alla" },
-                new Category { Id = 2, Name = "Food" },
+                new Category { Id = 2, Name = "Mat" },
                 new Category { Id = 3, Name = "Transport" },
-                new Category { Id = 4, Name = "Clothing" },
-                new Category { Id = 5, Name = "Taxes" },
-                new Category { Id = 6, Name = "House" },
-                new Category { Id = 7, Name = "Hobbies" },
-                new Category { Id = 8, Name = "Kids" },
+                new Category { Id = 4, Name = "Kläder" },
+                new Category { Id = 5, Name = "Skatt" },
+                new Category { Id = 6, Name = "Hem" },
+                new Category { Id = 7, Name = "Hobby" },
+                new Category { Id = 8, Name = "Barn" },
                 new Category { Id = 9, Name = "TV" },
                 new Category { Id = 10, Name = "SaaS" },
-                new Category { Id = 11, Name = "Subscriptions" },
-                
+                new Category { Id = 11, Name = "Prenumerationer" },
+                new Category { Id = 12, Name = "Husdjur" },
+                new Category { Id = 13, Name = "Underhållning" },
+
                 // Income
-                new Category { Id = 12, Name = "Salary" },
-                new Category { Id = 13, Name = "Allowance" },
-                new Category { Id = 14, Name = "ExtraIncome" },
-                new Category { Id = 15, Name = "Undefined" }
+                new Category { Id = 14, Name = "Lön" },
+                new Category { Id = 15, Name = "Bidrag" },
+                new Category { Id = 16, Name = "Extrainkomst" },
+
+                new Category { Id = 17, Name = "Okänd" }
                 );
         }
     }

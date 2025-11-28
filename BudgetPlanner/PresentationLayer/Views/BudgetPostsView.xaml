@@ -13,10 +13,10 @@
     <Grid Background="{StaticResource BackgroundLight}" Margin="16">
 
         <StackPanel>
-            
+
             <!-- HEADER -->
             <TextBlock Text="Budgetposter" Style="{StaticResource HeaderTextStyle}"/>
-            
+
             <!-- FILTER CARD -->
             <Border Style="{StaticResource CardStyle}" Margin="0,16,0,16">
                 <Grid>
@@ -27,7 +27,7 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    
+
                     <!-- Datumintervall -->
                     <StackPanel Grid.Column="0" Margin="0,0,24,0">
                         <TextBlock Text="Från" Style="{StaticResource LabelTextStyle}"/>
@@ -38,7 +38,7 @@
                         <TextBlock Text="Till" Style="{StaticResource LabelTextStyle}"/>
                         <DatePicker SelectedDate="{Binding ToDate}" />
                     </StackPanel>
-                    
+
                     <!-- Kategori -->
                     <StackPanel Grid.Column="2" Margin="0,0,24,0">
                         <TextBlock Text="Kategori" Style="{StaticResource LabelTextStyle}"/>
@@ -48,7 +48,7 @@
                                   Width="150"
                                   />
                     </StackPanel>
-                    
+
                     <!-- Sökfält -->
                     <StackPanel Grid.Column="3">
                         <TextBlock Text="Sök" Style="{StaticResource LabelTextStyle}"/>
@@ -57,7 +57,7 @@
                                   Padding="6"
                                   Background="{StaticResource PrimaryBlueLight}"/>
                     </StackPanel>
-                    
+
                     <!-- Ny post -->
                     <Button Grid.Column="4"
                             Content="Ny budgetpost"
@@ -70,7 +70,7 @@
                     />
                 </Grid>
             </Border>
-            
+
             <!-- POST-TYPE FILTERS -->
             <StackPanel>
                 <TextBlock Text="Typ av post" Style="{StaticResource LabelTextStyle}" Width="150" Margin="0,0,0,4"/>
@@ -85,20 +85,16 @@
                     </ComboBox.ItemsSource>
                 </ComboBox>
             </StackPanel>
-            
+
             <!-- LISTA -->
             <Border Style="{StaticResource CardStyle}" Margin="0,16,0,0">
                 <ListView ItemsSource="{Binding FilteredPosts}"
                           ItemTemplate="{StaticResource BudgetPostTemplate}">
-                   
+
                 </ListView>
             </Border>
         </StackPanel>
-        
-        
+
+
     </Grid>
 </UserControl>
-    
-    
-    
-   

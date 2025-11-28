@@ -1,0 +1,48 @@
+﻿<UserControl x:Class="BudgetPlanner.PresentationLayer.Resources.MW_Window.SideBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BudgetPlanner.PresentationLayer.Resources.MW_Window"
+             >
+
+    <StackPanel Background="{StaticResource SecondaryBackground}">
+
+        <Button Style="{StaticResource NavButtonStyle}"
+                FontFamily="Segoe MDL2 Assets"
+                Content="&#xE80F;"
+                ToolTip="Översikt"
+                Command="{Binding NavigateDashboardCommand}"
+                HorizontalAlignment="Center" 
+                Margin="0,20,0,20"></Button>
+
+        <Button Style="{StaticResource NavButtonStyle}"
+                Content="💰"
+                ToolTip="Budgetöversikt"
+                Command="{Binding NavigateBudgetPostsCommand}"
+                HorizontalAlignment="Center" 
+                Margin="0,0,0,20"/>
+
+        <Button Style="{StaticResource NavButtonStyle}"
+                Content="🗂️"
+                ToolTip="Kategorier"
+                Command="{Binding NavigateCategoriesCommand}"
+                HorizontalAlignment="Center" 
+                Margin="0,0,0,20"/>
+
+        <Button Style="{StaticResource NavButtonStyle}"
+                Content="📈"
+                ToolTip="Prognoser"
+                Command="{Binding NavigatePrognosisCommand}"
+                HorizontalAlignment="Center" 
+                Margin="0,0,0,20"/>
+
+        <Button Style="{StaticResource NavButtonStyle}"
+                FontFamily="Segoe MDL2 Assets"
+                Content="&#xE713;"
+                ToolTip="Inställningar"
+                Command="{Binding NavigateSettingsCommand}"
+                HorizontalAlignment="Center" 
+                />
+    </StackPanel>
+</UserControl>

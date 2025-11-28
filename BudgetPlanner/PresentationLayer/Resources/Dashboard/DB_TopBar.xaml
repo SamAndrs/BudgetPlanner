@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="BudgetPlanner.PresentationLayer.Resources.Dashboard.DB_TopBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BudgetPlanner.PresentationLayer.Resources.Dashboard"
+             mc:Ignorable="d" 
+             >
+
+    <StackPanel Background="Transparent">
+        <TextBlock Text="Månadsöversikt" 
+                   FontSize="14"
+                   FontWeight="Bold"
+                   Foreground="{StaticResource SecondaryForeground}"
+                   HorizontalAlignment="Center"
+                   Margin="0,0,0,10"/>
+
+        <TextBlock Text="Binding CurrentMonth"
+                   FontSize="12"
+                   FontWeight="Bold"
+                   Foreground="{StaticResource PrimaryForeground}"
+                   HorizontalAlignment="Center"
+                   Margin="0,0,0,20"/>
+
+        <TextBlock Text="{Binding NetBalanceThisMonth, StringFormat='{}{0:C0}'}"
+                   FontSize="26"
+                   FontWeight="Bold"
+                   Foreground="{StaticResource PrimaryBackground}"
+                   HorizontalAlignment="Center"/>
+    </StackPanel>
+</UserControl>

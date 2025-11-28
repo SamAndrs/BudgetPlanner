@@ -37,4 +37,40 @@
     <SolidColorBrush x:Key="ExpenseRed" Color="{StaticResource ExpenseRedColor}" />
     <SolidColorBrush x:Key="WarningYellow" Color="{StaticResource WarningYellowColor}" />
 
+    
+    
+    <Color x:Key="PrimaryBackgroundColor">#242424</Color>
+    <Color x:Key="SecondaryBackgroundColor">#1b1b1b</Color>
+
+    <Color x:Key="PrimaryForegroundColor">#ffffff</Color>
+    <Color x:Key="SecondaryForegroundColor">#5c5c5c</Color>
+
+    <SolidColorBrush x:Key="PrimaryBackground" Color="{StaticResource PrimaryBackgroundColor}" />
+    <SolidColorBrush x:Key="SecondaryBackground" Color="{StaticResource SecondaryBackgroundColor}" />
+
+    <SolidColorBrush x:Key="PrimaryForeground" Color="{StaticResource PrimaryForegroundColor}" />
+    <SolidColorBrush x:Key="SecondaryForeground" Color="{StaticResource SecondaryForegroundColor}" />
+
+
+    <!-- 
+    Primary background color: #242424
+    Secondary background color: #1b1b1b
+    
+    Primary foreground color: #ffffff
+    Secondary foreground color: #5c5c5c
+    
+    ExpenseRed: #d15356
+    IncomeGreen: #39dc9c
+    ExpenseBackground: #733f3d
+    IncomeBackground: #32e197
+    
+    ButtonColor: #7c7c7c
+    ButtonColorHover: #b1b1b1
+    
+    SaveButtonColor: #242424
+    
+    BorderColor: #242424
+    
+    -->
+    
 </ResourceDictionary>

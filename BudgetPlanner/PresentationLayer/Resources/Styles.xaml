@@ -29,4 +29,75 @@
         <Setter Property="Foreground" Value="{StaticResource PrimaryBlueLight}" />
         <Setter Property="FontSize" Value="14" />
     </Style>
+    
+    <!-- Buttons -->
+    <Style x:Key="WindowButtonStyle" TargetType="Button">
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Background" Value="{StaticResource PrimaryBackground}" />
+        <Setter Property="Foreground" Value="{StaticResource SecondaryForeground}" />
+        <Setter Property="FontFamily" Value="Garamond" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Width="18" Height="18"
+                            CornerRadius="9"
+                            Background="{TemplateBinding Background}">
+                        <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource SecondaryBackground}" />
+            </Trigger>
+        </Style.Triggers>
+        
+        
+
+        
+    </Style>
+
+    <Style x:Key="NavButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="Foreground" Value="{StaticResource SecondaryForeground}" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="Padding" Value="10" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="ToolTipService.ShowDuration" Value="60000"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                            <TextBlock Text="{TemplateBinding Content}"
+                                    FontSize="24" Margin="5"/>
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource PrimaryForeground}"></Setter>
+            </Trigger>
+        </Style.Triggers>
+        
+    </Style>
+    <!-- 
+        BudgetPost style
+        Date + amount (list total): TextColor: Secondary ForegroundColor BG: Primary backgroundcolor
+        Main-Card-content:
+        BG: Secondary backgroundcolor
+         - Icon. Category
+         - Category: TextColor: Secondary ForegroundColor
+         - Description: TextColor: Primary ForegroundCoor
+         - Amount: TextColor: IncomeGreen/ ExpenseRed  BG: IncomeGreenBackground/ ExpenseRedBackground
+    
+    
+        
+    -->
 </ResourceDictionary>

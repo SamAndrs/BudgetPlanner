@@ -27,9 +27,7 @@
         <views:SettingsView />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type vm:AddEditBudgetPostVM}" 
-                  xmlns:vm="clr-namespace:BudgetPlanner.PresentationLayer.ViewModels"
-                  xmlns:views="clr-namespace:BudgetPlanner.PresentationLayer.Views">
+    <DataTemplate DataType="{x:Type vm:AddEditBudgetPostVM}">
         <views:AddEditBudgetPostView />
     </DataTemplate>
 

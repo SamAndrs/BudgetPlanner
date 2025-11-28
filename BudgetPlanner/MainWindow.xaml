@@ -6,116 +6,85 @@
         xmlns:local="clr-namespace:BudgetPlanner"     
 
         xmlns:views="clr-namespace:BudgetPlanner.PresentationLayer.Views"
+        xmlns:controls="clr-namespace:BudgetPlanner.PresentationLayer.Resources.MW_Window"
         
         mc:Ignorable="d"
-        Title="Budgetplaneraren" Height="600" Width="800">
+        Title="Budgetplaneraren" Height="600" Width="1000"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        Background="Transparent"
+        AllowsTransparency="True"
+        MouseDown="Window_MouseDown">
 
-    <Window.Resources>
-        <Style x:Key="NavButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderBrush" Value="Transparent" />
-            <Setter Property="HorizontalAlignment" Value="Stretch" />
-            <Setter Property="Padding" Value="10" />
-            <Setter Property="Cursor" Value="Hand" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}">
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                <TextBlock Text="{TemplateBinding Content}"
-                                           FontSize="24" Margin="5"/>
-                            </StackPanel>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="ToolTipService.ShowDuration" Value="60000"/>
-        </Style>
-    </Window.Resources>
+    <Border CornerRadius="18"
+            Background="{StaticResource PrimaryBackground}"
+            BorderBrush="{StaticResource SecondaryBackground}"
+            BorderThickness="3">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <!-- Sidebar -->
+                <ColumnDefinition Width="60" />
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="60" />
-            <!-- Sidebar -->
-            <ColumnDefinition Width="*" />
-            <!-- Main Content -->
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+                <!-- Main Content -->
+                <ColumnDefinition />
 
-        <!-- Top bar-->
-        <Rectangle Grid.Column="1" Grid.Row="0" Fill="#2C3E50"></Rectangle>
-        <TextBlock Grid.Column="1" Grid.Row="0" Text="BudgetPlaneraren"
-                 FontSize="35" HorizontalAlignment="Left"
-                 Margin="10,0,0,10"
-                   Foreground="white" />
+                <!-- Window Buttons-->
+                <ColumnDefinition Width="25" />
+                <ColumnDefinition Width="25" />
+                <ColumnDefinition Width="5" />
+            </Grid.ColumnDefinitions>
 
-        <Rectangle Grid.Column="0" Grid.Row="0" Fill="Black"></Rectangle>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition />
+                <RowDefinition Height="25"/>
+            </Grid.RowDefinitions>
+
         
-        <!-- LEFT SIDEBAR -->
-        <StackPanel Grid.Column="0" Grid.Row="1" Background="#2C3E50">
 
-            <Button Style="{StaticResource NavButtonStyle}"
-                    FontFamily="Segoe MDL2 Assets"
-                    Content="&#xE80F;"
-                    ToolTip="Dashboard"
-                    Foreground="{StaticResource PrimaryBlueLight}"
-                    Command="{Binding NavigateDashboardCommand}"
-                    HorizontalAlignment="Center"/>
+            <!-- Window Control buttons -->
+            <Button x:Name="btnMinimize"
+                    Grid.Row="0" Grid.Column="2"
+                    Style="{StaticResource WindowButtonStyle}"
+                    Content="-"
+                    Click="btnMinimize_Click" >
+            </Button>
 
-            <Button Style="{StaticResource NavButtonStyle}"
-                     Content="💰"
-                     ToolTip="Budgetöversikt"
-                    Foreground="{StaticResource PrimaryBlueLight}"
-                     Command="{Binding NavigateBudgetPostsCommand}"
-                    HorizontalAlignment="Center"/>
-
-            <Button Style="{StaticResource NavButtonStyle}"
-                     Content="🗂️"
-                     ToolTip="Kategorier"
-                    Foreground="{StaticResource PrimaryBlueLight}"
-                     Command="{Binding NavigateCategoriesCommand}"
-                    HorizontalAlignment="Center"/>
-
-            <Button Style="{StaticResource NavButtonStyle}"
-                     Content="📈"
-                     ToolTip="Prognoser"
-                    Foreground="{StaticResource PrimaryBlueLight}"
-                     Command="{Binding NavigatePrognosisCommand}"
-                    HorizontalAlignment="Center"/>
-
-            <Button Style="{StaticResource NavButtonStyle}"
-                    FontFamily="Segoe MDL2 Assets"
-                     Content="&#xE713;"
-                     ToolTip="Inställningar"
-                     Foreground="{StaticResource PrimaryBlueLight}"
-                     Command="{Binding NavigateSettingsCommand}"
-                    HorizontalAlignment="Center"/>
-
-        </StackPanel>
-
-       
-
-        <!-- CONTENT AREA -->
-        <ContentControl Grid.Column="1" Grid.Row="1"
-                        Content="{Binding CurrentView}" />
-
-        <!-- Modal backdrop -->
-        <Border Grid.ColumnSpan="2" Grid.RowSpan="2"
-        Background="#80000000"
-        Visibility="{Binding DataContext.IsDialogOpen, RelativeSource={RelativeSource AncestorType=Window},
-                             Converter={StaticResource BoolToVisibility}}" />
+            <Button x:Name="btnClose"
+                    Grid.Row="0" Grid.Column="3"
+                    Style="{StaticResource WindowButtonStyle}"
+                    Content="x"
+                    Click="btnClose_Click">
+            </Button>
 
 
-        <ContentControl x:Name="DialogHost"
-                Grid.ColumnSpan="2" Grid.RowSpan="2"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Content="{Binding CurrentDialog}"
-                Visibility="{Binding IsDialogOpen, Converter={StaticResource BoolToVisibility}}" />
+            <!-- TITLE BAR -->
+            <controls:TitleBar Grid.Column="1" Grid.Row="0"  Margin="10,0,0,10"/>
+
+   
+            <!-- LEFT SIDEBAR -->
+            <Rectangle Grid.Column="0" Grid.Row="0" Fill="{StaticResource SecondaryBackground}"/>
+            <Rectangle Grid.Column="0" Grid.Row="1" Fill="{StaticResource SecondaryBackground}" />
+
+            <controls:SideBar Grid.Column="0" Grid.Row="2" Background="{StaticResource SecondaryBackground}"/>
+
+            <Rectangle Grid.Column="0" Grid.Row="3" Fill="{StaticResource SecondaryBackground}" />
 
 
-    </Grid>
+
+            <!-- CONTENT AREA -->
+            <ContentControl Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2"
+                            Content="{Binding CurrentView}" />
+
+            <!-- Modal backdrop -->
+
+            <controls:DialogOverlay Grid.RowSpan="4" Grid.ColumnSpan="4"
+                                    IsOpen="{Binding IsDialogOpen}"
+                                    DialogContent="{Binding CurrentDialog}"/>
+        
+        </Grid>
+    </Border>
+
 </Window>
