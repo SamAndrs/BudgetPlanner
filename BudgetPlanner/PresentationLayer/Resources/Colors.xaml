@@ -15,8 +15,8 @@
     <Color x:Key="TextMediumColor">#495057</Color>
     <Color x:Key="TextLightColor">#868E96</Color>
 
-    <Color x:Key="IncomeGreenColor">#40C057</Color>
-    <Color x:Key="ExpenseRedColor">#F03E3E</Color>
+    <Color x:Key="IncomeGreenColor">#39dc9c</Color>
+    <Color x:Key="ExpenseRedColor">#d15356</Color>
     <Color x:Key="WarningYellowColor">#FAB005</Color>
 
     <!-- Brushes -->
@@ -39,11 +39,22 @@
 
     
     
+    
+    
     <Color x:Key="PrimaryBackgroundColor">#242424</Color>
     <Color x:Key="SecondaryBackgroundColor">#1b1b1b</Color>
 
     <Color x:Key="PrimaryForegroundColor">#ffffff</Color>
-    <Color x:Key="SecondaryForegroundColor">#5c5c5c</Color>
+    <Color x:Key="SecondaryForegroundColor">#8c8c8c</Color>
+
+    <Color x:Key="ButtonColor">#7c7c7c</Color>
+    <Color x:Key="ButtonColorHover">#b1b1b1</Color>
+
+    <Color x:Key="IncomeBackgroundColor">#138656</Color>
+    <Color x:Key="ExpenseBackgroundColor">#733f3d</Color>
+
+    <SolidColorBrush x:Key="IncomeBackground" Color="{StaticResource IncomeBackgroundColor}" />
+    <SolidColorBrush x:Key="ExpenseBackground" Color="{StaticResource ExpenseBackgroundColor}" />
 
     <SolidColorBrush x:Key="PrimaryBackground" Color="{StaticResource PrimaryBackgroundColor}" />
     <SolidColorBrush x:Key="SecondaryBackground" Color="{StaticResource SecondaryBackgroundColor}" />
@@ -51,18 +62,21 @@
     <SolidColorBrush x:Key="PrimaryForeground" Color="{StaticResource PrimaryForegroundColor}" />
     <SolidColorBrush x:Key="SecondaryForeground" Color="{StaticResource SecondaryForegroundColor}" />
 
+    <SolidColorBrush x:Key="PrimaryButtonColor" Color="{StaticResource ButtonColor}" />
+    <SolidColorBrush x:Key="SecondaryButtonColor" Color="{StaticResource ButtonColorHover}" />
+
 
     <!-- 
     Primary background color: #242424
     Secondary background color: #1b1b1b
     
     Primary foreground color: #ffffff
-    Secondary foreground color: #5c5c5c
+    Secondary foreground color: #8c8c8c
     
     ExpenseRed: #d15356
     IncomeGreen: #39dc9c
     ExpenseBackground: #733f3d
-    IncomeBackground: #32e197
+    IncomeBackground: #138656
     
     ButtonColor: #7c7c7c
     ButtonColorHover: #b1b1b1

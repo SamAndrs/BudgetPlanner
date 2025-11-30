@@ -16,7 +16,8 @@ namespace BudgetPlanner.PresentationLayer.Resources.Converters
                 if (post.PostType == BudgetPostType.Expense)
                     return "-" + amount;
 
-                return amount;
+                else 
+                    return "+" + amount;
             }
 
             return value;

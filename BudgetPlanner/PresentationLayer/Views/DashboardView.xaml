@@ -3,192 +3,93 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:BudgetPlanner.PresentationLayer.Resources.Converters"
-             mc:Ignorable="d">
-
-
-    <Border Background="{StaticResource BackgroundLight}" Padding="24">
+             xmlns:local="clr-namespace:BudgetPlanner.PresentationLayer.Views"
+             xmlns:controls="clr-namespace:BudgetPlanner.PresentationLayer.Resources.Dashboard"
+             xmlns:wpf="clr-namespace:ScottPlot.WPF;assembly=ScottPlot.WPF" xmlns:wpf1="clr-namespace:ScottPlot;assembly=ScottPlot.WPF"
+             mc:Ignorable="d"
+             >
+    <Border Background="{StaticResource PrimaryBackground}" Padding="15">
         <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="2*"/>
             </Grid.RowDefinitions>
 
-            <!-- HEADER -->
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                <TextBlock Text="Dashboard"
-                        Style="{StaticResource HeaderTextStyle}"/>
+            <!-- TOPBAR -->
+            <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Top">
+                <controls:DB_TopBar HorizontalAlignment="Center" Margin="0,0,0,15"/>
 
-                <TextBlock Text="{Binding NotifyOnSourceUpdated, StringFormat='({0:MMMM yyyy})'}" 
-                        VerticalAlignment="Center"
-                        Margin="12,0,0,0"
-                        Foreground="{StaticResource TextMedium}"/>
+                <!-- Income/ Expense cards-->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <controls:Total_IncomeCard />
+                    <controls:Total_ExpenseCard Margin="15,0,0,0"/>
+                </StackPanel>
+
             </StackPanel>
+           
+            <!-- LEFT COLUMN: DAY LIST -->
+            <controls:DayList Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Margin="10"/>
+           
+            
+            <!-- CENTER COLUM: BUDGETPOST LIST -->
+            <controls:DB_MonthPostsList Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Margin="10"/>
+            
+            <!-- RIGHT COLUMN: -->
+            
+            <!-- Bar-diagram-->
+            <Grid Grid.Column="3" Grid.Row="0" Grid.RowSpan="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-            <!-- SUMMARY CARDS -->
-            <Grid Grid.Row="1" Margin="0,24,0,24">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0" Margin="10"
+                           Text="Översikt (inkomster/ utgifter)"
+                           FontSize="16"
+                           Foreground="{StaticResource SecondaryForeground}" />
 
-                <!-- Income Card -->
-                <Border Grid.Column="0" Style="{StaticResource CardStyle}" Margin="0,0,12,0">
-                    <StackPanel>
-                        <TextBlock Text="Inkomster"
-                                Foreground="{StaticResource TextMedium}"
-                                FontSize="14"/>
-                        <TextBlock Text="{Binding TotalIncomeThisMonth, StringFormat='{}{0:C0}'}"
-                                Foreground="{StaticResource IncomeGreen}"
-                                FontSize="26" FontWeight="Bold"/>
-                    </StackPanel>
+                <Border Grid.Row="1"  CornerRadius="12" Padding="10" 
+                        Background="{StaticResource SecondaryBackground}" 
+                        MinHeight="200">
+
+                    <wpf1:WpfPlot x:Name="DailyBarChartPlot"/>
                 </Border>
 
-                <!-- Expense Card -->
-                <Border Grid.Column="1" Style="{StaticResource CardStyle}" Margin="12,0,12,0">
-                    <StackPanel>
-                        <TextBlock Text="Ugifter"
-                                Foreground="{StaticResource TextMedium}"
-                                FontSize="14"
-                                />
-                        <TextBlock Text="{Binding TotalExpensesThisMonth, StringFormat='{}{0:C0}'}"
-                                Foreground="{StaticResource ExpenseRed}"
-                                FontSize="26" FontWeight="Bold"
-                                />
-                    </StackPanel>
-                </Border>
-
-                <!-- Net balance Card -->
-                <Border Grid.Column="2" Style="{StaticResource CardStyle}" Margin="12,0">
-                    <StackPanel>
-                        <TextBlock Text="Balans (netto)"
-                                Foreground="{StaticResource TextMedium}"
-                                FontSize="14"
-                                />
-                        <TextBlock Text="{Binding NetBalanceThisMonth, StringFormat='{}{0:C0}'}"
-                                Foreground="{StaticResource TextDark}"
-                                FontSize="26" FontWeight="Bold"/>
-                    </StackPanel>
-                </Border>
             </Grid>
+            
+            
+            <!-- Pie-chart diagram-->
+            <Grid Grid.Column="3" Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-            <!-- MAIN CONTENT -->
-            <Grid Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0" Margin="10"
+                           Text="Utgifter per kategori (%)"
+                           FontSize="16"
+                           Foreground="{StaticResource SecondaryForeground}"/>
 
-                <!-- Left Side: Recent transactions -->
-                <StackPanel Grid.Column="0">
-                    <TextBlock Text="Senaste transaktioner"
-                            Style="{StaticResource HeaderTextStyle}"
-                            FontSize="18" Margin="0,0,0,12"
-                            />
+                <Border Grid.Row="1" CornerRadius="12" Padding="10" 
+                        Background="{StaticResource SecondaryBackground}"
+       >
+                    <wpf1:WpfPlot x:Name="PieChartPlot"/>
+                </Border>
 
-                    <Border Style="{StaticResource CardStyle}">
-                        <ScrollViewer VerticalScrollBarVisibility="Auto">
-                            <ItemsControl ItemsSource="{Binding RecentPosts}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Border Margin="0,4"
-                                             Background="{StaticResource CardBackground}"
-                                             Padding="8"
-                                             CornerRadius="8"
-                                             BorderBrush="{StaticResource BorderLight}"
-                                             BorderThickness="1">
-
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                    <ColumnDefinition Width="*"/>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                </Grid.ColumnDefinitions>
-
-                                                <!-- Small color dot -->
-                                                <Ellipse Width="12" Height="12"
-                                                      Fill="{Binding PostType, Converter={StaticResource PostTypeToBrushConverter}}"
-                                                      VerticalAlignment="Center"
-                                                      />
-
-                                                <!-- Description + Date -->
-                                                <StackPanel Margin="12,0" Grid.Column="1">
-                                                    <TextBlock Text="{Binding Description}"
-                                                            Foreground="{StaticResource TextDark}"
-                                                            FontSize="14"
-                                                            />
-                                                    <TextBlock Text="{Binding Date, StringFormat='{}{0:yyyy-MM-dd}'}"
-                                                            Foreground="{StaticResource TextLight}"
-                                                            FontSize="12"
-                                                            />
-                                                </StackPanel>
-
-                                                <!-- Amount -->
-                                                <TextBlock Grid.Column="2"
-                                                        Text="{Binding Amount, StringFormat='{}{0:C0}'}"
-                                                        Foreground="{Binding PostType, Converter={StaticResource PostTypeToBrushConverter}}"
-                                                        VerticalAlignment="Center"
-                                                        FontWeight="Bold"                                                          
-                                                        />
-                                            </Grid>
-                                        </Border>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </ScrollViewer>
-                    </Border>
-                </StackPanel>
-
-                <!-- RIGHT SIDE: CATEGORY SUMMARY -->
-                <StackPanel Grid.Column="1" Margin="24,0,0,0">
-                    <TextBlock Text="Kategori"
-                            Style="{StaticResource HeaderTextStyle}"
-                            FontSize="18" Margin="0,0,0,12"                               
-                            />
-
-                    <Border Style="{StaticResource CardStyle}">
-                        <ItemsControl ItemsSource="{Binding CategorySummaries}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid Margin="0,4">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock FontSize="22" Margin="0,0,8,0">
-                                                <TextBlock.Text>
-                                                    <Binding Path="CategoryName" Converter="{StaticResource IconConverter}" />
-                                                </TextBlock.Text>
-                                                <TextBlock.Foreground>
-                                                    <Binding Path="CategoryName" Converter="{StaticResource IconConverter}" />
-                                                </TextBlock.Foreground>
-                                            </TextBlock>
-
-                                            <TextBlock Text="{Binding CategoryName}"
-               Foreground="{StaticResource TextDark}"
-               FontSize="14"/>
-                                        </StackPanel>
-
-                                        <TextBlock Grid.Column="1"
-                                                Text="{Binding Total, StringFormat='{}{0:C0}'}"
-                                                Foreground="{StaticResource TextDark}"
-                                                FontWeight="Bold"                                                   
-                                                />
-                                    </Grid>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-
-                        </ItemsControl>
-                    </Border>
-                </StackPanel>
             </Grid>
+            
+           
+
+            
+
 
         </Grid>
     </Border>
-
 </UserControl>

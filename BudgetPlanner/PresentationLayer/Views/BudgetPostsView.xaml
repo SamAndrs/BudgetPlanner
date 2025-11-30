@@ -5,11 +5,6 @@
              xmlns:domain="clr-namespace:BudgetPlanner.DomainLayer.Enums"
              xmlns:local="clr-namespace:BudgetPlanner.PresentationLayer.Resources.Converters">
 
-    <UserControl.Resources>
-        <!-- Converter för Income/ Expense color -->
-        <local:PostTypeToBrushConverter x:Key="PostTypeToBrushConverter" />
-    </UserControl.Resources>
-
     <Grid Background="{StaticResource BackgroundLight}" Margin="16">
 
         <StackPanel>

@@ -13,7 +13,10 @@ namespace BudgetPlanner.PresentationLayer.Resources.Converters
         {
             bool visible = value is bool b && b;
 
-            if(Invert)
+            if(parameter is string p && p.ToLower() == "invert")
+                visible = !visible;
+
+            if (Invert)
                 visible = !visible;
 
             return visible ? Visibility.Visible : Visibility.Collapsed;

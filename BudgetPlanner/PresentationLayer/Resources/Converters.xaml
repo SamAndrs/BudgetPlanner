@@ -4,6 +4,7 @@
                     xmlns:conv="clr-namespace:BudgetPlanner.PresentationLayer.Resources.Converters">
 
     <conv:PostTypeToBrushConverter x:Key="PostTypeToBrushConverter" />
+    <conv:PostTypeToBGColor x:Key="PostTypeToBGColor" />
     <conv:PostTypeAmountConverter x:Key="PostTypeAmountConverter" />
     <conv:BoolToVisibilityConverter x:Key="BoolToVisibility" />
     <conv:EnumDescriptionConverter x:Key="EnumDescription" />

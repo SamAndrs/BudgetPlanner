@@ -4,6 +4,7 @@ using BudgetPlanner.PresentationLayer.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Globalization;
 using System.IO;
 using System.Windows;
 
@@ -21,11 +22,24 @@ namespace BudgetPlanner
         {
             base.OnStartup(e);
 
+            // Sätt trådkultur globalt
+            var culture = new CultureInfo("sv-SE");
+            CultureInfo.DefaultThreadCurrentCulture = culture;
+            CultureInfo.DefaultThreadCurrentUICulture = culture;
+
+            // Säkerställ att WPF-format använder rätt kultur
+            var lang = System.Windows.Markup.XmlLanguage.GetLanguage(culture.IetfLanguageTag);
+            FrameworkElement.LanguageProperty.OverrideMetadata(
+                typeof(FrameworkElement),
+                new FrameworkPropertyMetadata(lang)
+            );
+
             // 1. Build configuration
             var builder = new ConfigurationBuilder()
                 .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
+          
             Configuration = builder.Build();
 
 
