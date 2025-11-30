@@ -31,5 +31,15 @@ namespace BudgetPlanner
         {
             Application.Current.Shutdown();
         }
+
+        private void btnMaximize_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Maximized;
+        }
+
+        private void btnWindow_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Normal;
+        }
     }
 }

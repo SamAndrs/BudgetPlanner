@@ -4,10 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BudgetPlanner.PresentationLayer.Resources.Dashboard"
-             mc:Ignorable="d" 
              >
 
-    <StackPanel Background="Transparent">
+    <StackPanel x:Name="RootPanel" Background="Transparent">
         <TextBlock Text="Månadsöversikt" 
                    FontSize="14"
                    FontWeight="Bold"
@@ -15,17 +14,18 @@
                    HorizontalAlignment="Center"
                    Margin="0,0,0,10"/>
 
-        <TextBlock Text="Binding CurrentMonth"
-                   FontSize="12"
+        <TextBlock Text="{Binding CurrentMonth}"
+                   FontSize="14"
                    FontWeight="Bold"
                    Foreground="{StaticResource PrimaryForeground}"
                    HorizontalAlignment="Center"
                    Margin="0,0,0,20"/>
 
-        <TextBlock Text="{Binding NetBalanceThisMonth, StringFormat='{}{0:C0}'}"
+        <TextBlock Text="{Binding NetBalanceThisMonth, StringFormat='{}{0:C}'}"
                    FontSize="26"
                    FontWeight="Bold"
-                   Foreground="{StaticResource PrimaryBackground}"
+                   Foreground="{StaticResource PrimaryForeground}"
                    HorizontalAlignment="Center"/>
+        
     </StackPanel>
 </UserControl>

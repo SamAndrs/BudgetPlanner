@@ -9,7 +9,7 @@
         xmlns:controls="clr-namespace:BudgetPlanner.PresentationLayer.Resources.MW_Window"
         
         mc:Ignorable="d"
-        Title="Budgetplaneraren" Height="600" Width="1000"
+        Title="Budgetplaneraren"
         WindowStyle="None"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
@@ -32,12 +32,14 @@
                 <!-- Window Buttons-->
                 <ColumnDefinition Width="25" />
                 <ColumnDefinition Width="25" />
+                <ColumnDefinition Width="25" />
+                <ColumnDefinition Width="25" />
                 <ColumnDefinition Width="5" />
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="50"/>
                 <RowDefinition />
                 <RowDefinition Height="25"/>
             </Grid.RowDefinitions>
@@ -51,9 +53,23 @@
                     Content="-"
                     Click="btnMinimize_Click" >
             </Button>
+            
+            <Button x:Name="btnMaximize"
+                    Grid.Row="0" Grid.Column="3"
+                    Style="{StaticResource WindowButtonStyle}"
+                    Content="+"
+                    Click="btnMaximize_Click" >
+            </Button>
+
+            <Button x:Name="btnWindow"
+                    Grid.Row="0" Grid.Column="4"
+                    Style="{StaticResource WindowButtonStyle}"
+                    Content="❐"
+                    Click="btnWindow_Click" >
+            </Button>
 
             <Button x:Name="btnClose"
-                    Grid.Row="0" Grid.Column="3"
+                    Grid.Row="0" Grid.Column="5"
                     Style="{StaticResource WindowButtonStyle}"
                     Content="x"
                     Click="btnClose_Click">
@@ -61,7 +77,8 @@
 
 
             <!-- TITLE BAR -->
-            <controls:TitleBar Grid.Column="1" Grid.Row="0"  Margin="10,0,0,10"/>
+            <controls:TitleBar Grid.Column="1" Grid.Row="1"  Grid.ColumnSpan="4"  Margin="10,0,0,10"
+                               HorizontalAlignment="Center"/>
 
    
             <!-- LEFT SIDEBAR -->
@@ -75,7 +92,7 @@
 
 
             <!-- CONTENT AREA -->
-            <ContentControl Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2"
+            <ContentControl Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="4"
                             Content="{Binding CurrentView}" />
 
             <!-- Modal backdrop -->

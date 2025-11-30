@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace BudgetPlanner.PresentationLayer.Views
+namespace BudgetPlanner.PresentationLayer.Resources.Dashboard
 {
     /// <summary>
-    /// Interaction logic for DazhboardView.xaml
+    /// Interaction logic for DayList.xaml
     /// </summary>
-    public partial class DazhboardView : UserControl
+    public partial class DayList : UserControl
     {
-        public DazhboardView()
+        public DayList()
         {
             InitializeComponent();
         }

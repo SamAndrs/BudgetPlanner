@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="BudgetPlanner.PresentationLayer.Resources.Dashboard.DB_DayTransactionsCard"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BudgetPlanner.PresentationLayer.Resources.Dashboard"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="400">
+
+    <Border Margin="5,2" Padding="8"
+            Background="{StaticResource SecondaryBackground}"
+            CornerRadius="6">
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Icon -->
+            <Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" CornerRadius="50" Width="50" Height="50" Padding="10"
+                    Background="{StaticResource PrimaryBackground}" Margin="5"  VerticalAlignment="Center">
+                <TextBlock FontSize="20"
+                    VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock.Text>
+                        <Binding Path="Category.Name" Converter="{StaticResource IconConverter}" />
+                    </TextBlock.Text>
+                    <TextBlock.Foreground>
+                        <Binding Path="Category.Name" Converter="{StaticResource IconConverter}" />
+                    </TextBlock.Foreground>
+                </TextBlock>
+
+            </Border>
+            
+
+            <StackPanel Grid.Column="1">
+                <!-- Kategori -->
+                <TextBlock Grid.Row="0"
+                           Text="{Binding Category.Name}"
+                           FontSize="16"
+                           Foreground="{StaticResource SecondaryForeground}"
+                           Margin="5,5,0,15"/>
+                
+                <!-- Description -->
+                <TextBlock Grid.Row="1"
+                           Text="{Binding Description}"
+                           FontSize="18"
+                           VerticalAlignment="Bottom"
+                           Foreground="{StaticResource PrimaryForeground}"
+                           Margin="5,0,5,5"/>
+            </StackPanel>
+            
+            <!-- Belopp -->
+            <Border CornerRadius="3" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" 
+                    VerticalAlignment="Center" Padding="3"
+                    Background="{Binding PostType,
+                                    Converter={StaticResource PostTypeToBGColor}}" >
+                <TextBlock VerticalAlignment="Center"
+                           Text="{Binding ., Converter={StaticResource PostTypeAmountConverter}}"
+                           FontSize="16"
+                           Foreground="{Binding PostType,
+                                    Converter={StaticResource PostTypeToBrushConverter}}" />
+            </Border>
+        </Grid>
+    </Border>
+</UserControl>
