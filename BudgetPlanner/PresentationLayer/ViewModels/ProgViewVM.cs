@@ -2,175 +2,189 @@
 using BudgetPlanner.DomainLayer.Models;
 using BudgetPlanner.PresentationLayer.Commands;
 using System.Collections.ObjectModel;
-using System.Security.AccessControl;
 using System.Windows.Input;
 
 namespace BudgetPlanner.PresentationLayer.ViewModels
 {
-    public class BudgetPostsViewVM : ViewModelBase
+    public class ProgViewVM : ViewModelBase
     {
-        public string ViewTitle { get; set; } = "Budgetposter";
+        private double _yearlyIncome;
+        private double _yearlyWorkhours;
 
-        private string _searchText = "";
-        private Category _selectedCategory;
-        private BudgetPostType _selectedType;
-        private Recurring _recurring;
-        private DateTime? _fromDate;
-        private DateTime? _toDate;
-        private BudgetPostFilterOption _selectedTypeOption;
-
-        private double _totalIncome;
-        private double _totalExpense;
-
-
-        #region --- Properties (full) ---
-        public string SearchText
+        public double YearlyIncome
         {
-            get { return _searchText; }
+            get { return _yearlyIncome; }
             set 
             { 
-                if(_searchText != value)
-                {
-                    _searchText = value;
-                    RaisePropertyChanged();
-                    ApplyFilters();
-                }
-            }
-        }
-
-        public Category SelectedCategory
-        {
-            get { return _selectedCategory; }
-            set { _selectedCategory = value;
+                _yearlyIncome = value;
                 RaisePropertyChanged();
-                ApplyFilters();
+                RaisePropertyChanged(nameof(CalculatedMonthlyIncome));
             }
         }
 
-        public BudgetPostType SelectedType
+        public double YearlyWorkhours
         {
-            get { return _selectedType; }
-            set { _selectedType = value;
+            get { return _yearlyWorkhours; }
+            set 
+            { 
+                _yearlyWorkhours = value; 
                 RaisePropertyChanged();
-                ApplyFilters();
+                RaisePropertyChanged(nameof(CalculatedMonthlyIncome));
             }
         }
 
-        public Recurring Recurring
+        public double CalculatedMonthlyIncome
         {
-            get { return _recurring; }
-            set { _recurring = value; 
-                RaisePropertyChanged();
-                ApplyFilters();
-            }
-        }
-
-        public DateTime? FromDate
-        {
-            get { return _fromDate; }
-            set { _fromDate = value;
-                RaisePropertyChanged();
-                ApplyFilters();
-            }
-        }
-
-        public DateTime? ToDate
-        {
-            get { return _toDate; }
-            set { _toDate = value;
-                RaisePropertyChanged();
-                ApplyFilters();
-            }
-        }
-
-        public double TotalIncome
-        {
-            get { return _totalIncome; }
-            set { _totalIncome = value; 
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(TotalDifference));
-            }
-        }
-
-        public double TotalExpense
-        {
-            get { return _totalExpense; }
-            set { _totalExpense = value; 
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(TotalDifference));
-            }
-        }
-
-        public BudgetPostFilterOption SelectedTypeOption
-        {
-            get { return _selectedTypeOption; }
-            set
+            get
             {
-                _selectedTypeOption = value;
-                RaisePropertyChanged();
-                ApplyFilters();
+                if (YearlyWorkhours <= 0) return 0;
+                
+                double hourlyRate = YearlyIncome / YearlyWorkhours;
+                return hourlyRate * (YearlyWorkhours / 12);
             }
         }
 
-        public double TotalDifference => TotalIncome - TotalExpense;
 
-        #endregion
+        public string ViewTitle { get; } = "Månadsprognos";
 
         // Collections
-        public List<BudgetPost> AllPosts { get; set; }
-        public ObservableCollection<BudgetPost> FilteredPosts { get; set; }
-
+        public ObservableCollection<BudgetPost> AllPosts { get; set; } = new();
+        public ObservableCollection<Prognosis> MonthlyPrognoses { get; set; } = new();
         public ObservableCollection<Category> Categories { get; set; }
 
-        public ObservableCollection<BudgetPostFilterOption> BPTypeFilterOptions { get; }
+        public decimal TotalIncome => SelectedPrognosis?.TotalIncome ?? 0;
+        public decimal TotalExpense => SelectedPrognosis?.TotalExpenses ?? 0;
+        public decimal TotalDifference => TotalIncome - TotalExpense;
 
+        private Prognosis _selectedPrognosis;
 
-        // Chart
-        public Dictionary<string, int> CategoryCounts =>
-                //FilteredPosts
-                AllPosts
-                 .GroupBy(p => p.Category.Name)
-                 .ToDictionary(g => g.Key, g => g.Count());
+        public Prognosis SelectedPrognosis
+        {
+            get { return _selectedPrognosis; }
+            set
+            {
+                _selectedPrognosis = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(TotalIncome));
+                RaisePropertyChanged(nameof(TotalExpense));
+            }
+        }
 
-
-        // Actions
-        public Action<AddEditBudgetPostVM>? RequestOpenDialog { get; set; }
-        public Action? RequestCloseDialog { get; set; }
-        public Action? CategorySummaryChartRequested { get; set; }
 
         // Commands
-        public ICommand AddNewBudgetPostCommand { get; }
-        public ICommand EditPostCommand { get; }
-        public ICommand DeletePostCommand { get; }
+        public ICommand SelectNextMonthCommand { get; }
+        public ICommand SelectPreviousMonthCommand { get; }
 
 
         // Constructor
-        public BudgetPostsViewVM()
+        public ProgViewVM()
         {
-
-            // MOCKAD DATA  // TODO: Ladda verklig data från service, här.
+            // Mock data  //TODO: Hämta data från service ===============
             Categories = LoadCategories();
             AllPosts = LoadData();
 
-            // Calculate total of incomes, expenses and difference
-            RecalculateTotals();
+            GeneratePrognosesForYear(DateTime.Now.Year);
+            //GeneratePrognosisRange(DateTime.Now); // TODO: Uncomment after new methods
 
-            // Set BudgetPostType filteringoptions (income/ expense/ all)
-            BPTypeFilterOptions = SetPostTypeOptions();
-            
-            FilteredPosts = new ObservableCollection<BudgetPost>(AllPosts);
+            SelectedPrognosis = MonthlyPrognoses
+               .FirstOrDefault(p => p.FromDate.Month == DateTime.Now.Month);
 
-            AddNewBudgetPostCommand = new DelegateCommand(AddPost);
-            EditPostCommand = new DelegateCommand(EditPost);
-            DeletePostCommand = new DelegateCommand(DeletePost);
+            SelectNextMonthCommand = new DelegateCommand(NextMonth);
+            SelectPreviousMonthCommand = new DelegateCommand(PreviousMonth);
+        }
+
+        // MAIN LOGIC: Generate 10 monthly prognosis objects
+        private void GeneratePrognosesForYear(int year)
+        {
+            MonthlyPrognoses.Clear();
+
+            for (int month = 1; month <= 12; month++)
+            {
+                var from = new DateTime(year, month, 1);
+                var to = from.AddMonths(1).AddDays(-1);
+
+                var prognosis = new Prognosis
+                {
+                    Id = month,
+                    Month = $"{from:MMMM}",
+                    FromDate = from,
+                    ToDate = to,
+                };
+
+                CalculateMonthlyPrognosis(prognosis);
+
+                MonthlyPrognoses.Add(prognosis);
+            }
+        }
+
+        // Monthly calculation logic
+        private void CalculateMonthlyPrognosis(Prognosis prognosis)
+        {
+            prognosis.TotalIncome = 0;
+            prognosis.TotalExpenses = 0;
+            prognosis.BudgetPosts.Clear();
+
+            // Hämta alla poster för nuvarande månad
+            var postsForMonth = AllPosts.Where(p =>
+            (p.Recurring == Recurring.None && p.Date?.Month == prognosis.FromDate.Month) ||
+            (p.Recurring != Recurring.None));
+
+            foreach (var post in postsForMonth)
+            {
+                // Beräkna månadsvärde (0 för engångsposter innan filtrering)
+                decimal monthlyAmount = post.Recurring == Recurring.None
+                       ? (decimal)post.Amount
+                       : ConvertRecurringToMonthly(post);
+
+                if (post.PostType == BudgetPostType.Income)
+                    prognosis.TotalIncome += monthlyAmount;
+
+                else
+                    prognosis.TotalExpenses += Math.Abs(monthlyAmount);
+
+                prognosis.BudgetPosts.Add(post);
+            }
+
+            prognosis.TotalSum = prognosis.TotalIncome - prognosis.TotalExpenses;
         }
 
 
-        private List<BudgetPost>LoadData()
+        // Recurring conversion helper method
+        private decimal ConvertRecurringToMonthly(BudgetPost post)
+        {
+            var amount = (decimal)post.Amount;
+
+            return post.Recurring switch
+            {
+                Recurring.Daily => amount * 30,
+                Recurring.Weekly => amount * 4.33m,
+                Recurring.Monthly => amount,
+                Recurring.Yearly => amount / 12,
+                _ => 0
+            };
+        }
+
+        // Month navigation
+        private void NextMonth(object? obj)
+        {
+            int index = MonthlyPrognoses.IndexOf(SelectedPrognosis);
+            if (index < MonthlyPrognoses.Count - 1)
+                SelectedPrognosis = MonthlyPrognoses[index + 1];
+        }
+
+        private void PreviousMonth(object? obj)
+        {
+            int index = MonthlyPrognoses.IndexOf(SelectedPrognosis);
+            if (index > 0)
+                SelectedPrognosis = MonthlyPrognoses[index - 1];
+        }
+
+
+        private ObservableCollection<BudgetPost> LoadData()
         {
             var now = DateTime.Now;
 
-            var posts = new List<BudgetPost>
+            return new ObservableCollection<BudgetPost>
             {
                 // ==== Nuvarande månad ====
                 new BudgetPost { Id = 1, Amount = 3200, Category = Categories[1], CategoryId= Categories[1].Id, Description = "Veckohandling", Date = new DateTime(now.Year, now.Month, 1), Recurring= Recurring.Weekly, PostType = BudgetPostType.Expense },
@@ -212,8 +226,6 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
                 new BudgetPost { Id = 23, Amount = 28500, Category = Categories[12], CategoryId = 14, Description = "Lön", Date = new DateTime(now.Year, now.Month - 4, 23), Recurring = Recurring.Monthly, PostType = BudgetPostType.Income },
                 new BudgetPost { Id = 24, Amount = 600, Category = Categories[14], CategoryId = 16, Description = "Säljtjänst", Date = new DateTime(now.Year, now.Month - 4, 17), Recurring = Recurring.None, PostType = BudgetPostType.Income },
             };
-
-            return posts;
         }
 
         private ObservableCollection<Category> LoadCategories()
@@ -242,144 +254,6 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
 
                 new Category { Id = 17, Name = "Okänd" }
             };
-        }
-
-        private ObservableCollection<BudgetPostFilterOption> SetPostTypeOptions()
-        {
-            return new ObservableCollection<BudgetPostFilterOption>
-            {
-                new BudgetPostFilterOption { DisplayName = "Alla", Type = null },
-                new BudgetPostFilterOption { DisplayName = "Inkomst", Type = BudgetPostType.Income},
-                new BudgetPostFilterOption { DisplayName = "Utgift", Type = BudgetPostType.Expense}
-            };
-        }
-
-        private void DeletePost(object? obj)
-        {
-            if (obj is BudgetPost post)
-            {
-                AllPosts.Remove(post);
-                // TODO: Ta bort från datakälla via service
-                ApplyFilters();
-                RecalculateTotals();
-                RaisePropertyChanged(nameof(CategoryCounts));
-            }
-        }
-
-        private void EditPost(object? obj)
-        {
-            if (obj is not BudgetPost post) return;
-
-            var clone = new BudgetPost
-            {
-                Id = post.Id,
-                Amount = post.Amount,
-                Category = post.Category,
-                CategoryId = post.CategoryId,
-                Description = post.Description,
-                Date = post.Date,
-                PostType = post.PostType,
-                Recurring = post.Recurring
-            };
-
-            var vm = new AddEditBudgetPostVM(clone, Categories);
-
-            vm.CloseRequested += (success, editedPost) =>
-            {
-                if (success)
-                {
-                    // Uppdatera den ursprungliga posten med de redigerade värdena
-                    post.Amount = editedPost.Amount;
-                    post.Category = editedPost.Category;
-                    post.CategoryId = editedPost.CategoryId;
-                    post.Description = editedPost.Description;
-                    post.Date = editedPost.Date;
-                    post.PostType = editedPost.PostType;
-                    post.Recurring = editedPost.Recurring;
-
-                    ApplyFilters();
-                    RecalculateTotals();
-                    RaisePropertyChanged(nameof(CategoryCounts));
-                }
-                RequestCloseDialog?.Invoke();
-
-            };
-
-            RequestOpenDialog?.Invoke(vm);
-        }
-
-        private void AddPost(object? obj)
-        {
-            var vm = new AddEditBudgetPostVM(new BudgetPost { Date= DateTime.Today }, Categories);
-
-            vm.CloseRequested += (success, post) =>
-            {
-                if (success)
-                {
-                    AllPosts.Add(post);
-                    ApplyFilters();
-                    RecalculateTotals();
-                    RaisePropertyChanged(nameof(CategoryCounts));
-                }
-                RequestCloseDialog?.Invoke();
-            };
-
-            RequestOpenDialog?.Invoke(vm);
-
-        }
-
-
-        private void ApplyFilters()
-        {
-            var result = AllPosts.AsEnumerable();
-
-            // Söktext
-            if (!string.IsNullOrWhiteSpace(SearchText))
-            {
-                result = result.Where(x => 
-                    x.Category.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ||
-                    x.Description.Contains(SearchText, StringComparison.OrdinalIgnoreCase));
-            }
-            
-            // Kategori: Hoppa över om 'Alla' är vald eller null
-            if (SelectedCategory != null && SelectedCategory.Id != 1)
-                result = result.Where(x => x.Category.Id == SelectedCategory.Id);
-
-            // Datumintervall
-            if (FromDate != null)
-                result = result.Where(x => x.Date >= FromDate);
-
-            if (ToDate != null)
-                result = result.Where(x => x.Date <= ToDate);
-
-            // Inkomst/Utgift
-            if (SelectedTypeOption?.Type != null)
-                result = result.Where(x => x.PostType == SelectedTypeOption.Type.Value);
-
-            FilteredPosts.Clear();
-            foreach (var item in result)
-                FilteredPosts.Add(item);
-
-        }
-
-        private void RecalculateTotals()
-        {
-            TotalIncome = AllPosts
-                .Where(p => p.PostType == BudgetPostType.Income)
-                .Sum(p => p.Amount);
-
-            TotalExpense = AllPosts
-               .Where(p => p.PostType == BudgetPostType.Expense)
-               .Sum(p => p.Amount);
-
-            RaisePropertyChanged(nameof(TotalDifference));
-        }
-
-        // Helper class
-        public class BudgetPostFilterOption
-        {
-            public string DisplayName { get; set; }
-            public BudgetPostType? Type { get; set; }
         }
     }
 }

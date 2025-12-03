@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="BudgetPlanner.PresentationLayer.Views.ProgView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BudgetPlanner.PresentationLayer.Views"
+             
+             xmlns:controls="clr-namespace:BudgetPlanner.PresentationLayer.Resources.PrognosisView"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        
+        <!-- HEADER -->
+        <TextBlock Grid.Row="0" Grid.ColumnSpan="3"
+                   Text="{Binding ViewTitle}" 
+                   Style="{StaticResource HeaderTextStyle}"
+                   Foreground="{StaticResource SecondaryForeground}"
+                   HorizontalAlignment="Center"
+                   Margin="0,0,0,10"/>
+
+
+        <!-- NAVIGATION MONTH-PROGNOSIS -->
+        <controls:NavigationBar Grid.Row="1" Grid.Column="1" 
+                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+        <!-- PROGNOSIS CHART -->
+        <controls:PrognosisChart Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" 
+                                 Data="{Binding MonthlyPrognoses}"/> 
+
+        <!-- SUMMARIES -->
+        <controls:Summaries Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Padding="5"/>
+
+        <!-- LEFT COLUMN: INCOME CALCULATOR -->
+        <controls:MonthlyIncome Grid.Row="4" Grid.Column="0" Margin="10,0,0,5"/>
+
+        <!-- CENTER COLUMN: RECURRING BUDGETPOSTS -->
+        <controls:RecurringPosts Grid.Row="4" Grid.Column="1" Margin="5,0,5,5" /> 
+
+        <!-- RIGHT COLUMN: -->
+        
+        
+    </Grid>
+</UserControl>

@@ -52,14 +52,13 @@
 
                 <TextBlock Grid.Row="0" Margin="10"
                            Text="Översikt (inkomster/ utgifter)"
-                           FontSize="16"
-                           Foreground="{StaticResource SecondaryForeground}" />
+                           Style="{StaticResource LabelTextStyle}"/>
 
                 <Border Grid.Row="1"  CornerRadius="12" Padding="10" 
                         Background="{StaticResource SecondaryBackground}" 
                         MinHeight="200">
 
-                    <wpf1:WpfPlot x:Name="DailyBarChartPlot"/>
+                    <wpf:WpfPlot x:Name="DailyBarChartPlot"/>
                 </Border>
 
             </Grid>
@@ -74,13 +73,12 @@
 
                 <TextBlock Grid.Row="0" Margin="10"
                            Text="Utgifter per kategori (%)"
-                           FontSize="16"
-                           Foreground="{StaticResource SecondaryForeground}"/>
+                           Style="{StaticResource LabelTextStyle}"/>
 
                 <Border Grid.Row="1" CornerRadius="12" Padding="10" 
                         Background="{StaticResource SecondaryBackground}"
        >
-                    <wpf1:WpfPlot x:Name="PieChartPlot"/>
+                    <wpf:WpfPlot x:Name="PieChartPlot"/>
                 </Border>
 
             </Grid>

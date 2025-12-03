@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BudgetPlanner.PresentationLayer.Views"
              >
-    <Grid Background="{StaticResource BackgroundLight}">
+    <Grid Background="{StaticResource PrimaryBackground}">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />  <!-- Header row -->
@@ -15,11 +15,15 @@
         </Grid.RowDefinitions>
 
        <!-- HEADER -->
-        <TextBlock Grid.Row="0"
-                   Text="Månadsprognos"
-                   Style="{StaticResource HeaderTextStyle}"
-                   Margin="10,0,0,16"/>
-        
+        <!-- HEADER -->
+        <TextBlock Grid.Row="0" Grid.ColumnSpan="3"
+            Text="{Binding ViewTitle}" 
+            FontSize="18"
+            FontWeight="Bold"
+            Foreground="{StaticResource SecondaryForeground}"
+            HorizontalAlignment="Center"
+            Margin="0,0,0,10"/>
+
         <!-- Month Selection + Navigation bar -->
         <Grid Grid.Row="1" Margin="0,0,0,20" HorizontalAlignment="Center">
             <Grid.ColumnDefinitions>
@@ -72,7 +76,7 @@
             <!-- Total Income -->
             <Border Grid.Column="0" Grid.Row="0" Style="{StaticResource CardStyle}" Padding="16" Margin="0,0,16,0">
                 <StackPanel>
-                    <TextBlock Text="Inkomster (totalt)" Foreground="{StaticResource TextMedium}" FontSize="14"/>
+                    <TextBlock Text="Inkomster (totalt)" Style="{StaticResource LabelTextStyle}"/>
                     <TextBlock Text="{Binding TotalIncome, StringFormat={}{0:N0} kr}"
                                Foreground="{StaticResource IncomeGreen}"
                                FontSize="26" FontWeight="Bold" Margin="0,4,0,0"/>
@@ -82,7 +86,7 @@
             <!-- Total Expense -->
             <Border Grid.Column="1" Grid.Row="0" Style="{StaticResource CardStyle}" Padding="16" Margin="0,0,16,0">
                 <StackPanel>
-                    <TextBlock Text="Utgifter (totalt)" Foreground="{StaticResource TextMedium}" FontSize="14"/>
+                    <TextBlock Text="Utgifter (totalt)" Style="{StaticResource LabelTextStyle}"/>
                     <TextBlock Text="{Binding TotalExpense, StringFormat={}{0:N0} kr}"
                                Foreground="{StaticResource ExpenseRed}"
                                FontSize="26" FontWeight="Bold" Margin="0,4,0,0"/>
@@ -92,9 +96,9 @@
             <!-- Prognosis -->
             <Border Grid.Column="2" Style="{StaticResource CardStyle}" Padding="16">
                 <StackPanel>
-                    <TextBlock Text="Prognos (saldo)" Foreground="{StaticResource TextMedium}" FontSize="14"/>
+                    <TextBlock Text="Prognos (saldo)" Style="{StaticResource LabelTextStyle}"/>
                     <TextBlock Text="{Binding SelectedPrognosis.TotalSum, StringFormat={}{0:N0} kr}"
-                               Foreground="{StaticResource PrimaryBlueDark}"
+                               Foreground="{StaticResource PrimaryForeground}"
                                FontSize="26" FontWeight="Bold" Margin="0,4,0,0"/>
                 </StackPanel>
             </Border>
@@ -113,18 +117,18 @@
                         <TextBlock Text="Beräkna Månadsinkomst" 
                                    Style="{StaticResource LabelTextStyle}" Margin="0,0,0,12"/>
 
-                        <TextBlock Text="Årsinkomst" Foreground="{StaticResource TextMedium}"/>
+                        <TextBlock Text="Årsinkomst" Style="{StaticResource LabelTextStyle}"/>
                         <TextBox Text="{Binding YearlyIncome, UpdateSourceTrigger=PropertyChanged}" Margin="0,4,0,12"/>
 
-                        <TextBlock Text="Årsarbetstid (timmar)" Foreground="{StaticResource TextMedium}"/>
+                        <TextBlock Text="Årsarbetstid (timmar)" Style="{StaticResource LabelTextStyle}"/>
                         <TextBox Text="{Binding YearlyWorkHours, UpdateSourceTrigger=PropertyChanged}" Margin="0,4,0,12"/>
 
                         <TextBlock Text="Månadsinkomst/år"
-                                   Foreground="{StaticResource TextLight}" Margin="0,4,0,4"/>
+                                   Style="{StaticResource LabelTextStyle}" Margin="0,4,0,4"/>
 
                         <TextBlock Text="{Binding CalculatedMonthlyIncome, StringFormat={}{0:N0} kr}"
                                    FontSize="22" FontWeight="Bold"
-                                   Foreground="{StaticResource PrimaryBlueDark}"/>
+                                   Style="{StaticResource LabelTextStyle}"/>
                     </StackPanel>
                 </Border>
                 
@@ -146,7 +150,7 @@
                                         </Grid.ColumnDefinitions>
 
                                         <TextBlock Text="{Binding Description}" 
-                                                   Foreground="{StaticResource TextDark}"/>
+                                                   Foreground="{StaticResource SecondaryForeground}"/>
                                         
                                         <TextBlock Grid.Column="1"
                                                    Text="{Binding Amount, StringFormat={}{0:N0} kr}"

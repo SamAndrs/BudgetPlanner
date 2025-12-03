@@ -8,15 +8,17 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
 
-                <!-- Global styles -->
+                <!-- Global colors -->
                 <ResourceDictionary Source="PresentationLayer/Resources/Colors.xaml" />
-                <ResourceDictionary Source="PresentationLayer/Resources/Styles.xaml" />
 
                 <!-- Global Converters -->
                 <ResourceDictionary Source="PresentationLayer/Resources/Converters.xaml" />
 
+                <!-- Global styles -->
+                <ResourceDictionary Source="PresentationLayer/Resources/Styles.xaml" />
+
                 <!-- Global DataTemplates -->
-                <ResourceDictionary Source="PresentationLayer/Resources/BudgetPostTemplates.xaml" />
+                <ResourceDictionary Source="PresentationLayer/Resources/DataTemplates.xaml" />
                 <ResourceDictionary Source="PresentationLayer/Resources/ViewToVM_Mapping.xaml" />
                 
                

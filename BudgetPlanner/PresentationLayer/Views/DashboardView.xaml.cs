@@ -1,9 +1,6 @@
 ﻿using BudgetPlanner.PresentationLayer.ViewModels;
-using Microsoft.EntityFrameworkCore.Query.Internal;
-using System.Drawing;
-using System.Windows;
+using ScottPlot;
 using System.Windows.Controls;
-using System.Xaml.Schema;
 
 namespace BudgetPlanner.PresentationLayer.Views
 {
@@ -26,102 +23,133 @@ namespace BudgetPlanner.PresentationLayer.Views
             DrawPieChart(vm);
         }
 
+      
         private void DrawPieChart(DashboardViewVM vm)
         {
             var plt = PieChartPlot.Plot;
             plt.Clear();
 
-            // Set background to transparent
-            plt.Style(figureBackground: System.Drawing.Color.Transparent,
-                dataBackground: System.Drawing.Color.Transparent);
+            if (vm.ExpenseValues.Count == 0)
+                return;
 
+            int count = vm.ExpenseValues.Count;
+            double total = vm.ExpenseValues.Sum();
 
-            // Create piechart
-            var pie = plt.AddPie(vm.ExpenseValues.ToArray());
+            List<PieSlice> slices = new(count);
 
-            pie.SliceLabels = vm.ExpenseLabels.ToArray();
-            //pie.ShowLabels = true;
+            // Calculate percentages and set colors
+            for (int i = 0; i < count; i++)
+            {
+                double percentage = (vm.ExpenseValues[i] / total) * 100;
+                var color = Palette.Default.GetColor(i);
 
-            //pie.ShowValues = false;
-            pie.ShowPercentages = true;
-            pie.Explode = true;
-            pie.DonutSize = .5;
+                slices.Add(new PieSlice()
+                {
+                    Value = vm.ExpenseValues[i],
+                    Label = $"{vm.ExpenseLabels[i]}\n{percentage:0.0}%",
+                    FillColor = color,
+                    LabelFontColor = color
+                });
+            }
 
-            plt.Legend(location: ScottPlot.Alignment.LowerRight);
+            // Create chart
+            var pie = plt.Add.Pie(slices);
+
+            // Styling
+            pie.ExplodeFraction = 0.1;
+            pie.DonutFraction = 0.4;
+            pie.SliceLabelDistance = 1.2;
+
+            plt.Axes.Frameless();
+            plt.Axes.SetLimits(-1.5, 1.5, -1.5, 1.5);
+
+            plt.FigureBackground.Color = Colors.Transparent;
+
             PieChartPlot.Refresh();
         }
 
+       
         private void DrawDailyBarChart(DashboardViewVM vm)
         {
-            // Set colors
-            var textColor = ToColor((System.Windows.Media.Color)Application.Current.Resources["SecondaryForegroundColor"]);
-            var gridLineColor = ToColor((System.Windows.Media.Color)Application.Current.Resources["PrimaryBackgroundColor"]);
-
-            var incomeBrush = (System.Windows.Media.SolidColorBrush)Application.Current.Resources["IncomeGreen"];
-            var expenseBrush = (System.Windows.Media.SolidColorBrush)Application.Current.Resources["ExpenseRed"];
-            
-            var incomeColor = ToColor(incomeBrush.Color);
-            var expenseColor = ToColor(expenseBrush.Color);
-
             var plt = DailyBarChartPlot.Plot;
             plt.Clear();
 
             var activeDays = vm.ActiveDays;
             int nrDays = activeDays.Count;
 
-            double[] xs = new double[nrDays];
-            double[] incomeValues = new double[nrDays];
-            double[] expensesValues = new double[nrDays];
-            string[] labels = new string[nrDays];
+            // Sätt Y-axel från 0 till maxvärde + lite marginal
+            double maxValue = activeDays.Max(d => Math.Max(d.TotalIncome, d.TotalExpense));
+            plt.Axes.SetLimitsY(0, maxValue * 1.1); // 10% marginal
+
+            var bars = new List<ScottPlot.Bar>();
+            var ticks = new List<ScottPlot.Tick>();
 
             for (int i = 0; i < nrDays; i++)
             {
-                xs[i] = i;
-                incomeValues[i] = activeDays[i].TotalIncome;
-                expensesValues[i] = activeDays[i].TotalExpense;
-                labels[i] = activeDays[i].DayNumber.ToString();
+                var day = activeDays[i];
+                double pos = i;
+
+                // Skapa bars
+                bars.Add(new ScottPlot.Bar
+                {
+                    Position = pos - 0.2,
+                    Value = day.TotalIncome,
+                    FillColor = SetColor("Income"),
+                    Size = 0.4
+                });
+
+                bars.Add(new ScottPlot.Bar
+                {
+                    Position = pos + 0.2,
+                    Value = day.TotalExpense,
+                    FillColor = SetColor("Expense"),
+                    Size = 0.4
+                });
+
+                // Skapa X‑axel tick
+                ticks.Add(new Tick(pos, day.DayNumber.ToString()));
             }
 
-            // Add bars
-            var incomeBars = plt.AddBar(incomeValues, xs);
-            incomeBars.FillColor = incomeColor;
-            incomeBars.BarWidth = 0.2;
-            incomeBars.PositionOffset = -0.2;
+            // Lägg till alla bars på en gång
+            plt.Add.Bars(bars);
 
-            var expenseBars = plt.AddBar(expensesValues, xs);
-            expenseBars.FillColor = expenseColor;
-            expenseBars.BarWidth = 0.2;
-            expenseBars.PositionOffset = +0.2;
-
-            // X-Axis
-            plt.XTicks(xs, labels);
-            plt.XLabel("Dag i månaden");
-            plt.YLabel("Belopp");
-
-            // Legend
-            plt.Legend();
+            // X‑axel
+            plt.Axes.Bottom.TickGenerator = new ScottPlot.TickGenerators.NumericManual(ticks.ToArray());
 
             // Styling
-            plt.XAxis.Color(textColor);
-            plt.YAxis.Color(textColor);
+            plt.Axes.Color(SetColor("LabelText"));
+            plt.FigureBackground.Color = Colors.Transparent;
+            plt.DataBackground.Color = Colors.Transparent;
+            
 
-            // Set major grid line color
-            plt.XAxis.MajorGrid(true, gridLineColor);
-            plt.YAxis.MajorGrid(true, gridLineColor);
-
-            // Set background to transparent
-            plt.Style(figureBackground: System.Drawing.Color.Transparent,
-                dataBackground: System.Drawing.Color.Transparent);
+            // Visa legend
+            plt.ShowLegend();
 
             DailyBarChartPlot.Refresh();
         }
 
-        private Color ToColor(System.Windows.Media.Color mediaColor)
-        {
-            return System.Drawing.Color.FromArgb(mediaColor.A, mediaColor.R, mediaColor.G, mediaColor.B);
-        }
 
-        
+      
+        private Color SetColor(string color)
+        {
+            switch(color)
+            {
+                case ("Income"):
+                    return Color.FromHex("#39dc9c");
+
+                case ("Expense"):
+                    return Color.FromHex("#d15356");
+
+                case ("LabelText"):
+                    return Color.FromHex("#8c8c8c");
+
+                case ("GridLine"):
+                    return Color.FromHex("#242424");
+
+                default:
+                    return Color.FromHex("#ffffff");
+            }
+        }
     }
 
 

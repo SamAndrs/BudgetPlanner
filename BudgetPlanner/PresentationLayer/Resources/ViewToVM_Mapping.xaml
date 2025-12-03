@@ -15,12 +15,12 @@
         <views:BudgetPostsView />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type vm:CategoriesViewVM}">
-        <views:CategoriesView />
-    </DataTemplate>
-
     <DataTemplate DataType="{x:Type vm:PrognosisViewVM}">
         <views:PrognosisView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:ProgViewVM}">
+        <views:ProgView />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vm:SettingsViewVM}">

@@ -7,8 +7,11 @@
              >
 
     <Border Padding="20"
-            Background="{StaticResource BackgroundDark}"
-            CornerRadius="8">
+            CornerRadius="18"
+            BorderThickness="3"
+            BorderBrush="{StaticResource SecondaryBackground}"          
+            Background="{StaticResource PrimaryBackground}"
+           >
 
         <Grid Width="400" VerticalAlignment="Center">
             <Grid.RowDefinitions>
@@ -19,10 +22,10 @@
             </Grid.RowDefinitions>
             
             <!-- Rubrik -->
-            <TextBlock Text="{Binding DialogTitle}"
+            <TextBlock Text="Redigera/lägg till ny post"
                        FontSize="20"
                        FontWeight="Bold"
-                       Foreground="{StaticResource TextLight}"
+                       Foreground="{StaticResource SecondaryForeground}"
                        Margin="0,0,0,20"
                        Grid.Row="0"/>
             
@@ -30,47 +33,50 @@
             <StackPanel Grid.Row="1" Margin="0,0,0,10">
                 
                 <!-- Amount -->
-                <TextBlock Text="Belopp" Style="{StaticResource DialogTextStyle}"/>
-                <TextBox Text="{Binding Amount}" Margin="0,5,0,15"/>
+                <TextBlock Text="Belopp" Style="{StaticResource LabelTextStyle}"/>
+                <TextBox Text="{Binding Amount}"  
+                         Margin="0,5,0,15"/>
                 
                 <!-- Category -->
-                <TextBlock Text="Kategori" Style="{StaticResource DialogTextStyle}"/>
+                <TextBlock Text="Kategori" Style="{StaticResource LabelTextStyle}"/>
                 <ComboBox ItemsSource="{Binding Categories}"
                           DisplayMemberPath="Name"
                           SelectedItem="{Binding Category}"
                           Margin="0,5,0,15"/>
                 
                 <!-- Post type -->
-                <TextBlock Text="Typ" Style="{StaticResource DialogTextStyle}"/>
+                <TextBlock Text="Typ" Style="{StaticResource LabelTextStyle}"/>
                 <ComboBox ItemsSource="{Binding BudgetPostTypes}"
                           SelectedItem="{Binding PostType}"
                           Margin="0,5,0,15">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Converter={StaticResource EnumDescription}}"/>
+                            <TextBlock Text="{Binding Converter={StaticResource EnumDescription}}"
+                                       Foreground="{Binding RelativeSource={RelativeSource AncestorType=ComboBoxItem}, Path=Foreground}"/>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
                 
                 <!-- Recurring -->
-                <TextBlock Text="Återkommande" Style="{StaticResource DialogTextStyle}"/>
+                <TextBlock Text="Återkommande" Style="{StaticResource LabelTextStyle}"/>
                 <ComboBox ItemsSource="{Binding RecurringOptions}"
                           SelectedItem="{Binding Recurring}"
                           Margin="0,5,0,15">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Converter={StaticResource EnumDescription}}"/>
+                            <TextBlock Text="{Binding Converter={StaticResource EnumDescription}}"
+                                       Foreground="{Binding RelativeSource={RelativeSource AncestorType=ComboBoxItem}, Path=Foreground}"/>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
                 
                 <!-- Date -->
-                <TextBlock Text="Datum" Style="{StaticResource DialogTextStyle}"/>
+                <TextBlock Text="Datum" Style="{StaticResource LabelTextStyle}"/>
                 <DatePicker SelectedDate="{Binding Date}"
                             Margin="0,5,0,15"/>
 
                 <!-- Description -->
-                <TextBlock Text="Beskrivning" Style="{StaticResource DialogTextStyle}"/>
+                <TextBlock Text="Beskrivning" Style="{StaticResource LabelTextStyle}"/>
                 <TextBox Text="{Binding Description}"
                          Height="80"
                          Margin="0,5,0,10"
@@ -87,14 +93,13 @@
                 
                 <Button Content="Avbryt"
                         Width="80"
-                        Command="{Binding CancelCommand}"/>
+                        Command="{Binding CancelCommand}"
+                        Style="{StaticResource CancelButtonStyle}"/>
                 
                 <Button Content="Spara"
                        Width="80"
                         Command="{Binding SaveCommand}"
-                        Background="{StaticResource PrimaryBlue}"
-                        Foreground="White"
-                        Margin="10,0,0,0"/>
+                        Style="{StaticResource MainButtonStyle}"/>
             </StackPanel>
         </Grid>
     </Border>

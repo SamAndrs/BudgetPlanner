@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace BudgetPlanner.PresentationLayer.Views
+namespace BudgetPlanner.PresentationLayer.Resources.BudgetPosts
 {
     /// <summary>
-    /// Interaction logic for CategoriesView.xaml
+    /// Interaction logic for Summary.xaml
     /// </summary>
-    public partial class CategoriesView : UserControl
+    public partial class Summary : UserControl
     {
-        public CategoriesView()
+        public Summary()
         {
             InitializeComponent();
         }

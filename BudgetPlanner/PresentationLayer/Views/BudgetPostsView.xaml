@@ -1,95 +1,69 @@
 ﻿<UserControl x:Class="BudgetPlanner.PresentationLayer.Views.BudgetPostsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-             xmlns:domain="clr-namespace:BudgetPlanner.DomainLayer.Enums"
-             xmlns:local="clr-namespace:BudgetPlanner.PresentationLayer.Resources.Converters">
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BudgetPlanner.PresentationLayer.Views"
+             xmlns:controls="clr-namespace:BudgetPlanner.PresentationLayer.Resources.BudgetPosts"
+                
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    
+    <Border Background="{StaticResource PrimaryBackground}" Padding="15">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-    <Grid Background="{StaticResource BackgroundLight}" Margin="16">
-
-        <StackPanel>
-
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
             <!-- HEADER -->
-            <TextBlock Text="Budgetposter" Style="{StaticResource HeaderTextStyle}"/>
+            <TextBlock Grid.Row="0" Grid.ColumnSpan="3"
+                       Text="{Binding ViewTitle}" 
+                       FontSize="18"
+                       FontWeight="Bold"
+                       Foreground="{StaticResource SecondaryForeground}"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,10"/>
+            
+            <!-- LEFT COLUMN -->
+                <!--Filter card -->
+                <controls:Filter_Card Grid.Row="1" Grid.Column="0" Padding="5" Loaded="Filter_Card_Loaded"/>
 
-            <!-- FILTER CARD -->
-            <Border Style="{StaticResource CardStyle}" Margin="0,16,0,16">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
+            
+            <!-- CENTER COLUMN -->
+                <!-- Budgetposts list -->
+                <controls:Post_List Grid.Row="1" Grid.Column="1" Padding="5"/>
+            
+            <!-- RIGHT COLUMN -->
+                <!-- Summaries -->
+                <Grid Grid.Row="1" Grid.Column="3" Margin="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition />
+                        <RowDefinition />
 
-                    <!-- Datumintervall -->
-                    <StackPanel Grid.Column="0" Margin="0,0,24,0">
-                        <TextBlock Text="Från" Style="{StaticResource LabelTextStyle}"/>
-                        <DatePicker SelectedDate="{Binding FromDate}" />
-                    </StackPanel>
+                    </Grid.RowDefinitions>
 
-                    <StackPanel Grid.Column="1" Margin="0,0,24,0">
-                        <TextBlock Text="Till" Style="{StaticResource LabelTextStyle}"/>
-                        <DatePicker SelectedDate="{Binding ToDate}" />
-                    </StackPanel>
+                    <!-- Category summary chart -->
+                    <TextBlock Grid.Row="0" Text="Antal poster/ kategori" 
+                               Margin="0,0,0,5" Style="{StaticResource LabelTextStyle}"/>
+                <Border Grid.Row="1" CornerRadius="12" 
+                            Padding="5" Background="{StaticResource SecondaryBackground}">
 
-                    <!-- Kategori -->
-                    <StackPanel Grid.Column="2" Margin="0,0,24,0">
-                        <TextBlock Text="Kategori" Style="{StaticResource LabelTextStyle}"/>
-                        <ComboBox ItemsSource="{Binding Categories}"
-                                  DisplayMemberPath="Name"
-                                  SelectedItem="{Binding SelectedCategory}"
-                                  Width="150"
-                                  />
-                    </StackPanel>
+                    <controls:CategoryBarChart Data="{Binding CategoryCounts}" />
+                </Border>
+               
+                    <!-- Income/ Expense Summaries -->
+                    <controls:Summary Grid.Row="2" Grid.Column="3"/>
 
-                    <!-- Sökfält -->
-                    <StackPanel Grid.Column="3">
-                        <TextBlock Text="Sök" Style="{StaticResource LabelTextStyle}"/>
-                        <TextBox Text="{Binding SerachText}"
-                                  Width="200"
-                                  Padding="6"
-                                  Background="{StaticResource PrimaryBlueLight}"/>
-                    </StackPanel>
-
-                    <!-- Ny post -->
-                    <Button Grid.Column="4"
-                            Content="Ny budgetpost"
-                            Command="{Binding AddNewBudgetPostCommand}"
-                            Background="{StaticResource PrimaryBlue}"
-                            Foreground="White"
-                            Padding="8,4"
-                            Margin="16,0,0,0"
-                            VerticalAlignment="Bottom"
-                    />
-                </Grid>
-            </Border>
-
-            <!-- POST-TYPE FILTERS -->
-            <StackPanel>
-                <TextBlock Text="Typ av post" Style="{StaticResource LabelTextStyle}" Width="150" Margin="0,0,0,4"/>
-                <ComboBox Width="150"
-                          Margin="0 0 10 0"
-                          SelectedItem="{Binding SelectedType}">
-                    <ComboBox.ItemsSource>
-                        <x:Array Type="{x:Type domain:BudgetPostType}">
-                            <domain:BudgetPostType>Income</domain:BudgetPostType>
-                            <domain:BudgetPostType>Expense</domain:BudgetPostType>
-                        </x:Array>
-                    </ComboBox.ItemsSource>
-                </ComboBox>
-            </StackPanel>
-
-            <!-- LISTA -->
-            <Border Style="{StaticResource CardStyle}" Margin="0,16,0,0">
-                <ListView ItemsSource="{Binding FilteredPosts}"
-                          ItemTemplate="{StaticResource BudgetPostTemplate}">
-
-                </ListView>
-            </Border>
-        </StackPanel>
-
-
-    </Grid>
+            </Grid>
+        </Grid>
+    </Border>
 </UserControl>

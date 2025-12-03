@@ -7,8 +7,8 @@
              >
 
     <StackPanel x:Name="RootPanel" Background="Transparent">
-        <TextBlock Text="Månadsöversikt" 
-                   FontSize="14"
+        <TextBlock Text="{Binding ViewTitle}" 
+                   FontSize="18"
                    FontWeight="Bold"
                    Foreground="{StaticResource SecondaryForeground}"
                    HorizontalAlignment="Center"

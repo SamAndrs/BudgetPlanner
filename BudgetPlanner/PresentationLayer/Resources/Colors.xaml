@@ -2,89 +2,46 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <!-- Colors -->
-    <Color x:Key="PrimaryBlueColor">#4C6EF5</Color>
-    <Color x:Key="PrimaryBlueLightColor">#EDF2FF</Color>
-    <Color x:Key="PrimaryBlueDarkColor">#364FC7</Color>
-
-    <Color x:Key="BackgroundLightColor">#F8F9FA</Color>
-    <Color x:Key="BackgroundDarkColor">#2C3E50</Color>
-    <Color x:Key="CardBackgroundColor">#FFFFFF</Color>
-    <Color x:Key="BorderLightColor">#E9ECEF</Color>
-
-    <Color x:Key="TextDarkColor">#212529</Color>
-    <Color x:Key="TextMediumColor">#495057</Color>
-    <Color x:Key="TextLightColor">#868E96</Color>
+    <Color x:Key="PrimaryBackgroundColor">#242424</Color>
+    <Color x:Key="SecondaryBackgroundColor">#1b1b1b</Color>
+    <Color x:Key="AccentBackgroundColor">#4C8BE8</Color>
+    
+    <Color x:Key="PrimaryForegroundColor">#ffffff</Color>
+    <Color x:Key="SecondaryForegroundColor">#8c8c8c</Color>
+   
 
     <Color x:Key="IncomeGreenColor">#39dc9c</Color>
     <Color x:Key="ExpenseRedColor">#d15356</Color>
+    <Color x:Key="IncomeBackgroundColor">#138656</Color>
+    <Color x:Key="ExpenseBackgroundColor">#733f3d</Color>
     <Color x:Key="WarningYellowColor">#FAB005</Color>
+    
+    <Color x:Key="ButtonColor">#7c7c7c</Color>
+    <Color x:Key="ButtonColorHover">#4C8BE8</Color>
+    <Color x:Key="HoverBackgroundColor">#3A3A3A</Color>
 
     <!-- Brushes -->
-    <SolidColorBrush x:Key="PrimaryBlue" Color="{StaticResource PrimaryBlueColor}" />
-    <SolidColorBrush x:Key="PrimaryBlueLight" Color="{StaticResource PrimaryBlueLightColor}" />
-    <SolidColorBrush x:Key="PrimaryBlueDark" Color="{StaticResource PrimaryBlueDarkColor}" />
-
-    <SolidColorBrush x:Key="BackgroundLight" Color="{StaticResource BackgroundLightColor}" />
-    <SolidColorBrush x:Key="BackgroundDark" Color="{StaticResource BackgroundDarkColor}" />
-    <SolidColorBrush x:Key="CardBackground" Color="{StaticResource CardBackgroundColor}" />
-    <SolidColorBrush x:Key="BorderLight" Color="{StaticResource BorderLightColor}" />
-
-    <SolidColorBrush x:Key="TextDark" Color="{StaticResource TextDarkColor}" />
-    <SolidColorBrush x:Key="TextMedium" Color="{StaticResource TextMediumColor}" />
-    <SolidColorBrush x:Key="TextLight" Color="{StaticResource TextLightColor}" />
+    <SolidColorBrush x:Key="PrimaryBackground" Color="{StaticResource PrimaryBackgroundColor}" />
+    <SolidColorBrush x:Key="SecondaryBackground" Color="{StaticResource SecondaryBackgroundColor}" />
+    <SolidColorBrush x:Key="AccentBackground" Color="{StaticResource AccentBackgroundColor}" />
+    
+    <SolidColorBrush x:Key="PrimaryForeground" Color="{StaticResource PrimaryForegroundColor}" />
+    <SolidColorBrush x:Key="SecondaryForeground" Color="{StaticResource SecondaryForegroundColor}" />
+    
 
     <SolidColorBrush x:Key="IncomeGreen" Color="{StaticResource IncomeGreenColor}" />
     <SolidColorBrush x:Key="ExpenseRed" Color="{StaticResource ExpenseRedColor}" />
     <SolidColorBrush x:Key="WarningYellow" Color="{StaticResource WarningYellowColor}" />
-
-    
-    
-    
-    
-    <Color x:Key="PrimaryBackgroundColor">#242424</Color>
-    <Color x:Key="SecondaryBackgroundColor">#1b1b1b</Color>
-
-    <Color x:Key="PrimaryForegroundColor">#ffffff</Color>
-    <Color x:Key="SecondaryForegroundColor">#8c8c8c</Color>
-
-    <Color x:Key="ButtonColor">#7c7c7c</Color>
-    <Color x:Key="ButtonColorHover">#b1b1b1</Color>
-
-    <Color x:Key="IncomeBackgroundColor">#138656</Color>
-    <Color x:Key="ExpenseBackgroundColor">#733f3d</Color>
-
     <SolidColorBrush x:Key="IncomeBackground" Color="{StaticResource IncomeBackgroundColor}" />
     <SolidColorBrush x:Key="ExpenseBackground" Color="{StaticResource ExpenseBackgroundColor}" />
 
-    <SolidColorBrush x:Key="PrimaryBackground" Color="{StaticResource PrimaryBackgroundColor}" />
-    <SolidColorBrush x:Key="SecondaryBackground" Color="{StaticResource SecondaryBackgroundColor}" />
-
-    <SolidColorBrush x:Key="PrimaryForeground" Color="{StaticResource PrimaryForegroundColor}" />
-    <SolidColorBrush x:Key="SecondaryForeground" Color="{StaticResource SecondaryForegroundColor}" />
-
     <SolidColorBrush x:Key="PrimaryButtonColor" Color="{StaticResource ButtonColor}" />
     <SolidColorBrush x:Key="SecondaryButtonColor" Color="{StaticResource ButtonColorHover}" />
-
+    <SolidColorBrush x:Key="HoverBackground" Color="{StaticResource HoverBackgroundColor}" />
 
     <!-- 
-    Primary background color: #242424
-    Secondary background color: #1b1b1b
-    
-    Primary foreground color: #ffffff
-    Secondary foreground color: #8c8c8c
-    
-    ExpenseRed: #d15356
-    IncomeGreen: #39dc9c
-    ExpenseBackground: #733f3d
-    IncomeBackground: #138656
-    
-    ButtonColor: #7c7c7c
-    ButtonColorHover: #b1b1b1
-    
-    SaveButtonColor: #242424
-    
-    BorderColor: #242424
-    
+     <Color x:Key="AccentForegroundColor">#FFFFFF</Color>
+    <SolidColorBrush x:Key="AccentForeground" Color="{StaticResource AccentForegroundColor}" />
     -->
     
 </ResourceDictionary>

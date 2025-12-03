@@ -6,6 +6,8 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
 {
     public class DashboardViewVM : ViewModelBase
     {
+        public string ViewTitle { get; set; } = string.Empty;
+
         public double TotalIncomeThisMonth { get; set; }
 
         public double TotalExpensesThisMonth { get; set; }
@@ -41,6 +43,8 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
         // Contructor
         public DashboardViewVM()
         {
+            ViewTitle = "Månadsöversikt";
+
             _allPosts = Mockposts();
             LoadDays();
 

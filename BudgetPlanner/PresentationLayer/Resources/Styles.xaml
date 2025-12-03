@@ -4,33 +4,119 @@
 
     <!-- Card Style -->
     <Style x:Key="CardStyle" TargetType="Border">
-        <Setter Property="Background" Value="{StaticResource CardBackground}" />
+        <Setter Property="Background" Value="{StaticResource SecondaryBackground}" />
         <Setter Property="CornerRadius" Value="12" />
         <Setter Property="Padding" Value="16" />
-        <Setter Property="BorderBrush" Value="{StaticResource BorderLight}" />
+        <Setter Property="BorderBrush" Value="{StaticResource PrimaryBackground}" />
         <Setter Property="BorderThickness" Value="1" />
+    </Style>
+    
+    <!-- Summary Card style -->
+    <Style x:Key="SummaryCardStyle" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="30" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <!-- Summary Difference, Card style -->
+    <Style x:Key="SummaryDiffCardStyle" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="30" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Foreground" Value="{Binding TotalDifference, Converter={StaticResource ValueConverter}}" />
     </Style>
 
     <!-- Header Text -->
     <Style x:Key="HeaderTextStyle" TargetType="TextBlock">
-        <Setter Property="Foreground" Value="{StaticResource TextDark}" />
+        <Setter Property="Foreground" Value="{StaticResource PrimaryForeground}" />
         <Setter Property="FontSize" Value="22" />
         <Setter Property="FontWeight" Value="SemiBold" />
     </Style>
 
     <!-- Smaller labels -->
     <Style x:Key="LabelTextStyle" TargetType="TextBlock">
-        <Setter Property="Foreground" Value="{StaticResource TextMedium}" />
+        <Setter Property="Foreground" Value="{StaticResource SecondaryForeground}" />
         <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontWeight" Value="SemiBold" />
     </Style>
 
-    <!-- Dialog labels -->
-    <Style x:Key="DialogTextStyle" TargetType="TextBlock">
-        <Setter Property="Foreground" Value="{StaticResource PrimaryBlueLight}" />
-        <Setter Property="FontSize" Value="14" />
+    <!-- Vertical Scrollbar -->
+    <ControlTemplate x:Key="VerticalScrollBarTemplate" TargetType="ScrollBar">
+        <Grid Width="10" Background="Transparent">
+            <!-- Spåret -->
+            <Border Background="{StaticResource SecondaryBackground}"
+                CornerRadius="4"
+                Margin="2"/>
+
+            <Track x:Name="PART_Track" IsDirectionReversed="true">
+                <Track.Thumb>
+                    <Thumb x:Name="Thumb"
+                       Background="{StaticResource HoverBackground}"
+                       Height="20"
+                       />
+                </Track.Thumb>
+            </Track>
+        </Grid>
+
+        <!-- Hover på thumb -->
+        <ControlTemplate.Triggers>
+            <Trigger SourceName="Thumb" Property="IsMouseOver" Value="True">
+                <Setter TargetName="Thumb"
+                    Property="Background"
+                    Value="{StaticResource AccentBackground}"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- Horizontal Scrollbar -->
+    <ControlTemplate x:Key="HorizontalScrollBarTemplate" TargetType="ScrollBar">
+        <Grid Height="10" Background="Transparent">
+            <!-- Spåret -->
+            <Border Background="{StaticResource SecondaryBackground}"
+                CornerRadius="4"
+                Margin="2"/>
+
+            <Track x:Name="PART_Track">
+                <Track.Thumb>
+                    <Thumb x:Name="Thumb"
+                       Background="{StaticResource HoverBackground}"
+                       Width="20"/>
+                </Track.Thumb>
+            </Track>
+        </Grid>
+
+        <!-- Hover på thumb -->
+        <ControlTemplate.Triggers>
+            <Trigger SourceName="Thumb" Property="IsMouseOver" Value="True">
+                <Setter TargetName="Thumb"
+                    Property="Background"
+                    Value="{StaticResource AccentBackground}"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style TargetType="ScrollBar">
+        <Setter Property="Foreground" Value="{StaticResource SecondaryForeground}"/>
+        <Setter Property="Background" Value="{StaticResource SecondaryBackground}"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+
+        <!-- Standard: vertikal -->
+        <Setter Property="Template" Value="{StaticResource VerticalScrollBarTemplate}"/>
+
+        <Style.Triggers>
+            <!-- Horisontell scrollbar -->
+            <Trigger Property="Orientation" Value="Horizontal">
+                <Setter Property="Template" Value="{StaticResource HorizontalScrollBarTemplate}"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
+
     
     <!-- Buttons -->
+    <!-- Window control buttons (close, minimize, maximize) -->
     <Style x:Key="WindowButtonStyle" TargetType="Button">
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Background" Value="{StaticResource PrimaryBackground}" />
@@ -54,12 +140,9 @@
                 <Setter Property="Background" Value="{StaticResource SecondaryBackground}" />
             </Trigger>
         </Style.Triggers>
-        
-        
-
-        
     </Style>
 
+    <!-- Navigation buttons (side bar) -->
     <Style x:Key="NavButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
@@ -82,22 +165,71 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Foreground" Value="{StaticResource SecondaryButtonColor}"></Setter>
+                <Setter Property="Foreground" Value="{StaticResource SecondaryButtonColor}" />
             </Trigger>
         </Style.Triggers>
         
     </Style>
-    <!-- 
-        BudgetPost style
-        Date + amount (list total): TextColor: Secondary ForegroundColor BG: Primary backgroundcolor
-        Main-Card-content:
-        BG: Secondary backgroundcolor
-         - Icon. Category
-         - Category: TextColor: Secondary ForegroundColor
-         - Description: TextColor: Primary ForegroundCoor
-         - Amount: TextColor: IncomeGreen/ ExpenseRed  BG: IncomeGreenBackground/ ExpenseRedBackground
     
-    
+    <!-- Main button style -->
+    <Style x:Key="MainButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource PrimaryButtonColor}" />
+        <Setter Property="Foreground" Value="{StaticResource PrimaryForeground}" />
+        <Setter Property="Padding" Value="8,4" />
+        <Setter Property="Margin" Value="16,0,0,0" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            CornerRadius="8"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter 
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            RecognizesAccessKey="True"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+            
+        </Setter>
         
-    -->
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource SecondaryButtonColor}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Cancel button style -->
+    <Style x:Key="CancelButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource HoverBackground}" />
+        <Setter Property="Foreground" Value="{StaticResource PrimaryForeground}" />
+        <Setter Property="Padding" Value="8,4" />
+        <Setter Property="Margin" Value="16,0,0,0" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        CornerRadius="8"
+                        Padding="{TemplateBinding Padding}">
+                        <ContentPresenter 
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        RecognizesAccessKey="True"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+
+        </Setter>
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource SecondaryButtonColor}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 </ResourceDictionary>

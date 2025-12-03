@@ -23,17 +23,19 @@
                 HorizontalAlignment="Center" 
                 Margin="0,0,0,20"/>
 
+        <!--
         <Button Style="{StaticResource NavButtonStyle}"
                 Content="🗂️"
                 ToolTip="Kategorier"
                 Command="{Binding NavigateCategoriesCommand}"
                 HorizontalAlignment="Center" 
                 Margin="0,0,0,20"/>
+        -->
 
         <Button Style="{StaticResource NavButtonStyle}"
                 Content="📈"
                 ToolTip="Prognoser"
-                Command="{Binding NavigatePrognosisCommand}"
+                Command="{Binding NavigateProgCommand}"            
                 HorizontalAlignment="Center" 
                 Margin="0,0,0,20"/>
 

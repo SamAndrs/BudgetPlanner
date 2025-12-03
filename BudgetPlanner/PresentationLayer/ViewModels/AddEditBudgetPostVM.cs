@@ -10,8 +10,6 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
     {
         private BudgetPost _model;
 
-        public string DialogTitle { get; set; }
-
         // Lists for ComboBoxes
         public ObservableCollection<Category> Categories { get; }
         public Array BudgetPostTypes => Enum.GetValues(typeof(BudgetPostType));
@@ -69,8 +67,6 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
 
             SaveCommand = new DelegateCommand(_ => Save());
             CancelCommand = new DelegateCommand(_ => Cancel());
-
-            DialogTitle = "Redigera/ Addera post";
         }
 
         private void Cancel()

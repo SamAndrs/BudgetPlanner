@@ -1,0 +1,64 @@
+﻿<UserControl x:Class="BudgetPlanner.PresentationLayer.Resources.BudgetPosts.Post_List"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BudgetPlanner.PresentationLayer.Resources.BudgetPosts"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="60"/>
+            <ColumnDefinition Width="125"/>
+        </Grid.ColumnDefinitions>
+            
+        <!-- Datum -->
+        <TextBlock Grid.Column="0" Grid.Row="0" Margin="5" HorizontalAlignment="Center"
+                 Style="{StaticResource LabelTextStyle}"
+                 Text="Datum"/>
+
+        <!-- Belopp -->
+        <TextBlock Grid.Column="1" Grid.Row="0" Margin="5" HorizontalAlignment="Center"
+                 Style="{StaticResource LabelTextStyle}"
+                 Text="Belopp"/>
+
+        <!-- Kategori + Beskrivning -->
+        <TextBlock Grid.Column="2" Grid.Row="0" Margin="5" HorizontalAlignment="Center"
+                 Style="{StaticResource LabelTextStyle}"
+                 Text="Kategori" />
+        
+        <!-- Actions -->
+        <TextBlock Grid.Column="3" Grid.Row="0" Margin="5" HorizontalAlignment="Center"
+                 Style="{StaticResource LabelTextStyle}"
+                 Text="Åtgärder"/>
+
+        <!-- Återkommande -->
+        <TextBlock Grid.Column="4" Grid.Row="0" Margin="5" HorizontalAlignment="Center"
+         Style="{StaticResource LabelTextStyle}"
+         Text="Återkommande"/>
+
+        <Border Grid.ColumnSpan="5" Grid.Row="1" CornerRadius="12"
+                Background="{StaticResource SecondaryBackground}"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch">
+
+            <ListView Background="Transparent" Padding="8"
+                      BorderBrush="Transparent"
+                      ItemsSource="{Binding FilteredPosts}"
+                      ItemTemplate="{StaticResource BudgetPostTemplate}"
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+
+
+
+        </Border>
+    </Grid>
+</UserControl>

@@ -8,6 +8,8 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
 {
     public class PrognosisViewVM : ViewModelBase
     {
+        public string ViewTitle { get; } = "Månadsprognos";
+
         #region Calculation Properties
         private double _yearlyIncome;
 
@@ -54,6 +56,7 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
         #region PROGNOSIS Properties
         public ObservableCollection<BudgetPost> AllPosts { get; set; } = new();
         public ObservableCollection<Prognosis> MonthlyPrognoses { get; set; } = new();
+        public ObservableCollection<Category> Categories { get; set; }
 
         public decimal TotalIncome => SelectedPrognosis?.TotalIncome ?? 0;
         public decimal TotalExpense => SelectedPrognosis?.TotalExpenses ?? 0;
@@ -73,6 +76,8 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
         }
 
         #endregion
+
+        // Commands
         public ICommand SelectNextMonthCommand { get; }
         public ICommand SelectPreviousMonthCommand { get; }
 
@@ -81,11 +86,15 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
         // Constructor
         public PrognosisViewVM()
         {
-            // Mock data
-            LoadMockData();
+            // Mock data  //TODO: Hämta data från service ===============
+            Categories = LoadCategories();
+            AllPosts = LoadData();
 
-            //TODO: Hämta data från service
-            
+            YearlyIncome = 200000;  //TODO: Remove mocked value
+            YearlyWorkHours = 1920; //TODO: Remove mocked value
+
+            // ==========================================
+
 
             GeneratePrognosesForYear(DateTime.Now.Year);
 
@@ -184,76 +193,81 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
         }
 
 
-        // Mockdata for demo
-        private void LoadMockData()
+        
+        private ObservableCollection<BudgetPost> LoadData()
         {
-            YearlyIncome = 200000;
-            YearlyWorkHours = 1920;
+            var now = DateTime.Now;
 
-            var salaryCategory = new Category { Id = 1, Name = "Lön" };
-            var housingCategory = new Category { Id = 2, Name = "Boende" };
-            var otherCategory = new Category { Id = 3, Name = "Övrigt" };
+            return new ObservableCollection<BudgetPost>
+            {
+                // ==== Nuvarande månad ====
+                new BudgetPost { Id = 1, Amount = 3200, Category = Categories[1], CategoryId= Categories[1].Id, Description = "Veckohandling", Date = new DateTime(now.Year, now.Month, 1), Recurring= Recurring.Weekly, PostType = BudgetPostType.Expense },
+                new BudgetPost { Id = 2, Amount = 8500, Category = Categories[5], CategoryId= Categories[5].Id, Description = "Månadshyra", Date = new DateTime(now.Year, now.Month, 25), Recurring= Recurring.Monthly, PostType = BudgetPostType.Expense },
+                new BudgetPost { Id = 3, Amount = 28500, Category = Categories[13], CategoryId= Categories[13].Id, Description = "Lön för Juni", Date = new DateTime(now.Year, now.Month, 22), Recurring= Recurring.Monthly, PostType = BudgetPostType.Income },
+                new BudgetPost { Id = 4, Amount = 1200, Category = Categories[2], CategoryId= Categories[2].Id, Description = "Busskort", Date = new DateTime(now.Year, now.Month, 1), Recurring= Recurring.Monthly, PostType = BudgetPostType.Expense },
+                new BudgetPost { Id = 5, Amount = 500, Category = Categories[12], CategoryId= Categories[12].Id, Description = "Biobesök", Date = new DateTime(now.Year, now.Month, 15), Recurring= Recurring.None, PostType = BudgetPostType.Expense },
+                new BudgetPost { Id = 6, Amount = 1200, Category = Categories[14], CategoryId= Categories[14].Id, Description = "Bonus", Date = new DateTime(now.Year, now.Month, 15), Recurring= Recurring.None, PostType = BudgetPostType.Income },
+            
+                // ===== Månad 2: En månad bakåt  =====
+                new BudgetPost { Id = 1, Amount = 3200, Category = Categories[0], CategoryId = 2, Description = "Veckohandling", Date = new DateTime(now.Year, now.Month-1, 1), Recurring = Recurring.Weekly, PostType = BudgetPostType.Expense },
+                new BudgetPost { Id = 2, Amount = 900, Category = Categories[1], CategoryId = 3, Description = "Månadskort buss", Date = new DateTime(now.Year, now.Month-1, 2), Recurring = Recurring.Monthly, PostType = BudgetPostType.Expense },
+                new BudgetPost { Id = 3, Amount = 8500, Category = Categories[4], CategoryId = 6, Description = "Hyra", Date = new DateTime(now.Year, now.Month-1, 25), Recurring = Recurring.Monthly, PostType = BudgetPostType.Expense },
+                new BudgetPost { Id = 4, Amount = 1200, Category = Categories[10], CategoryId = 12, Description = "Veterinärkontroll", Date = new DateTime(now.Year, now.Month-1, 12), Recurring = Recurring.None, PostType = BudgetPostType.Expense },
+                new BudgetPost { Id = 5, Amount = 28500, Category = Categories[12], CategoryId = 14, Description = "Lön", Date = new DateTime(now.Year, now.Month-1, 23), Recurring = Recurring.Monthly, PostType = BudgetPostType.Income },
+                new BudgetPost { Id = 6, Amount = 800, Category = Categories[14], CategoryId = 16, Description = "Frilansjobb", Date = new DateTime(now.Year, now.Month-1, 18), Recurring = Recurring.None, PostType = BudgetPostType.Income },
 
-            AllPosts = new ObservableCollection<BudgetPost>
-        {
-            // --- ÅTERKOMMANDE INKOMSTER ---
-        new BudgetPost {
-            Id = 1, Amount = 35000, Description = "Lön",
-            CategoryId = 1, Category = salaryCategory,
-            Recurring = Recurring.Monthly, PostType = BudgetPostType.Income
-        },
+                // ===== Månad 3: Två månader bakåt =====
+                new BudgetPost { Id = 7, Amount = 3100, Category = Categories[0], CategoryId = 2, Description = "Storhandling", Date = new DateTime(now.Year, now.Month - 2, 3), Recurring = Recurring.None, PostType = BudgetPostType.Expense },
+                new BudgetPost { Id = 8, Amount = 750, Category = Categories[1], CategoryId = 3, Description = "Resor till arbete", Date = new DateTime(now.Year, now.Month - 2, 6), Recurring = Recurring.None, PostType = BudgetPostType.Expense },
+                new BudgetPost { Id = 9, Amount = 8500, Category = Categories[4], CategoryId = 6, Description = "Hyra", Date = new DateTime(now.Year, now.Month - 2, 25), Recurring = Recurring.Monthly, PostType = BudgetPostType.Expense },
+                new BudgetPost { Id = 10, Amount = 200, Category = Categories[11], CategoryId = 13, Description = "Biobesök", Date = new DateTime(now.Year, now.Month - 2, 14), Recurring = Recurring.None, PostType = BudgetPostType.Expense },
+                new BudgetPost { Id = 11, Amount = 28500, Category = Categories[12], CategoryId = 14, Description = "Lön", Date = new DateTime(now.Year, now.Month - 2, 23), Recurring = Recurring.Monthly, PostType = BudgetPostType.Income },
+                new BudgetPost { Id = 12, Amount = 1500, Category = Categories[15], CategoryId = 16, Description = "Extrajobb helg", Date = new DateTime(now.Year, now.Month - 2, 20), Recurring = Recurring.None, PostType = BudgetPostType.Income },
 
-        // --- ÅTERKOMMANDE UTGIFTER ---
-        new BudgetPost {
-            Id = 2, Amount = 8500, Description = "Hyra",
-            CategoryId = 2, Category = housingCategory,
-            Recurring = Recurring.Monthly, PostType = BudgetPostType.Expense
-        },
-        new BudgetPost {
-            Id = 3, Amount = 399, Description = "Bredband",
-            CategoryId = 2, Category = housingCategory,
-            Recurring = Recurring.Monthly, PostType = BudgetPostType.Expense
-        },
-        new BudgetPost {
-            Id = 4, Amount = 299, Description = "Gymkort",
-            CategoryId = 3, Category = otherCategory,
-            Recurring = Recurring.Monthly, PostType = BudgetPostType.Expense
-        },
+                // ===== Månad 4: Tre månader bakåt =====
+                new BudgetPost { Id = 13, Amount = 2800, Category = Categories[0], CategoryId = 2, Description = "Matinköp", Date = new DateTime(now.Year, now.Month - 3, 4), Recurring = Recurring.Weekly, PostType = BudgetPostType.Expense },
+                new BudgetPost { Id = 14, Amount = 8500, Category = Categories[4], CategoryId = 6, Description = "Hyra", Date = new DateTime(now.Year, now.Month - 3, 25), Recurring = Recurring.Monthly, PostType = BudgetPostType.Expense },
+                new BudgetPost { Id = 15, Amount = 1200, Category = Categories[9], CategoryId = 11, Description = "Netflix + Spotify", Date = new DateTime(now.Year, now.Month - 3, 1), Recurring = Recurring.Monthly, PostType = BudgetPostType.Expense },
+                new BudgetPost { Id = 16, Amount = 400, Category = Categories[2], CategoryId = 4, Description = "Nya strumpor", Date = new DateTime(now.Year, now.Month - 3, 10), Recurring = Recurring.None, PostType = BudgetPostType.Expense },
+                new BudgetPost { Id = 17, Amount = 28500, Category = Categories[12], CategoryId = 14, Description = "Lön", Date = new DateTime(now.Year, now.Month - 3, 23), Recurring = Recurring.Monthly, PostType = BudgetPostType.Income },
+                new BudgetPost { Id = 18, Amount = 900, Category = Categories[13], CategoryId = 15, Description = "Studiebidrag", Date = new DateTime(now.Year, now.Month - 3, 5), Recurring = Recurring.Monthly, PostType = BudgetPostType.Income },
 
-        // --- ENGÅNGSPOSTER PER SPECIFIK MÅNAD ---
-        // Februari: Bilservice
-        new BudgetPost {
-            Id = 5, Amount = 3200, Description = "Bilservice",
-            CategoryId = 3, Category = otherCategory,
-            Recurring = Recurring.None, PostType = BudgetPostType.Expense,
-            Date = new DateTime(DateTime.Now.Year, 2, 5)
-        },
-
-        // Mars: Bonus
-        new BudgetPost {
-            Id = 6, Amount = 8000, Description = "Bonus",
-            CategoryId = 1, Category = salaryCategory,
-            Recurring = Recurring.None, PostType = BudgetPostType.Income,
-            Date = new DateTime(DateTime.Now.Year, 3, 25)
-        },
-
-        // Maj: Försäkring
-        new BudgetPost {
-            Id = 7, Amount = 1200, Description = "Husförsäkring",
-            CategoryId = 2, Category = housingCategory,
-            Recurring = Recurring.None, PostType = BudgetPostType.Expense,
-            Date = new DateTime(DateTime.Now.Year, 5, 10)
-        },
-
-        // December: Julklappar
-        new BudgetPost {
-            Id = 8, Amount = 4500, Description = "Julklappar",
-            CategoryId = 3, Category = otherCategory,
-            Recurring = Recurring.None, PostType = BudgetPostType.Expense,
-            Date = new DateTime(DateTime.Now.Year, 12, 18)
+                // ===== Månad 5: Fyra månader bakåt =====
+                new BudgetPost { Id = 19, Amount = 3000, Category = Categories[0], CategoryId = 2, Description = "Matkasse", Date = new DateTime(now.Year, now.Month - 4, 6), Recurring = Recurring.Weekly, PostType = BudgetPostType.Expense },
+                new BudgetPost { Id = 20, Amount = 600, Category = Categories[1], CategoryId = 3, Description = "Bussbiljetter", Date = new DateTime(now.Year, now.Month - 4, 12), Recurring = Recurring.None, PostType = BudgetPostType.Expense },
+                new BudgetPost { Id = 21, Amount = 8500, Category = Categories[4], CategoryId = 6, Description = "Hyra", Date = new DateTime(now.Year, now.Month - 4, 25), Recurring = Recurring.Monthly, PostType = BudgetPostType.Expense },
+                new BudgetPost { Id = 22, Amount = 300, Category = Categories[6], CategoryId = 8, Description = "Barnaktiviteter", Date = new DateTime(now.Year, now.Month - 4, 8), Recurring = Recurring.None, PostType = BudgetPostType.Expense },
+                new BudgetPost { Id = 23, Amount = 28500, Category = Categories[12], CategoryId = 14, Description = "Lön", Date = new DateTime(now.Year, now.Month - 4, 23), Recurring = Recurring.Monthly, PostType = BudgetPostType.Income },
+                new BudgetPost { Id = 24, Amount = 600, Category = Categories[14], CategoryId = 16, Description = "Säljtjänst", Date = new DateTime(now.Year, now.Month - 4, 17), Recurring = Recurring.None, PostType = BudgetPostType.Income },
+            };
         }
-    };
 
+        private ObservableCollection<Category> LoadCategories()
+        {
+            return new ObservableCollection<Category>
+            {
+               // Expenses
+                new Category { Id = 1, Name = "Alla" },
+                new Category { Id = 2, Name = "Mat" },
+                new Category { Id = 3, Name = "Transport" },
+                new Category { Id = 4, Name = "Kläder" },
+                new Category { Id = 5, Name = "Skatt" },
+                new Category { Id = 6, Name = "Hem" },
+                new Category { Id = 7, Name = "Hobby" },
+                new Category { Id = 8, Name = "Barn" },
+                new Category { Id = 9, Name = "TV" },
+                new Category { Id = 10, Name = "SaaS" },
+                new Category { Id = 11, Name = "Prenumerationer" },
+                new Category { Id = 12, Name = "Husdjur" },
+                new Category { Id = 13, Name = "Underhållning" },
+
+                // Income
+                new Category { Id = 14, Name = "Lön" },
+                new Category { Id = 15, Name = "Bidrag" },
+                new Category { Id = 16, Name = "Extrainkomst" },
+
+                new Category { Id = 17, Name = "Okänd" }
+            };
         }
     }
 }

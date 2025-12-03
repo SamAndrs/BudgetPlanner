@@ -9,5 +9,6 @@
     <conv:BoolToVisibilityConverter x:Key="BoolToVisibility" />
     <conv:EnumDescriptionConverter x:Key="EnumDescription" />
     <conv:CategoryToIconConverter x:Key="IconConverter" />
+    <conv:ValueToColorConverter x:Key="ValueConverter" />
 
 </ResourceDictionary>
