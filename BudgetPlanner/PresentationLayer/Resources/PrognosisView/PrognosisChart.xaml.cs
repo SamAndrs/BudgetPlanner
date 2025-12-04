@@ -47,11 +47,11 @@ namespace BudgetPlanner.PresentationLayer.Resources.PrognosisView
             double[] incomes = months.Select(m => (double)m.TotalIncome).ToArray();
             double[] expenses = months.Select(m => (double)m.TotalExpenses).ToArray();
 
-            string[] labels = months
+            string[] xLabels = months
                 .Select(m => m.FromDate.ToString("MMM"))
                 .ToArray();
 
-            double[] xs = Enumerable.Range(0, labels.Length).Select(i => (double)i).ToArray();
+           
 
             var bars = new List<Bar>();
 
@@ -66,7 +66,7 @@ namespace BudgetPlanner.PresentationLayer.Resources.PrognosisView
                 // Skapa bars
                 bars.Add(new Bar
                 {
-                    Position = pos - 0.2,
+                    Position = pos - 0.1,
                     Value = incomes[i],
                     FillColor = SetColor("Income"),
                     Size = barWidth
@@ -76,42 +76,34 @@ namespace BudgetPlanner.PresentationLayer.Resources.PrognosisView
 
                 bars.Add(new Bar
                 {
-                    Position = pos + 0.2,
-                    Value = -expenses[i],
+                    Position = pos + 0.1,
+                    Value = expenses[i],
                     FillColor = SetColor("Expense"),
                     Size = barWidth
                 });
             }
 
-            /* Income bars → GRÖN
-            plt.AddBar(
-                values: incomes,
-                positions: xs.Select(x => x - barWidth / 2).ToArray(),
-                color: Colors.Green.WithOpacity(0.85),
-                fill: true,
-                barWidth: barWidth
-            );
-
-            // Expense bars → RÖD
-            plt.AddBar(
-                values: expenses.Select(x => -x).ToArray(),   // negativa för att peka nedåt
-                positions: xs.Select(x => x + barWidth / 2).ToArray(),
-                color: Colors.Red.WithOpacity(0.85),
-                fill: true,
-                barWidth: barWidth
-            );*/
-
+            // Build chart
             plt.Add.Bars(bars);
 
-            // Y-axel titel
+            // Y-axis title
             plt.YLabel("Belopp (kr)");
+            var ymaxValue = GetMaxValue(incomes, expenses); // Get highest of either income/ expense
+            
+            //ScottPlot.TickGenerators.NumericAutomatic tickGenY = new();
+            //tickGenY.TargetTickCount = 3;
+            //plt.Axes.Left.TickGenerator = tickGenY;
+            plt.Axes.SetLimitsY(0, ymaxValue * 1.1);
 
-            // X-axel
-            //plt.XAxis.TickGenerator = new ScottPlot.TickGenerators.Category(labels);
 
+            // X-axis
+            plt.Axes.Bottom.TickGenerator = new ScottPlot.TickGenerators.NumericManual(
+                            Enumerable.Range(0, xLabels.Length)
+                            .Select(i => new Tick(i, xLabels[i]))
+                            .ToArray()
+            );
 
             // Grid & stil
-            //plt.Grid(enable: true, lineStyle: LineStyle.Dot, color: ScottPlot.Colors.Gray.WithOpacity(0.3));
             plt.Axes.Color(SetColor("LabelText"));
             plt.FigureBackground.Color = Colors.Transparent;
             plt.DataBackground.Color = Colors.Transparent;
@@ -141,17 +133,16 @@ namespace BudgetPlanner.PresentationLayer.Resources.PrognosisView
                     return Color.FromHex("#ffffff");
             }
         }
-    }
 
-    // Små extension helpers
-    public static class ColorExtensions
-    {
-        public static Color WithOpacity(this Color c, double opacity)
+
+        private int GetMaxValue(double[] incomes, double[] expenses)
         {
-            return new Color(c.R, c.G, c.B, (byte)(opacity * 255));
+            var highestIncome = incomes.Max();
+
+            var highestExpenses = expenses.Max();
+
+            return (int)Math.Max(highestIncome, highestExpenses);
         }
     }
-
-
 }
 

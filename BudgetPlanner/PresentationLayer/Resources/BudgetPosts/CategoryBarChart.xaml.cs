@@ -57,6 +57,7 @@ namespace BudgetPlanner.PresentationLayer.Resources.BudgetPosts
                     Position = i,
                     Value = values[i],
                     FillColor = GetTresholdColor(values[i]),
+                    Size = 0.3
                 });
 
                 maxValue += (int)bars[i].Value;
@@ -73,6 +74,8 @@ namespace BudgetPlanner.PresentationLayer.Resources.BudgetPosts
                             .Select(i => new ScottPlot.Tick(i, categories[i]))
                             .ToArray()
             );
+
+            plt.Axes.SetLimitsY(0, categories.Length * 1.1);  // 10% marginal
 
 
             // Styling

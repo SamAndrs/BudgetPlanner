@@ -152,9 +152,6 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
             Categories = LoadCategories();
             AllPosts = LoadData();
 
-            // Calculate total of incomes, expenses and difference
-            RecalculateTotals();
-
             // Set BudgetPostType filteringoptions (income/ expense/ all)
             BPTypeFilterOptions = SetPostTypeOptions();
             
@@ -360,15 +357,18 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
             foreach (var item in result)
                 FilteredPosts.Add(item);
 
+            RaisePropertyChanged(nameof(TotalIncome));
+            RaisePropertyChanged(nameof(TotalExpense));
+            RecalculateTotals();
         }
 
         private void RecalculateTotals()
         {
-            TotalIncome = AllPosts
+            TotalIncome = FilteredPosts
                 .Where(p => p.PostType == BudgetPostType.Income)
                 .Sum(p => p.Amount);
 
-            TotalExpense = AllPosts
+            TotalExpense = FilteredPosts
                .Where(p => p.PostType == BudgetPostType.Expense)
                .Sum(p => p.Amount);
 

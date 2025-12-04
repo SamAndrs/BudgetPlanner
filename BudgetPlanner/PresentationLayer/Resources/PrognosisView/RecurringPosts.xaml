@@ -18,26 +18,45 @@
                    Style="{StaticResource LabelTextStyle}"/>
 
         <Border Style="{StaticResource CardStyle}" Padding="16" Grid.Row="1">
-            <ItemsControl ItemsSource="{Binding SelectedPrognosis.BudgetPosts}">
-                <ItemsControl.ItemTemplate>
+            <ListView Background="Transparent" Padding="8"
+                      BorderBrush="Transparent"
+                      ItemsSource="{Binding SelectedPrognosis.BudgetPosts}"
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto">
+
+                <ListView.ItemTemplate>
                     <DataTemplate>
                         <Grid Margin="0,4">
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="100"/>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Text="{Binding Description}" 
+                            <!-- Date -->
+                            <TextBlock Grid.Column="1" Margin="0,0,10,5"
+                                       Text="{Binding Date, StringFormat={}{0:dd}}" 
+                                       Foreground="{StaticResource SecondaryForeground}"/>
+                            
+                            <!-- Description -->
+                            <TextBlock Grid.Column="2" Margin="0,0,10,5"
+                                       Text="{Binding Description}" 
                                        Foreground="{StaticResource SecondaryForeground}"/>
 
-                            <TextBlock Grid.Column="1"
+                            <!-- Amount -->
+                            <TextBlock Grid.Column="3" Margin="0,0,10,5"
                                        Text="{Binding Amount, StringFormat={}{0:N0} kr}"
                                        Foreground="{Binding PostType, 
-                            Converter={StaticResource PostTypeToBrushConverter}}"/>
+                                                Converter={StaticResource PostTypeToBrushConverter}}"/>
                         </Grid>
                     </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+
+
+                </ListView.ItemTemplate>
+            </ListView>
+
+
         </Border>
     </Grid>
 </UserControl>

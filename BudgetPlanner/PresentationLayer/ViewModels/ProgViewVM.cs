@@ -9,8 +9,6 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
     public class ProgViewVM : ViewModelBase
     {
         private double _yearlyIncome;
-        private double _yearlyWorkhours;
-
         public double YearlyIncome
         {
             get { return _yearlyIncome; }
@@ -18,10 +16,10 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
             { 
                 _yearlyIncome = value;
                 RaisePropertyChanged();
-                RaisePropertyChanged(nameof(CalculatedMonthlyIncome));
             }
         }
 
+        private double _yearlyWorkhours;
         public double YearlyWorkhours
         {
             get { return _yearlyWorkhours; }
@@ -29,20 +27,33 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
             { 
                 _yearlyWorkhours = value; 
                 RaisePropertyChanged();
-                RaisePropertyChanged(nameof(CalculatedMonthlyIncome));
             }
         }
 
+        private double _calculatedMonthlyIncome;
         public double CalculatedMonthlyIncome
         {
-            get
-            {
-                if (YearlyWorkhours <= 0) return 0;
-                
-                double hourlyRate = YearlyIncome / YearlyWorkhours;
-                return hourlyRate * (YearlyWorkhours / 12);
-            }
+            get { return _calculatedMonthlyIncome; }
+            set { _calculatedMonthlyIncome = value; RaisePropertyChanged(); }
         }
+
+
+        private double _hourlyIncomeYear;
+        public double HourlyIncomeYear
+        {
+            get { return _hourlyIncomeYear; }
+            set { _hourlyIncomeYear = value; RaisePropertyChanged(); }
+        }
+
+        private double _hourlyIncomeMonth;
+
+        public double HourlyIncomeMonth
+        {
+            get { return _hourlyIncomeMonth; }
+            set { _hourlyIncomeMonth = value; RaisePropertyChanged(); }
+        }
+
+
 
 
         public string ViewTitle { get; } = "Månadsprognos";
@@ -74,6 +85,7 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
         // Commands
         public ICommand SelectNextMonthCommand { get; }
         public ICommand SelectPreviousMonthCommand { get; }
+        public ICommand CalculateIncomeCommand { get; set; }
 
 
         // Constructor
@@ -91,6 +103,28 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
 
             SelectNextMonthCommand = new DelegateCommand(NextMonth);
             SelectPreviousMonthCommand = new DelegateCommand(PreviousMonth);
+
+            CalculateIncomeCommand = new DelegateCommand(CalculateIncome);
+        }
+
+        private void CalculateIncome(object? obj)
+        {
+           if(YearlyIncome <= 0 || YearlyWorkhours <= 0)
+            {
+                CalculatedMonthlyIncome = 0;
+                HourlyIncomeYear = 0;
+                HourlyIncomeMonth = 0;
+                return;
+            }
+
+            // 1. Månadsinkomst
+            CalculatedMonthlyIncome = YearlyIncome / 12;
+
+            // 2. Timlön baserat på år
+            HourlyIncomeYear = YearlyIncome / YearlyWorkhours;
+
+            // 3. Timlön baserat på månad (40 h/vecka)
+            HourlyIncomeMonth = CalculatedMonthlyIncome / 40;  //TODO: veckotimmar värde (globalt)
         }
 
         // MAIN LOGIC: Generate 10 monthly prognosis objects

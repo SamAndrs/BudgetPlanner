@@ -12,9 +12,9 @@ namespace BudgetPlanner.PresentationLayer.Resources.BudgetPosts
             InitializeComponent();
         }
 
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
+        //private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
 
-        }
+        //}
     }
 }

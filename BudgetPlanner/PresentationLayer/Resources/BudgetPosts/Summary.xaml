@@ -18,7 +18,7 @@
         </Grid.RowDefinitions>
 
         <!-- Total sum (income)-->
-        <TextBlock Grid.Row="0" Text="Inkomster (total)" 
+        <TextBlock Grid.Row="0" Text="Inkomster (poster -totalt)" 
                    Margin="0,5,0,5" Style="{StaticResource LabelTextStyle}"/>
         
         <Border Grid.Row="1" CornerRadius="12"
@@ -31,7 +31,7 @@
         
 
         <!-- Total sum (expenses) -->
-        <TextBlock Grid.Row="2" Text="Utgifter (total)" 
+        <TextBlock Grid.Row="2" Text="Utgifter (poster -totalt)" 
                 Margin="0,5,0,5" Style="{StaticResource LabelTextStyle}"/>
 
         <Border Grid.Row="3" CornerRadius="12" 
@@ -44,7 +44,7 @@
         
 
         <!-- Total difference -->
-        <TextBlock Grid.Row="4" Text="Differens (total)" 
+        <TextBlock Grid.Row="4" Text="Differens (poster -totalt)" 
                    Margin="0,5,0,5" Style="{StaticResource LabelTextStyle}"/>
         
         <Border Grid.Row="5" CornerRadius="12" 
