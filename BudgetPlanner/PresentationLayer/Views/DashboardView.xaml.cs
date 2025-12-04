@@ -77,12 +77,8 @@ namespace BudgetPlanner.PresentationLayer.Views
             var activeDays = vm.ActiveDays;
             int nrDays = activeDays.Count;
 
-            // Sätt Y-axel från 0 till maxvärde + lite marginal
-            double maxValue = activeDays.Max(d => Math.Max(d.TotalIncome, d.TotalExpense));
-            plt.Axes.SetLimitsY(0, maxValue * 1.1); // 10% marginal
-
-            var bars = new List<ScottPlot.Bar>();
-            var ticks = new List<ScottPlot.Tick>();
+            var bars = new List<Bar>();
+            var ticks = new List<Tick>();
 
             for (int i = 0; i < nrDays; i++)
             {
@@ -90,20 +86,20 @@ namespace BudgetPlanner.PresentationLayer.Views
                 double pos = i;
 
                 // Skapa bars
-                bars.Add(new ScottPlot.Bar
+                bars.Add(new Bar
                 {
-                    Position = pos - 0.2,
+                    Position = pos - 0.1,
                     Value = day.TotalIncome,
                     FillColor = SetColor("Income"),
-                    Size = 0.4
+                    Size = 0.2
                 });
 
-                bars.Add(new ScottPlot.Bar
+                bars.Add(new Bar
                 {
-                    Position = pos + 0.2,
+                    Position = pos + 0.1,
                     Value = day.TotalExpense,
                     FillColor = SetColor("Expense"),
-                    Size = 0.4
+                    Size = 0.2
                 });
 
                 // Skapa X‑axel tick
@@ -113,17 +109,19 @@ namespace BudgetPlanner.PresentationLayer.Views
             // Lägg till alla bars på en gång
             plt.Add.Bars(bars);
 
+            // Axis setup  (Sätt Y- och X-axlar från 0 till maxvärde + lite marginal)
+
+            double maxValue = activeDays.Max(d => Math.Max(d.TotalIncome, d.TotalExpense));
+            plt.Axes.SetLimitsY(0, maxValue * 1.1); // 10% marginal
+                
             // X‑axel
             plt.Axes.Bottom.TickGenerator = new ScottPlot.TickGenerators.NumericManual(ticks.ToArray());
+            plt.Axes.SetLimitsX(0, ticks.Count * 1.1); // 10% marginal
 
             // Styling
             plt.Axes.Color(SetColor("LabelText"));
             plt.FigureBackground.Color = Colors.Transparent;
             plt.DataBackground.Color = Colors.Transparent;
-            
-
-            // Visa legend
-            plt.ShowLegend();
 
             DailyBarChartPlot.Refresh();
         }

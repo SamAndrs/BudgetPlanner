@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace BudgetPlanner.PresentationLayer.ViewModels
 {
-    public class ViewModelBase : INotifyPropertyChanged
+    public abstract class ViewModelBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 

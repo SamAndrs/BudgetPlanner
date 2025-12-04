@@ -22,11 +22,11 @@
 
                 <!-- Yearly income-->
                 <TextBlock Text="Årsinkomst" Style="{StaticResource LabelTextStyle}"/>
-                <TextBox Text="{Binding YearlyIncome, UpdateSourceTrigger=PropertyChanged}" Margin="0,4,0,12"/>
+                <TextBox Text="{Binding Settings.YearlyIncome, UpdateSourceTrigger=PropertyChanged}" Margin="0,4,0,12"/>
 
                 <!-- Yearly workhours-->
                 <TextBlock Text="Årsarbetstid (timmar)" Style="{StaticResource LabelTextStyle}"/>
-                <TextBox Text="{Binding YearlyWorkhours, UpdateSourceTrigger=PropertyChanged}" Margin="0,4,0,12"/>
+                <TextBox Text="{Binding Settings.YearlyWorkhours, UpdateSourceTrigger=PropertyChanged}" Margin="0,4,0,12"/>
 
                 <!-- Calculated monthly income/ per year-->
                 <TextBlock Text="Månadsinkomst/år"
@@ -62,7 +62,7 @@
                            Foreground="{StaticResource PrimaryForeground}"/>
 
                 <TextBlock Grid.Row="0" Grid.Column="1"
-                           Text="Timlön/månad (snitt: 40h)"
+                           Text="{Binding Settings.WeeklyWorkhours}"
                            Style="{StaticResource LabelTextStyle}" Margin="0,4,0,4"/>
 
                     <TextBlock Grid.Row="1" Grid.Column="1"

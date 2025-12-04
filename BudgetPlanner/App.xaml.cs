@@ -52,7 +52,7 @@ namespace BudgetPlanner
             services.AddSingleton<BudgetPostService>();
             services.AddSingleton<CategoryService>();
             services.AddSingleton<PrognosisService>();
-            services.AddSingleton<ViewModelBase>();
+            services.AddSingleton<UserSettingsService>();
 
             ServiceProvider = services.BuildServiceProvider();
 

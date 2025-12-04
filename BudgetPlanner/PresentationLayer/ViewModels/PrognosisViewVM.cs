@@ -1,65 +1,75 @@
 ﻿using BudgetPlanner.DomainLayer.Enums;
 using BudgetPlanner.DomainLayer.Models;
+using BudgetPlanner.DomainLayer.Services;
 using BudgetPlanner.PresentationLayer.Commands;
 using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Input;
 
 namespace BudgetPlanner.PresentationLayer.ViewModels
 {
     public class PrognosisViewVM : ViewModelBase
     {
-        public string ViewTitle { get; } = "Månadsprognos";
+        
 
-        #region Calculation Properties
         private double _yearlyIncome;
-
         public double YearlyIncome
         {
             get { return _yearlyIncome; }
-            set
-            {
+            set 
+            { 
                 _yearlyIncome = value;
                 RaisePropertyChanged();
-                RaisePropertyChanged(nameof(CalculatedMonthlyIncome));
             }
         }
 
         private double _yearlyWorkhours;
-
-        public double YearlyWorkHours
+        public double YearlyWorkhours
         {
             get { return _yearlyWorkhours; }
-            set
-            {
-                _yearlyWorkhours = value;
+            set 
+            { 
+                _yearlyWorkhours = value; 
                 RaisePropertyChanged();
-                RaisePropertyChanged(nameof(CalculatedMonthlyIncome));
             }
         }
 
-
+        private double _calculatedMonthlyIncome;
         public double CalculatedMonthlyIncome
         {
-            get
-            {
-                if (YearlyWorkHours <= 0) return 0;
-                double hourlyRate = YearlyIncome / YearlyWorkHours;
-                return hourlyRate * (YearlyWorkHours / 12);
-            }
-
+            get { return _calculatedMonthlyIncome; }
+            set { _calculatedMonthlyIncome = value; RaisePropertyChanged(); }
         }
 
 
-        #endregion
+        private double _hourlyIncomeYear;
+        public double HourlyIncomeYear
+        {
+            get { return _hourlyIncomeYear; }
+            set { _hourlyIncomeYear = value; RaisePropertyChanged(); }
+        }
+
+        private double _hourlyIncomeMonth;
+
+        public double HourlyIncomeMonth
+        {
+            get { return _hourlyIncomeMonth; }
+            set { _hourlyIncomeMonth = value; RaisePropertyChanged(); }
+        }
 
 
-        #region PROGNOSIS Properties
+
+
+        public string ViewTitle { get; } = "Månadsprognos";
+
+        // Collections
         public ObservableCollection<BudgetPost> AllPosts { get; set; } = new();
         public ObservableCollection<Prognosis> MonthlyPrognoses { get; set; } = new();
         public ObservableCollection<Category> Categories { get; set; }
 
         public decimal TotalIncome => SelectedPrognosis?.TotalIncome ?? 0;
         public decimal TotalExpense => SelectedPrognosis?.TotalExpenses ?? 0;
+        public decimal TotalDifference => TotalIncome - TotalExpense;
 
         private Prognosis _selectedPrognosis;
 
@@ -75,34 +85,70 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
             }
         }
 
-        #endregion
 
         // Commands
         public ICommand SelectNextMonthCommand { get; }
         public ICommand SelectPreviousMonthCommand { get; }
-
+        public ICommand CalculateIncomeCommand { get; set; }
 
 
         // Constructor
         public PrognosisViewVM()
         {
+
+            var settings = (UserSettingsService)Application.Current.Resources["UserSettings"];
+
+            settings.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(UserSettingsService.YearlyIncome) ||
+                    e.PropertyName == nameof(UserSettingsService.YearlyWorkhours) ||
+                    e.PropertyName == nameof(UserSettingsService.WeeklyWorkhours))
+                {
+                    RecalculateIncome(settings);
+                }
+            };
+
             // Mock data  //TODO: Hämta data från service ===============
             Categories = LoadCategories();
             AllPosts = LoadData();
 
-            YearlyIncome = 200000;  //TODO: Remove mocked value
-            YearlyWorkHours = 1920; //TODO: Remove mocked value
-
-            // ==========================================
-
-
             GeneratePrognosesForYear(DateTime.Now.Year);
+            //GeneratePrognosisRange(DateTime.Now); // TODO: Uncomment after new methods
 
             SelectedPrognosis = MonthlyPrognoses
-                .FirstOrDefault(p => p.FromDate.Month == DateTime.Now.Month);
+               .FirstOrDefault(p => p.FromDate.Month == DateTime.Now.Month);
 
             SelectNextMonthCommand = new DelegateCommand(NextMonth);
             SelectPreviousMonthCommand = new DelegateCommand(PreviousMonth);
+
+            CalculateIncomeCommand = new DelegateCommand(CalculateIncome);
+        }
+
+        private void CalculateIncome(object? obj)
+        {
+           if(YearlyIncome <= 0 || YearlyWorkhours <= 0)
+            {
+                CalculatedMonthlyIncome = 0;
+                HourlyIncomeYear = 0;
+                HourlyIncomeMonth = 0;
+                return;
+            }
+
+            // 1. Månadsinkomst
+            CalculatedMonthlyIncome = YearlyIncome / 12;
+
+            // 2. Timlön baserat på år
+            HourlyIncomeYear = YearlyIncome / YearlyWorkhours;
+
+            // 3. Timlön baserat på månad (40 h/vecka)
+            HourlyIncomeMonth = CalculatedMonthlyIncome / 40;  //TODO: veckotimmar värde (globalt)
+        }
+
+        private void RecalculateIncome(UserSettingsService settings)
+        {
+            CalculatedMonthlyIncome = settings.YearlyIncome / 12;
+            HourlyIncomeYear = settings.YearlyIncome / settings.YearlyWorkhours;
+            HourlyIncomeMonth = CalculatedMonthlyIncome / settings.WeeklyWorkhours;
         }
 
 
@@ -193,7 +239,6 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
         }
 
 
-        
         private ObservableCollection<BudgetPost> LoadData()
         {
             var now = DateTime.Now;
@@ -271,37 +316,3 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
         }
     }
 }
-
-/*
-  <!-- 
-           Syfte:
-        Visa beräkning av nästa månads budget baserat på återkommande poster.
-
-⭐ Innehåll:
-
-Kort med:
-
-”Förväntade inkomster”
-
-”Förväntade utgifter”
-
-”Prognostiserat saldo”
-
-Lista: ”Återkommande poster som påverkar nästa månad”
-
-Möjlighet att justera:
-
-Frånvaro
-
-Extra inkomster
-
-Engångskostnader
-
-MVVM-idé:
-
-PrognosisService → CalculateNextMonthPrognosis()
-
-Spara resultat i Prognosis-tabell
-        -->
- 
- */
