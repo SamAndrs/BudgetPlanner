@@ -22,11 +22,15 @@
 
                 <!-- Yearly income-->
                 <TextBlock Text="Årsinkomst" Style="{StaticResource LabelTextStyle}"/>
-                <TextBox Text="{Binding Settings.YearlyIncome, UpdateSourceTrigger=PropertyChanged}" Margin="0,4,0,12"/>
+                <TextBlock Text="{Binding Settings.YearlyIncome}" 
+                           Margin="0,4,0,12" FontWeight="Bold"
+                           FontSize="22" Foreground="{StaticResource PrimaryForeground}"/>
 
                 <!-- Yearly workhours-->
                 <TextBlock Text="Årsarbetstid (timmar)" Style="{StaticResource LabelTextStyle}"/>
-                <TextBox Text="{Binding Settings.YearlyWorkhours, UpdateSourceTrigger=PropertyChanged}" Margin="0,4,0,12"/>
+                <TextBlock Text="{Binding Settings.YearlyWorkhours}" 
+                           Margin="0,4,0,12" FontWeight="Bold"
+                           FontSize="22" Foreground="{StaticResource PrimaryForeground}"/>
 
                 <!-- Calculated monthly income/ per year-->
                 <TextBlock Text="Månadsinkomst/år"
@@ -49,20 +53,20 @@
                         <ColumnDefinition />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                
-                
-                <TextBlock Grid.Row="0" Grid.Column="0"
+
+
+                    <TextBlock Grid.Row="0" Grid.Column="0"
                            Text="Timlön/år (snitt)"
                            Style="{StaticResource LabelTextStyle}" Margin="0,4,0,4"/>
-                
-                <TextBlock Grid.Row="1" Grid.Column="0"
+
+                    <TextBlock Grid.Row="1" Grid.Column="0"
                            Text="{Binding HourlyIncomeYear, StringFormat={}{0:N0} kr}"
                            FontSize="16" FontWeight="Bold"
                            Style="{StaticResource LabelTextStyle}"
                            Foreground="{StaticResource PrimaryForeground}"/>
 
-                <TextBlock Grid.Row="0" Grid.Column="1"
-                           Text="{Binding Settings.WeeklyWorkhours}"
+                    <TextBlock Grid.Row="0" Grid.Column="1"
+                           Text="{Binding Settings.WeeklyWorkhours, StringFormat='Timlön/vecka ({0}h)'}"
                            Style="{StaticResource LabelTextStyle}" Margin="0,4,0,4"/>
 
                     <TextBlock Grid.Row="1" Grid.Column="1"
@@ -71,14 +75,6 @@
                            Style="{StaticResource LabelTextStyle}"
                            Foreground="{StaticResource PrimaryForeground}"/>
                 </Grid>
-
-                <Button HorizontalAlignment="Center" VerticalAlignment="Bottom"
-                        Margin="0,5,0,5"
-                        Style="{StaticResource MainButtonStyle}"
-                        Content="Beräkna" Width="100"
-                        FontWeight="Bold"
-                        Command="{Binding CalculateIncomeCommand}">
-                </Button>
             </StackPanel>
         </Border>
 

@@ -37,30 +37,27 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
         public ICommand NavigateDashboardCommand { get; }
         public ICommand NavigateBudgetPostsCommand { get; }
         public ICommand NavigatePrognosisCommand { get; }
-
         public ICommand NavigateSettingsCommand { get; }
 
         // ViewModels
         public DashboardViewVM DashboardVM { get; }
         public BudgetPostsViewVM BudgetPostsViewVM { get; }
         public PrognosisViewVM PrognosisViewVM { get; set; }
-
         public SettingsViewVM SettingsViewVM { get; set; }
 
 
-        public MainViewModel()
+        public MainViewModel(DashboardViewVM dashboardVM, BudgetPostsViewVM budgetPostsVM, PrognosisViewVM prognosisVM, SettingsViewVM settingsVM)
         {
-            // Initialize VMs
-            DashboardVM = new DashboardViewVM();
-            BudgetPostsViewVM = new BudgetPostsViewVM();
-            PrognosisViewVM = new PrognosisViewVM();
-            
+            DashboardVM = dashboardVM;
+            BudgetPostsViewVM = budgetPostsVM;
+            PrognosisViewVM = prognosisVM;
+            SettingsViewVM = settingsVM;
+
 
             // Initialize Commands
             NavigateDashboardCommand = new DelegateCommand(_ => NavigateToDashboard());
             NavigateBudgetPostsCommand = new DelegateCommand(_ => CurrentView = BudgetPostsViewVM);
             NavigatePrognosisCommand = new DelegateCommand(_ => CurrentView = PrognosisViewVM);
-
             NavigateSettingsCommand = new DelegateCommand(_ => CurrentView = SettingsViewVM);
 
             // koppla VM -> dialoghantering

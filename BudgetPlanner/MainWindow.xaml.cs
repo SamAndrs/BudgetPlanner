@@ -1,5 +1,6 @@
 ﻿using BudgetPlanner.DomainLayer.Services;
 using BudgetPlanner.PresentationLayer.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 
 namespace BudgetPlanner
@@ -13,7 +14,8 @@ namespace BudgetPlanner
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MainViewModel();
+            //DataContext = new MainViewModel();
+            DataContext = App.ServiceProvider.GetRequiredService<MainViewModel>();
         }
 
         private void Window_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)

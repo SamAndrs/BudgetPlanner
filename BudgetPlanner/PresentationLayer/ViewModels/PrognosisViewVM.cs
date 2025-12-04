@@ -10,29 +10,8 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
 {
     public class PrognosisViewVM : ViewModelBase
     {
-        
-
-        private double _yearlyIncome;
-        public double YearlyIncome
-        {
-            get { return _yearlyIncome; }
-            set 
-            { 
-                _yearlyIncome = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        private double _yearlyWorkhours;
-        public double YearlyWorkhours
-        {
-            get { return _yearlyWorkhours; }
-            set 
-            { 
-                _yearlyWorkhours = value; 
-                RaisePropertyChanged();
-            }
-        }
+        private readonly UserSettingsService _settings;
+        public UserSettingsService Settings => _settings;
 
         private double _calculatedMonthlyIncome;
         public double CalculatedMonthlyIncome
@@ -71,7 +50,7 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
         public decimal TotalExpense => SelectedPrognosis?.TotalExpenses ?? 0;
         public decimal TotalDifference => TotalIncome - TotalExpense;
 
-        private Prognosis _selectedPrognosis;
+        private Prognosis _selectedPrognosis;   
 
         public Prognosis SelectedPrognosis
         {
@@ -89,22 +68,21 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
         // Commands
         public ICommand SelectNextMonthCommand { get; }
         public ICommand SelectPreviousMonthCommand { get; }
-        public ICommand CalculateIncomeCommand { get; set; }
-
+        
 
         // Constructor
-        public PrognosisViewVM()
+        public PrognosisViewVM(UserSettingsService settings)
         {
+            _settings = settings;
 
-            var settings = (UserSettingsService)Application.Current.Resources["UserSettings"];
 
-            settings.PropertyChanged += (s, e) =>
+            _settings.PropertyChanged += (s, e) =>
             {
                 if (e.PropertyName == nameof(UserSettingsService.YearlyIncome) ||
                     e.PropertyName == nameof(UserSettingsService.YearlyWorkhours) ||
                     e.PropertyName == nameof(UserSettingsService.WeeklyWorkhours))
                 {
-                    RecalculateIncome(settings);
+                    RecalculateIncome();
                 }
             };
 
@@ -121,34 +99,13 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
             SelectNextMonthCommand = new DelegateCommand(NextMonth);
             SelectPreviousMonthCommand = new DelegateCommand(PreviousMonth);
 
-            CalculateIncomeCommand = new DelegateCommand(CalculateIncome);
-        }
+        }       
 
-        private void CalculateIncome(object? obj)
+        private void RecalculateIncome()
         {
-           if(YearlyIncome <= 0 || YearlyWorkhours <= 0)
-            {
-                CalculatedMonthlyIncome = 0;
-                HourlyIncomeYear = 0;
-                HourlyIncomeMonth = 0;
-                return;
-            }
-
-            // 1. Månadsinkomst
-            CalculatedMonthlyIncome = YearlyIncome / 12;
-
-            // 2. Timlön baserat på år
-            HourlyIncomeYear = YearlyIncome / YearlyWorkhours;
-
-            // 3. Timlön baserat på månad (40 h/vecka)
-            HourlyIncomeMonth = CalculatedMonthlyIncome / 40;  //TODO: veckotimmar värde (globalt)
-        }
-
-        private void RecalculateIncome(UserSettingsService settings)
-        {
-            CalculatedMonthlyIncome = settings.YearlyIncome / 12;
-            HourlyIncomeYear = settings.YearlyIncome / settings.YearlyWorkhours;
-            HourlyIncomeMonth = CalculatedMonthlyIncome / settings.WeeklyWorkhours;
+            CalculatedMonthlyIncome = _settings.YearlyIncome / 12;
+            HourlyIncomeYear = _settings.YearlyIncome / _settings.YearlyWorkhours;
+            HourlyIncomeMonth = CalculatedMonthlyIncome / _settings.WeeklyWorkhours;
         }
 
 

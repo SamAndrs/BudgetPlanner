@@ -54,15 +54,21 @@ namespace BudgetPlanner
             services.AddSingleton<PrognosisService>();
             services.AddSingleton<UserSettingsService>();
 
+            services.AddSingleton<MainViewModel>();
+            services.AddTransient<DashboardViewVM>();
+            services.AddTransient<BudgetPostsViewVM>();
+            services.AddTransient<PrognosisViewVM>();
+            services.AddTransient<SettingsViewVM>();
+
             ServiceProvider = services.BuildServiceProvider();
 
             // 3. Start MainWindow
-            //var mainWindow = new MainWindow()
+            var mainWindow = new MainWindow();
             //{
             //    DataContext = ServiceProvider.GetService<ViewModelBase>()
             //};
 
-            //mainWindow.Show();
+            mainWindow.Show();
         }
     }
 

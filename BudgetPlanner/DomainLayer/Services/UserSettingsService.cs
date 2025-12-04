@@ -31,13 +31,13 @@ namespace BudgetPlanner.DomainLayer.Services
             set { _weeklyWorkhours = value; RaisePropertyChanged(); }
         }
 
-        private double _taxRate;
+        //private double _taxRate;
 
-        public double TaxRate
-        {
-            get { return _taxRate; }
-            set { _taxRate = value; RaisePropertyChanged(); }
-        }
+        //public double TaxRate
+        //{
+        //    get { return _taxRate; }
+        //    set { _taxRate = value; RaisePropertyChanged(); }
+        //}
 
     }
 }
