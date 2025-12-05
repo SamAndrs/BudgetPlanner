@@ -35,7 +35,9 @@ namespace BudgetPlanner.Migrations
                     TotalIncome = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     TotalExpenses = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     TotalSum = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    FromDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ToDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Month = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -50,9 +52,11 @@ namespace BudgetPlanner.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Amount = table.Column<double>(type: "float(18)", precision: 18, scale: 2, nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
-                    Reccuring = table.Column<int>(type: "int", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TransactionType = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Recurring = table.Column<int>(type: "int", nullable: false),
+                    RecurringGroupID = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    PostType = table.Column<int>(type: "int", nullable: false),
                     PrognosisId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -76,20 +80,23 @@ namespace BudgetPlanner.Migrations
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { 1, "Food" },
-                    { 2, "Transport" },
-                    { 3, "Clothing" },
-                    { 4, "Taxes" },
-                    { 5, "House" },
-                    { 6, "Hobbies" },
-                    { 7, "Kids" },
-                    { 8, "TV" },
-                    { 9, "SaaS" },
-                    { 10, "Subscriptions" },
-                    { 11, "Salary" },
-                    { 12, "Allowance" },
-                    { 13, "ExtraIncome" },
-                    { 14, "Undefined" }
+                    { 1, "Alla" },
+                    { 2, "Mat" },
+                    { 3, "Transport" },
+                    { 4, "Kläder" },
+                    { 5, "Skatt" },
+                    { 6, "Hem" },
+                    { 7, "Hobby" },
+                    { 8, "Barn" },
+                    { 9, "TV" },
+                    { 10, "SaaS" },
+                    { 11, "Prenumerationer" },
+                    { 12, "Husdjur" },
+                    { 13, "Underhållning" },
+                    { 14, "Lön" },
+                    { 15, "Bidrag" },
+                    { 16, "Extrainkomst" },
+                    { 17, "Okänd" }
                 });
 
             migrationBuilder.CreateIndex(

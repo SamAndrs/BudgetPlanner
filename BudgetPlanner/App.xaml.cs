@@ -18,7 +18,7 @@ namespace BudgetPlanner
         public static IServiceProvider? ServiceProvider { get; private set; }
         public static IConfiguration? Configuration { get; private set; }
 
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
@@ -62,12 +62,22 @@ namespace BudgetPlanner
 
             ServiceProvider = services.BuildServiceProvider();
 
-            // 3. Start MainWindow
-            var mainWindow = new MainWindow();
-            //{
-            //    DataContext = ServiceProvider.GetService<ViewModelBase>()
-            //};
 
+            // 3. Seed database
+            using (var scope = ServiceProvider.CreateScope())
+            {
+               var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+               await context.Database.MigrateAsync();
+               await DataSeeder.SeedAsync(context);
+
+
+                // 4. Generera Recurring posts
+                var bpService = scope.ServiceProvider.GetRequiredService<BudgetPostService>();
+                await bpService.GenerateRecurringPostsAsync();
+            }
+
+            // 5. Start MainWindow
+            var mainWindow = new MainWindow();
             mainWindow.Show();
         }
     }

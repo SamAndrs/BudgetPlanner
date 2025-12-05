@@ -12,9 +12,9 @@ namespace BudgetPlanner.DomainLayer.Models
 
         public virtual List<BudgetPost> BudgetPosts { get; set; } = new();
 
-        public decimal TotalIncome { get; set; } = 0;
+        public decimal MonthlyIncome { get; set; } = 0;
 
-        public decimal TotalExpenses { get; set; } = 0;
+        public decimal MonthlyExpense { get; set; } = 0;
 
         public decimal TotalSum { get; set; } = 0;
 

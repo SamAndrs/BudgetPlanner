@@ -1,6 +1,6 @@
 ﻿using BudgetPlanner.DomainLayer.Models;
+using BudgetPlanner.PresentationLayer.ViewModels;
 using ScottPlot;
-using System.Reflection.Emit;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -13,6 +13,7 @@ namespace BudgetPlanner.PresentationLayer.Resources.PrognosisView
         {
             InitializeComponent();
         }
+
 
         public IEnumerable<Prognosis> Data
         {
@@ -44,24 +45,23 @@ namespace BudgetPlanner.PresentationLayer.Resources.PrognosisView
             // Sortera datan i kronologisk ordning
             var months = Data.OrderBy(p => p.FromDate).ToList();
 
-            double[] incomes = months.Select(m => (double)m.TotalIncome).ToArray();
-            double[] expenses = months.Select(m => (double)m.TotalExpenses).ToArray();
+            double[] incomes = months.Select(m => (double)m.MonthlyIncome).ToArray();
+            double[] expenses = months.Select(m => (double)m.MonthlyExpense).ToArray();
 
-            string[] xLabels = months
-                .Select(m => m.FromDate.ToString("MMM"))
-                .ToArray();
-
-           
+            //double[] incomes = [30, 40, 50, 60, 70, 80, 25, 56, 68, 13, 55];
+            //double[] expenses = [15, 20, 25, 30, 76, 88, 34, 52, 15, 17, 99];
+                       
 
             var bars = new List<Bar>();
+            var barWidth = 0.2;
 
-            // Stapelbredd
-            double barWidth = 0.2;
+            string[] xLabels = months.Select(m => m.FromDate.ToString("MMM")).ToArray();
 
             for (int i = 0; i < months.Count; i++)
             {
                 var month = months[i];
                 double pos = i;
+
 
                 // Skapa bars
                 bars.Add(new Bar
@@ -70,8 +70,6 @@ namespace BudgetPlanner.PresentationLayer.Resources.PrognosisView
                     Value = incomes[i],
                     FillColor = SetColor("Income"),
                     Size = barWidth
-
-                    
                 });
 
                 bars.Add(new Bar
@@ -88,11 +86,7 @@ namespace BudgetPlanner.PresentationLayer.Resources.PrognosisView
 
             // Y-axis title
             plt.YLabel("Belopp (kr)");
-            var ymaxValue = GetMaxValue(incomes, expenses); // Get highest of either income/ expense
-            
-            //ScottPlot.TickGenerators.NumericAutomatic tickGenY = new();
-            //tickGenY.TargetTickCount = 3;
-            //plt.Axes.Left.TickGenerator = tickGenY;
+            var ymaxValue = Math.Max(incomes.Max(), expenses.Max()); // Get highest of either income/ expense
             plt.Axes.SetLimitsY(0, ymaxValue * 1.1);
 
 
@@ -132,16 +126,6 @@ namespace BudgetPlanner.PresentationLayer.Resources.PrognosisView
                 default:
                     return Color.FromHex("#ffffff");
             }
-        }
-
-
-        private int GetMaxValue(double[] incomes, double[] expenses)
-        {
-            var highestIncome = incomes.Max();
-
-            var highestExpenses = expenses.Max();
-
-            return (int)Math.Max(highestIncome, highestExpenses);
         }
     }
 }

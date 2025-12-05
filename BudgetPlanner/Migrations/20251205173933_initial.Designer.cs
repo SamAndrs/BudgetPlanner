@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BudgetPlanner.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251119152731_initial")]
+    [Migration("20251205173933_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -40,17 +40,24 @@ namespace BudgetPlanner.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime?>("Date")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PostType")
+                        .HasColumnType("int");
 
                     b.Property<int?>("PrognosisId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Reccuring")
+                    b.Property<int>("Recurring")
                         .HasColumnType("int");
 
-                    b.Property<int>("TransactionType")
-                        .HasColumnType("int");
+                    b.Property<string>("RecurringGroupID")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -81,72 +88,87 @@ namespace BudgetPlanner.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Food"
+                            Name = "Alla"
                         },
                         new
                         {
                             Id = 2,
-                            Name = "Transport"
+                            Name = "Mat"
                         },
                         new
                         {
                             Id = 3,
-                            Name = "Clothing"
+                            Name = "Transport"
                         },
                         new
                         {
                             Id = 4,
-                            Name = "Taxes"
+                            Name = "Kläder"
                         },
                         new
                         {
                             Id = 5,
-                            Name = "House"
+                            Name = "Skatt"
                         },
                         new
                         {
                             Id = 6,
-                            Name = "Hobbies"
+                            Name = "Hem"
                         },
                         new
                         {
                             Id = 7,
-                            Name = "Kids"
+                            Name = "Hobby"
                         },
                         new
                         {
                             Id = 8,
-                            Name = "TV"
+                            Name = "Barn"
                         },
                         new
                         {
                             Id = 9,
-                            Name = "SaaS"
+                            Name = "TV"
                         },
                         new
                         {
                             Id = 10,
-                            Name = "Subscriptions"
+                            Name = "SaaS"
                         },
                         new
                         {
                             Id = 11,
-                            Name = "Salary"
+                            Name = "Prenumerationer"
                         },
                         new
                         {
                             Id = 12,
-                            Name = "Allowance"
+                            Name = "Husdjur"
                         },
                         new
                         {
                             Id = 13,
-                            Name = "ExtraIncome"
+                            Name = "Underhållning"
                         },
                         new
                         {
                             Id = 14,
-                            Name = "Undefined"
+                            Name = "Lön"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Name = "Bidrag"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Name = "Extrainkomst"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Name = "Okänd"
                         });
                 });
 
@@ -158,7 +180,14 @@ namespace BudgetPlanner.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime>("FromDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Month")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ToDate")
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("TotalExpenses")

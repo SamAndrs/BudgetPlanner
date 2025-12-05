@@ -10,11 +10,11 @@ namespace BudgetPlanner.PresentationLayer.Views
         public DashboardView()
         {
             InitializeComponent();
-            Loaded += DazhboardView_Loaded;
+            Loaded += DashboardView_Loaded;
 
         }
 
-        private void DazhboardView_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        private void DashboardView_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
             var vm = DataContext as DashboardViewVM;
             if (vm == null) return;
@@ -110,13 +110,16 @@ namespace BudgetPlanner.PresentationLayer.Views
             plt.Add.Bars(bars);
 
             // Axis setup  (Sätt Y- och X-axlar från 0 till maxvärde + lite marginal)
+            if(activeDays.Any())
+            {
+                double maxValue = activeDays.Max(d => Math.Max(d.TotalIncome, d.TotalExpense));
+                plt.Axes.SetLimitsY(0, maxValue * 1.1); // 10% marginal
 
-            double maxValue = activeDays.Max(d => Math.Max(d.TotalIncome, d.TotalExpense));
-            plt.Axes.SetLimitsY(0, maxValue * 1.1); // 10% marginal
-                
-            // X‑axel
-            plt.Axes.Bottom.TickGenerator = new ScottPlot.TickGenerators.NumericManual(ticks.ToArray());
-            plt.Axes.SetLimitsX(0, ticks.Count * 1.1); // 10% marginal
+                // X‑axel
+                plt.Axes.Bottom.TickGenerator = new ScottPlot.TickGenerators.NumericManual(ticks.ToArray());
+                plt.Axes.SetLimitsX(0, ticks.Count * 1.1); // 10% marginal
+            }
+            
 
             // Styling
             plt.Axes.Color(SetColor("LabelText"));

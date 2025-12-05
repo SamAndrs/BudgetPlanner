@@ -1,4 +1,5 @@
 ﻿using BudgetPlanner.DataAccessLayer;
+using BudgetPlanner.DomainLayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,7 @@ namespace BudgetPlanner.DomainLayer.Services
         {
             _db = db;
         }
+
+        public List<Category> GetAllCategories() => _db.Categories.OrderBy(c => c.Name).ToList();
     }
 }

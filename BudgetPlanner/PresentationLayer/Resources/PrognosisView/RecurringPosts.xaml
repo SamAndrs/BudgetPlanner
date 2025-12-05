@@ -20,7 +20,7 @@
         <Border Style="{StaticResource CardStyle}" Padding="16" Grid.Row="1">
             <ListView Background="Transparent" Padding="8"
                       BorderBrush="Transparent"
-                      ItemsSource="{Binding SelectedPrognosis.BudgetPosts}"
+                      ItemsSource="{Binding RecurringPosts}"
                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                       ScrollViewer.VerticalScrollBarVisibility="Auto">
 

@@ -29,17 +29,17 @@ namespace BudgetPlanner.DataAccessLayer
                 .Property(p => p.Amount)
                 .HasPrecision(18, 2); // total 18 digits, 2 decimals
 
-            modelBuilder.Entity<Prognosis>()
-                .Property(p => p.TotalIncome)
-                .HasPrecision(18, 2);
+            //modelBuilder.Entity<Prognosis>()
+            //    .Property(p => p.TotalIncome)
+            //    .HasPrecision(18, 2);
 
-            modelBuilder.Entity<Prognosis>()
-                .Property(p => p.TotalExpenses)
-                .HasPrecision(18, 2);
+            //modelBuilder.Entity<Prognosis>()
+            //    .Property(p => p.TotalExpenses)
+            //    .HasPrecision(18, 2);
 
-            modelBuilder.Entity<Prognosis>()
-                .Property(p => p.TotalSum)
-                .HasPrecision(18, 2);
+            //modelBuilder.Entity<Prognosis>()
+            //    .Property(p => p.TotalSum)
+            //    .HasPrecision(18, 2);
 
 
 
