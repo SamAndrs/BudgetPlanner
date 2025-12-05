@@ -1,0 +1,107 @@
+﻿<UserControl x:Class="BudgetPlanner.PresentationLayer.Views.AddEditBudgetPostView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BudgetPlanner.PresentationLayer.Views"
+             >
+
+    <Border Padding="20"
+            CornerRadius="18"
+            BorderThickness="3"
+            BorderBrush="{StaticResource SecondaryBackground}"          
+            Background="{StaticResource PrimaryBackground}"
+           >
+
+        <Grid Width="400" VerticalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            
+            <!-- Rubrik -->
+            <TextBlock Text="Redigera/lägg till ny post"
+                       FontSize="20"
+                       FontWeight="Bold"
+                       Foreground="{StaticResource SecondaryForeground}"
+                       Margin="0,0,0,20"
+                       Grid.Row="0"/>
+            
+            <!-- FORM FIELDS -->
+            <StackPanel Grid.Row="1" Margin="0,0,0,10">
+                
+                <!-- Amount -->
+                <TextBlock Text="Belopp" Style="{StaticResource LabelTextStyle}"/>
+                <TextBox Text="{Binding Amount}"  
+                         Margin="0,5,0,15"/>
+                
+                <!-- Category -->
+                <TextBlock Text="Kategori" Style="{StaticResource LabelTextStyle}"/>
+                <ComboBox ItemsSource="{Binding Categories}"
+                          DisplayMemberPath="Name"
+                          SelectedItem="{Binding Category}"
+                          Margin="0,5,0,15"/>
+                
+                <!-- Post type -->
+                <TextBlock Text="Typ" Style="{StaticResource LabelTextStyle}"/>
+                <ComboBox ItemsSource="{Binding BudgetPostTypes}"
+                          SelectedItem="{Binding PostType}"
+                          Margin="0,5,0,15">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource EnumDescription}}"
+                                       Foreground="{Binding RelativeSource={RelativeSource AncestorType=ComboBoxItem}, Path=Foreground}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                
+                <!-- Recurring -->
+                <TextBlock Text="Återkommande" Style="{StaticResource LabelTextStyle}"/>
+                <ComboBox ItemsSource="{Binding RecurringOptions}"
+                          SelectedItem="{Binding Recurring}"
+                          Margin="0,5,0,15">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource EnumDescription}}"
+                                       Foreground="{Binding RelativeSource={RelativeSource AncestorType=ComboBoxItem}, Path=Foreground}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                
+                <!-- Date -->
+                <TextBlock Text="Datum" Style="{StaticResource LabelTextStyle}"/>
+                <DatePicker SelectedDate="{Binding Date}"
+                            Margin="0,5,0,15"/>
+
+                <!-- Description -->
+                <TextBlock Text="Beskrivning" Style="{StaticResource LabelTextStyle}"/>
+                <TextBox Text="{Binding Description}"
+                         Height="80"
+                         Margin="0,5,0,10"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"/>
+
+            </StackPanel>
+
+            <!-- Buttons -->
+            <StackPanel Grid.Row="3"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        Margin="0,20,0,0">
+                
+                <Button Content="Avbryt"
+                        Width="80"
+                        Command="{Binding CancelCommand}"
+                        Style="{StaticResource CancelButtonStyle}"/>
+                
+                <Button Content="Spara"
+                       Width="80"
+                        Command="{Binding SaveCommand}"
+                        Style="{StaticResource MainButtonStyle}"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+    
+</UserControl>

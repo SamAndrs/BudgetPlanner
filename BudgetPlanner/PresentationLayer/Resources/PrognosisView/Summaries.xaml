@@ -1,0 +1,48 @@
+﻿<UserControl x:Class="BudgetPlanner.PresentationLayer.Resources.PrognosisView.Summaries"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BudgetPlanner.PresentationLayer.Resources.PrognosisView"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+    
+       
+        <!-- Header -->
+        <TextBlock Grid.Row="0" Margin="5,5,0,0"
+                   Text="Inkomster/ utgifter/ differens (total/år)" 
+                   Style="{StaticResource LabelTextStyle}"/>
+
+        <Border Grid.Row="1" CornerRadius="12"
+                Padding="5" Margin="5,0,5,5"
+                Background="{StaticResource SecondaryBackground}">
+
+            <StackPanel>
+                <!-- Total sum (income)-->
+                <TextBlock HorizontalAlignment="Center" Margin="5,25,5,5"
+                           Text="{Binding TotalIncome, StringFormat='+{0:C}'}"
+                           Style="{StaticResource SummaryCardStyle}"
+                           Foreground="{StaticResource IncomeBackground}" />
+
+                <!-- Total sum (expenses) -->
+                <TextBlock HorizontalAlignment="Center" Margin="5,0,5,5"
+                    Text="{Binding TotalExpense, StringFormat='-{0:C}'}"
+                    Style="{StaticResource SummaryCardStyle}"
+                    Foreground="{StaticResource ExpenseBackground}" />
+
+                <!-- Total difference -->
+                <TextBlock HorizontalAlignment="Center" Margin="5,0,5,5"
+                    Style="{StaticResource SummaryDiffCardStyle}"
+                    Text="{Binding TotalDifference, StringFormat={}{0:+# ##0.00 kr;-# ##0.00 kr}}"/>
+            </StackPanel>
+
+
+        </Border>
+
+    </Grid>
+</UserControl>

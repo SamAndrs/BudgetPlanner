@@ -1,9 +1,29 @@
 ﻿<Application x:Class="BudgetPlanner.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:BudgetPlanner"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             
+             
+
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+
+                <!-- Global colors -->
+                <ResourceDictionary Source="PresentationLayer/Resources/Colors.xaml" />
+
+                <!-- Global Converters -->
+                <ResourceDictionary Source="PresentationLayer/Resources/Converters.xaml" />
+
+                <!-- Global styles -->
+                <ResourceDictionary Source="PresentationLayer/Resources/Styles.xaml" />
+
+                <!-- Global DataTemplates -->
+                <ResourceDictionary Source="PresentationLayer/Resources/DataTemplates.xaml" />
+                <ResourceDictionary Source="PresentationLayer/Resources/ViewToVM_Mapping.xaml" />
+                
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

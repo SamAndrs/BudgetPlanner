@@ -1,0 +1,82 @@
+﻿<UserControl x:Class="BudgetPlanner.PresentationLayer.Resources.PrognosisView.MonthlyIncome"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BudgetPlanner.PresentationLayer.Resources.PrognosisView"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Margin="0,0,0,5"
+                 Text="Beräkna Månadsinkomst"
+                 Style="{StaticResource LabelTextStyle}"/>
+
+        <Border Style="{StaticResource CardStyle}" Grid.Row="1"
+              Padding="16"  Margin="0,0,16,0">
+            <StackPanel>
+
+                <!-- Yearly income-->
+                <TextBlock Text="Årsinkomst" Style="{StaticResource LabelTextStyle}"/>
+                <TextBlock Text="{Binding Settings.YearlyIncome}" 
+                           Margin="0,4,0,12" FontWeight="Bold"
+                           FontSize="22" Foreground="{StaticResource PrimaryForeground}"/>
+
+                <!-- Yearly workhours-->
+                <TextBlock Text="Årsarbetstid (timmar)" Style="{StaticResource LabelTextStyle}"/>
+                <TextBlock Text="{Binding Settings.YearlyWorkhours}" 
+                           Margin="0,4,0,12" FontWeight="Bold"
+                           FontSize="22" Foreground="{StaticResource PrimaryForeground}"/>
+
+                <!-- Calculated monthly income/ per year-->
+                <TextBlock Text="Månadsinkomst/år"
+                           Style="{StaticResource LabelTextStyle}" Margin="0,4,0,4"/>
+
+                <TextBlock Text="{Binding CalculatedMonthlyIncome, StringFormat={}{0:N0} kr}"
+                           FontSize="22" FontWeight="Bold"
+                           Style="{StaticResource LabelTextStyle}"
+                           Foreground="{StaticResource PrimaryForeground}"/>
+
+                <!-- Calculated hourly salary -->
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+
+                    <TextBlock Grid.Row="0" Grid.Column="0"
+                           Text="Timlön/år (snitt)"
+                           Style="{StaticResource LabelTextStyle}" Margin="0,4,0,4"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0"
+                           Text="{Binding HourlyIncomeYear, StringFormat={}{0:N0} kr}"
+                           FontSize="16" FontWeight="Bold"
+                           Style="{StaticResource LabelTextStyle}"
+                           Foreground="{StaticResource PrimaryForeground}"/>
+
+                    <TextBlock Grid.Row="0" Grid.Column="1"
+                           Text="{Binding Settings.WeeklyWorkhours, StringFormat='Timlön/vecka ({0}h)'}"
+                           Style="{StaticResource LabelTextStyle}" Margin="0,4,0,4"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="1"
+                           Text="{Binding HourlyIncomeMonth, StringFormat={}{0:N0} kr}"
+                           FontSize="16" FontWeight="Bold"
+                           Style="{StaticResource LabelTextStyle}"
+                           Foreground="{StaticResource PrimaryForeground}"/>
+                </Grid>
+            </StackPanel>
+        </Border>
+
+    </Grid>
+</UserControl>

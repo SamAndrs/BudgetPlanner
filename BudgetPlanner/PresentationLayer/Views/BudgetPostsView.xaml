@@ -1,0 +1,69 @@
+﻿<UserControl x:Class="BudgetPlanner.PresentationLayer.Views.BudgetPostsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BudgetPlanner.PresentationLayer.Views"
+             xmlns:controls="clr-namespace:BudgetPlanner.PresentationLayer.Resources.BudgetPosts"
+                
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="1200">
+    
+    <Border Background="{StaticResource PrimaryBackground}" Padding="15">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
+            <!-- HEADER -->
+            <TextBlock Grid.Row="0" Grid.ColumnSpan="3"
+                       Text="{Binding ViewTitle}" 
+                       FontSize="18"
+                       FontWeight="Bold"
+                       Foreground="{StaticResource SecondaryForeground}"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,10"/>
+            
+            <!-- LEFT COLUMN -->
+                <!--Filter card -->
+                <controls:Filter_Card Grid.Row="1" Grid.Column="0" Padding="5"/>
+
+            
+            <!-- CENTER COLUMN -->
+                <!-- Budgetposts list -->
+                <controls:Post_List Grid.Row="1" Grid.Column="1" Padding="5"/>
+            
+            <!-- RIGHT COLUMN -->
+                <!-- Summaries -->
+                <Grid Grid.Row="1" Grid.Column="3" Margin="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition />
+                        <RowDefinition />
+
+                    </Grid.RowDefinitions>
+
+                    <!-- Category summary chart -->
+                    <TextBlock Grid.Row="0" Text="Antal poster/ kategori (totalt)" 
+                               Margin="0,0,0,5" Style="{StaticResource LabelTextStyle}"/>
+                <Border Grid.Row="1" CornerRadius="12" 
+                            Padding="5" Background="{StaticResource SecondaryBackground}">
+
+                    <controls:CategoryBarChart Data="{Binding CategoryCounts}" />
+                </Border>
+               
+                    <!-- Income/ Expense Summaries -->
+                    <controls:Summary Grid.Row="2" Grid.Column="3"/>
+
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

@@ -3,10 +3,105 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:BudgetPlanner"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        xmlns:local="clr-namespace:BudgetPlanner"     
 
-    </Grid>
+        xmlns:views="clr-namespace:BudgetPlanner.PresentationLayer.Views"
+        xmlns:controls="clr-namespace:BudgetPlanner.PresentationLayer.Resources.MW_Window"
+        
+        mc:Ignorable="d"
+        Title="Budgetplaneraren"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        Background="Transparent"
+        AllowsTransparency="True"
+        MouseDown="Window_MouseDown">
+
+    <Border CornerRadius="18"
+            Background="{StaticResource PrimaryBackground}"
+            BorderBrush="{StaticResource SecondaryBackground}"
+            BorderThickness="3">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <!-- Sidebar -->
+                <ColumnDefinition Width="60" />
+
+                <!-- Main Content -->
+                <ColumnDefinition />
+
+                <!-- Window Buttons-->
+                <ColumnDefinition Width="25" />
+                <ColumnDefinition Width="25" />
+                <ColumnDefinition Width="25" />
+                <ColumnDefinition Width="25" />
+                <ColumnDefinition Width="5" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition />
+                <RowDefinition Height="25"/>
+            </Grid.RowDefinitions>
+
+        
+
+            <!-- Window Control buttons -->
+            <Button x:Name="btnMinimize"
+                    Grid.Row="0" Grid.Column="2"
+                    Style="{StaticResource WindowButtonStyle}"
+                    Content="-"
+                    Click="btnMinimize_Click" >
+            </Button>
+            
+            <Button x:Name="btnMaximize"
+                    Grid.Row="0" Grid.Column="3"
+                    Style="{StaticResource WindowButtonStyle}"
+                    Content="+"
+                    Click="btnMaximize_Click" >
+            </Button>
+
+            <Button x:Name="btnWindow"
+                    Grid.Row="0" Grid.Column="4"
+                    Style="{StaticResource WindowButtonStyle}"
+                    Content="❐"
+                    Click="btnWindow_Click" >
+            </Button>
+
+            <Button x:Name="btnClose"
+                    Grid.Row="0" Grid.Column="5"
+                    Style="{StaticResource WindowButtonStyle}"
+                    Content="x"
+                    Click="btnClose_Click">
+            </Button>
+
+
+            <!-- TITLE BAR -->
+            <controls:TitleBar Grid.Column="1" Grid.Row="1"  Grid.ColumnSpan="4"  Margin="10,0,0,10"
+                               HorizontalAlignment="Center"/>
+
+   
+            <!-- LEFT SIDEBAR -->
+            <Rectangle Grid.Column="0" Grid.Row="0" Fill="{StaticResource SecondaryBackground}"/>
+            <Rectangle Grid.Column="0" Grid.Row="1" Fill="{StaticResource SecondaryBackground}" />
+
+            <controls:SideBar Grid.Column="0" Grid.Row="2" Background="{StaticResource SecondaryBackground}"/>
+
+            <Rectangle Grid.Column="0" Grid.Row="3" Fill="{StaticResource SecondaryBackground}" />
+
+
+
+            <!-- CONTENT AREA -->
+            <ContentControl Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="4"
+                            Content="{Binding CurrentView}" />
+
+            <!-- Modal backdrop -->
+
+            <controls:DialogOverlay Grid.RowSpan="4" Grid.ColumnSpan="4"
+                                    IsOpen="{Binding IsDialogOpen}"
+                                    DialogContent="{Binding CurrentDialog}"/>
+        
+        </Grid>
+    </Border>
+
 </Window>
