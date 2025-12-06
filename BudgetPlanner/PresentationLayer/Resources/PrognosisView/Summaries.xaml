@@ -15,7 +15,7 @@
        
         <!-- Header -->
         <TextBlock Grid.Row="0" Margin="5,5,0,0"
-                   Text="Inkomster/ utgifter/ differens (total/år)" 
+                   Text="Inkomster/ utgifter/ differens (total vald månad)" 
                    Style="{StaticResource LabelTextStyle}"/>
 
         <Border Grid.Row="1" CornerRadius="12"

@@ -47,11 +47,7 @@ namespace BudgetPlanner.PresentationLayer.Resources.PrognosisView
 
             double[] incomes = months.Select(m => (double)m.MonthlyIncome).ToArray();
             double[] expenses = months.Select(m => (double)m.MonthlyExpense).ToArray();
-
-            //double[] incomes = [30, 40, 50, 60, 70, 80, 25, 56, 68, 13, 55];
-            //double[] expenses = [15, 20, 25, 30, 76, 88, 34, 52, 15, 17, 99];
-                       
-
+                      
             var bars = new List<Bar>();
             var barWidth = 0.2;
 
@@ -61,7 +57,6 @@ namespace BudgetPlanner.PresentationLayer.Resources.PrognosisView
             {
                 var month = months[i];
                 double pos = i;
-
 
                 // Skapa bars
                 bars.Add(new Bar
@@ -96,6 +91,8 @@ namespace BudgetPlanner.PresentationLayer.Resources.PrognosisView
                             .Select(i => new Tick(i, xLabels[i]))
                             .ToArray()
             );
+
+            plt.Axes.Margins(bottom: 0);
 
             // Grid & stil
             plt.Axes.Color(SetColor("LabelText"));

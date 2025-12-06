@@ -212,7 +212,17 @@ namespace BudgetPlanner.DomainLayer.Services
         {
             if (post.Recurring != Recurring.None)
             {
-                post.RecurringGroupID = Guid.NewGuid().ToString();
+                _db.RecurringPosts.Add(
+                    new RecurringBudgetPostTemplate
+                    {
+                        Amount = post.Amount,
+                        CategoryId = post.CategoryId,
+                        Category = post.Category,
+                        Description = post.Description,
+                        Recurring = post.Recurring,
+                        PostType = post.PostType,
+                        RecurringStartDate = (DateTime)post.Date
+                    });
             }
             _db.BudgetPosts.Add(post);
             _db.SaveChanges();
