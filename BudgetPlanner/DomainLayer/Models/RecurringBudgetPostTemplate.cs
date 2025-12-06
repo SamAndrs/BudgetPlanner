@@ -2,25 +2,21 @@
 
 namespace BudgetPlanner.DomainLayer.Models
 {
-    public class BudgetPost
+    public class RecurringBudgetPostTemplate
     {
         public int Id { get; set; }
 
-        public double Amount { get; set; } = 0;
+        public double Amount { get; set; }
 
         public int CategoryId { get; set; }
         public Category Category { get; set; }
 
         public string Description { get; set; } = string.Empty;
 
-        public Recurring Recurring { get; set; } = Recurring.None;
-
-        public string? RecurringGroupID { get; set; }
-
-        public DateTime? Date { get; set; } = DateTime.UtcNow;
+        public Recurring Recurring { get; set; }
 
         public BudgetPostType PostType { get; set; }
 
-        public Guid? PrognosisId { get; set; }
+        public DateTime RecurringStartDate { get; set; }
     }
 }

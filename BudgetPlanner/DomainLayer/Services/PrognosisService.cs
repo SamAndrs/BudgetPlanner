@@ -1,101 +1,196 @@
-﻿using BudgetPlanner.DomainLayer.Enums;
+﻿using BudgetPlanner.DataAccessLayer;
+using BudgetPlanner.DomainLayer.Enums;
 using BudgetPlanner.DomainLayer.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BudgetPlanner.DomainLayer.Services
 {
     public class PrognosisService
     {
-        private readonly BudgetPostService _postService;
+        private readonly AppDbContext _context;
 
-        public PrognosisService(BudgetPostService postService)
+        public PrognosisService(AppDbContext context)
         {
-            _postService = postService;
+            _context = context;
+        }
+
+        #region == PROGNOSIS VIEWMODEL ===========================
+        public List<Prognosis> GetExistingPrognoses()
+        {
+            return _context.Prognoses
+                .Include(p => p.BudgetPosts)
+                .ThenInclude(bp => bp.Category)
+                .OrderBy(p => p.FromDate)
+                .ToList();
         }
 
 
-        #region == PROGNOSIS VIEWMODEL ===========================
-
-        public List<Prognosis> GeneratePrognosisRange(DateTime centerDate, int previousMonths = 5, int nextMonths = 4)
+        public Prognosis GeneratePrognosisForMonth(int year, int month)
         {
-            var allPosts = _postService.GetAllPosts();
+            // 1. Abort if prognosis for month already exist
+            var exiting = _context.Prognoses
+                .Include(p => p.BudgetPosts)
+                .FirstOrDefault(p => p.FromDate.Year == year && p.FromDate.Month == month);
 
-            var list = new List<Prognosis>();
+            if (exiting != null) 
+                return exiting;
 
-            int startOffset = -previousMonths;
-            int endOffset = nextMonths;
-
-            for (int offset = startOffset; offset <= endOffset; offset++)
+            // 2. If no existing prognosis, create new
+            var prognosis = new Prognosis
             {
-                var target = centerDate.AddMonths(offset);
-                var from = new DateTime(target.Year, target.Month, 1);
-                var to = from.AddMonths(1).AddDays(-1);
+                Id = Guid.NewGuid(),
+                FromDate = new DateTime(year, month, 1),
+                ToDate = new DateTime(year, month, 1).AddMonths(1).AddDays(-1),
+                Month = new DateTime(year, month, 1).ToString("MMMM yyyy")
+            };
 
-                var p = new Prognosis
+            // 3. Generate and add reccuring posts to Prognosis, from templates
+            var recurring = GenerateRecurringPosts(year, month);
+
+            prognosis.BudgetPosts = recurring.ToList();
+
+            // 4. Summarize BudgetPost income/ expense values and add to Prognosis
+            prognosis.MonthlyIncome = prognosis.BudgetPosts
+                                                .Where(p => p.PostType == BudgetPostType.Income)
+                                                .Sum(p => (decimal)p.Amount);
+            prognosis.MonthlyExpense = prognosis.BudgetPosts
+                                                .Where(p => p.PostType == BudgetPostType.Expense)
+                                                .Sum(p => (decimal)p.Amount);
+            prognosis.TotalSum = prognosis.MonthlyIncome - prognosis.MonthlyExpense;
+
+
+            _context.Prognoses.Add(prognosis);
+            _context.SaveChanges();
+
+            return prognosis;
+        }
+
+        // Generate prognosis for next month based on recurring posts data.
+        public Prognosis GetOrCreateNextMonthPrognosis()
+        {
+            var nextMonthDate = DateTime.Now.AddMonths(1);
+            var from = new DateTime(nextMonthDate.Year, nextMonthDate.Month, 1);
+            var to = from.AddMonths(1).AddDays(-1);
+
+            // 1. If prognosis already exist, return it
+            var existing = _context.Prognoses
+                                     .Include(p => p.BudgetPosts)
+                                     .ThenInclude(bp => bp.Category)
+                                     .FirstOrDefault(p => p.FromDate.Year == from.Year && p.FromDate.Month == from.Month);
+
+            if (existing != null)
+                return existing;
+
+            // 2. If no prognosis already exist, create new
+            var newPrognosis = new Prognosis
+            {
+                Id = Guid.NewGuid(),
+                FromDate = from,
+                ToDate = to,
+                Month = from.ToString("MMMM yyyy"),
+                BudgetPosts = new List<BudgetPost>()
+            };
+
+            // 3. Add recurring BudgetPosts
+            var recurring = GenerateRecurringPosts(from.Year, from.Month);
+
+            newPrognosis.BudgetPosts = recurring.ToList();
+
+            // 4. Summarize income/ expenses
+            newPrognosis.MonthlyIncome = newPrognosis.BudgetPosts
+                                               .Where(p => p.PostType == BudgetPostType.Income)
+                                               .Sum(p => (decimal)p.Amount);
+            newPrognosis.MonthlyExpense = newPrognosis.BudgetPosts
+                                                .Where(p => p.PostType == BudgetPostType.Expense)
+                                                .Sum(p => (decimal)p.Amount);
+            newPrognosis.TotalSum = newPrognosis.MonthlyIncome - newPrognosis.MonthlyExpense;
+
+            _context.Prognoses.Add(newPrognosis);
+            _context.SaveChanges();
+
+            return newPrognosis;
+        }
+
+        private List<BudgetPost> GenerateRecurringPosts(int year, int month)
+        {
+            var templates = _context.RecurringPosts.ToList();
+            var list = new List<BudgetPost>();
+
+            // Loop through list of recurring BudgetPost templates,
+            // and base new Prognosis Budgetpost data, depending on recurrence
+            foreach (var template in templates)
+            {
+                var current = new DateTime(year, month, template.RecurringStartDate.Day);
+
+                switch (template.Recurring)
                 {
-                    Id = offset + previousMonths + 1,
-                    Month = from.ToString("MMMM yyyy"),
-                    FromDate = from,
-                    ToDate = to
-                };
+                    case Recurring.Monthly:
+                        list.Add(new BudgetPost
+                        {
+                            Amount = template.Amount,
+                            CategoryId = template.CategoryId,
+                            Description = template.Description,
+                            Recurring = template.Recurring,
+                            Date = new DateTime(year, month, template.RecurringStartDate.Day),
+                            PostType = template.PostType,
+                        });
+                        break;
 
-                CalculatePrognosisForMonth(p, allPosts);
+                    case Recurring.Weekly:
 
-                list.Add(p);
+                        while (current.Month == month)
+                        {
+                            list.Add(new BudgetPost
+                            {
+                                Amount = template.Amount,
+                                CategoryId = template.CategoryId,
+                                Description = template.Description,
+                                Recurring = template.Recurring,
+                                Date = current,
+                                PostType = template.PostType,
+                            });
+
+                            current = current.AddDays(7);
+                        }
+                        break;
+
+                    case Recurring.Daily:
+
+                        while (current.Month == month)
+                        {
+                            list.Add(new BudgetPost
+                            {
+                                Amount = template.Amount,
+                                CategoryId = template.CategoryId,
+                                Description = template.Description,
+                                Recurring = template.Recurring,
+                                Date = current,
+                                PostType = template.PostType,
+                            });
+
+                            current = current.AddDays(1);
+                        }
+                        break;
+
+                    case Recurring.Yearly:
+                        if (template.RecurringStartDate.Month == month)
+                        {
+                            list.Add(new BudgetPost
+                            {
+                                Amount = template.Amount,
+                                CategoryId = template.CategoryId,
+                                Description = template.Description,
+                                Recurring = template.Recurring,
+                                Date = new DateTime(year, month, template.RecurringStartDate.Day),
+                                PostType = template.PostType,
+                            });
+                        }
+                        break;
+                }
             }
 
             return list;
-        }
-
-
-        // Beräknar intäkter/utgifter för en månad.
-        private void CalculatePrognosisForMonth(Prognosis prognosis, List<BudgetPost> allPosts)
-        {
-            prognosis.BudgetPosts.Clear();
-            prognosis.MonthlyIncome = 0;
-            prognosis.MonthlyExpense = 0;
-
-            var posts = allPosts.Where(p =>
-                // Engångsposter inom den aktuella månaden
-                (p.Recurring == Recurring.None &&
-                 p.Date.HasValue &&
-                 p.Date.Value >= prognosis.FromDate &&
-                 p.Date.Value <= prognosis.ToDate &&
-                 p.Date.Value <= DateTime.Today)
-
-                // Recurring-poster alltid med
-                || p.Recurring != Recurring.None
-            );
-
-            foreach (var post in posts)
-            {
-                var monthlyValue = ConvertToMonthlyValue(post);
-
-                if (post.PostType == BudgetPostType.Income)
-                    prognosis.MonthlyIncome += monthlyValue;
-                else
-                    prognosis.MonthlyExpense += Math.Abs(monthlyValue);
-
-               prognosis.BudgetPosts.Add(post);
-            }
-
-            prognosis.TotalSum = prognosis.MonthlyIncome - prognosis.MonthlyExpense;
-        }
-
-        // Kalkylerar belopp.baserat på återkommandetyp (värde)
-        private decimal ConvertToMonthlyValue(BudgetPost post)
-        {
-            var amount = (decimal)post.Amount;
-
-            return post.Recurring switch
-            {
-                Recurring.Daily => amount * 30,
-                Recurring.Weekly => amount * 4.33m,
-                Recurring.Monthly => amount,
-                Recurring.Yearly => amount / 12,
-                _ => amount
-            };
-        }
-
+        }      
         #endregion
     }
 }
