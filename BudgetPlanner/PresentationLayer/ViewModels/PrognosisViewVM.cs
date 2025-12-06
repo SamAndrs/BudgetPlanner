@@ -45,8 +45,8 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
 
         // Collections
         public ObservableCollection<Prognosis> MonthlyPrognoses { get; set; } = new();
-        public ObservableCollection<Category> Categories { get; set; } = new();
-        public List<BudgetPost> RecurringPosts { get; set; }
+        public ObservableCollection<Category> Categories { get; private set; } = new();
+        public ObservableCollection<RecurringBudgetPostTemplate> RecurringPosts { get; private set; } = new();
 
         // Income calculator
         public double CalculatedMonthlyIncome { get; set; }
@@ -80,14 +80,14 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
                 }
             };
 
-            _ = InitializeAsync();
+            LoadData();
 
             SelectNextMonthCommand = new DelegateCommand(_ => NextMonth());
             SelectPreviousMonthCommand = new DelegateCommand(_ => PreviousMonth());
         }
 
 
-        private async Task InitializeAsync()
+        private void LoadData()
         {
             // Load categories
             Categories = new ObservableCollection<Category>(_categoryService.GetAllCategories());
@@ -95,27 +95,19 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
 
             // Load prognosis for this year
             var year = DateTime.Now.Year;
-            LoadPrognosisRange();
 
+            MonthlyPrognoses = new ObservableCollection<Prognosis>(
+                _prognosisService.GetExistingPrognoses());
 
-            SelectedPrognosis = MonthlyPrognoses
-                .FirstOrDefault(p => p.FromDate.Month == DateTime.Now.Month);
+            var next = _prognosisService.GetOrCreateNextMonthPrognosis();
+            MonthlyPrognoses.Add(next);
 
             RaisePropertyChanged(nameof(MonthlyPrognoses));
 
-            RecurringPosts = _budgetPostService.GetRecurringPosts();          
-        }
+            SelectedPrognosis = MonthlyPrognoses.FirstOrDefault(p => p.FromDate.Month == DateTime.Now.Month);
 
-        private void LoadPrognosisRange()
-        {
-            MonthlyPrognoses.Clear();
-
-            // Generate prognoses for 5 last months and 4 coming ones
-            var list = _prognosisService.GeneratePrognosisRange(
-                DateTime.Now, previousMonths: 5, nextMonths: 4);
-
-            foreach (var prognosis in list)
-                MonthlyPrognoses.Add(prognosis);
+            // Load list of recurring BudgetPosts (templates) for list.
+            RecurringPosts = new ObservableCollection<RecurringBudgetPostTemplate>(_budgetPostService.GetRecurringTemplates());
         }
 
         private void RecalculateIncome()

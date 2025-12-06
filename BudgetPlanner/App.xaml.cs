@@ -70,13 +70,9 @@ namespace BudgetPlanner
                await context.Database.MigrateAsync();
                await DataSeeder.SeedAsync(context);
 
-
-                // 4. Generera Recurring posts
-                var bpService = scope.ServiceProvider.GetRequiredService<BudgetPostService>();
-                await bpService.GenerateRecurringPostsAsync();
             }
 
-            // 5. Start MainWindow
+            // 4. Start MainWindow
             var mainWindow = new MainWindow();
             mainWindow.Show();
         }

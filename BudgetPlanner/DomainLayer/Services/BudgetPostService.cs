@@ -3,7 +3,6 @@ using BudgetPlanner.DomainLayer.Enums;
 using BudgetPlanner.DomainLayer.Models;
 using BudgetPlanner.PresentationLayer.ViewModels;
 using Microsoft.EntityFrameworkCore;
-using OpenTK.Graphics.GL;
 
 namespace BudgetPlanner.DomainLayer.Services
 {
@@ -17,6 +16,7 @@ namespace BudgetPlanner.DomainLayer.Services
         }
 
         public List<BudgetPost> GetAllPosts() => _db.BudgetPosts.Include(p => p.Category).ToList();
+
 
         public async Task GenerateRecurringPostsAsync()
         {
@@ -212,7 +212,17 @@ namespace BudgetPlanner.DomainLayer.Services
         {
             if (post.Recurring != Recurring.None)
             {
-                post.RecurringGroupID = Guid.NewGuid().ToString();
+                _db.RecurringPosts.Add(
+                    new RecurringBudgetPostTemplate
+                    {
+                        Amount = post.Amount,
+                        CategoryId = post.CategoryId,
+                        Category = post.Category,
+                        Description = post.Description,
+                        Recurring = post.Recurring,
+                        PostType = post.PostType,
+                        RecurringStartDate = (DateTime)post.Date
+                    });
             }
             _db.BudgetPosts.Add(post);
             _db.SaveChanges();
@@ -235,27 +245,8 @@ namespace BudgetPlanner.DomainLayer.Services
 
         #region == PROGNOSIS VIEWMODEL ===========================
 
-        public List<BudgetPost> GetRecurringPosts()
-        {
-            var posts = _db.BudgetPosts
-                .Where(p => p.Recurring != Recurring.None)
-                .Include(p => p.Category)
-                .ToList();
+        public List<RecurringBudgetPostTemplate> GetRecurringTemplates() => _db.RecurringPosts.ToList();
 
-            // Group with identifying property to prevent double-listing
-            var unique = posts.GroupBy(p => new
-            {
-                p.Description,
-                p.Amount,
-                p.CategoryId,
-                p.PostType,
-                p.Recurring
-            })
-                .Select(g => g.First())
-                .ToList();
-
-            return unique;
-        }
         #endregion
     }
 }

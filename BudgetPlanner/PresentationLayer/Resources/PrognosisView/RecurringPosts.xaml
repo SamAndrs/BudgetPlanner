@@ -36,7 +36,7 @@
 
                             <!-- Date -->
                             <TextBlock Grid.Column="1" Margin="0,0,10,5"
-                                       Text="{Binding Date, StringFormat={}{0:dd}}" 
+                                       Text="{Binding RecurringStartDate, StringFormat={}{0:dd}}" 
                                        Foreground="{StaticResource SecondaryForeground}"/>
                             
                             <!-- Description -->

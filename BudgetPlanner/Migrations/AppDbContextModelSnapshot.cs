@@ -47,8 +47,8 @@ namespace BudgetPlanner.Migrations
                     b.Property<int>("PostType")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PrognosisId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("PrognosisId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Recurring")
                         .HasColumnType("int");
@@ -171,11 +171,9 @@ namespace BudgetPlanner.Migrations
 
             modelBuilder.Entity("BudgetPlanner.DomainLayer.Models.Prognosis", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("FromDate")
                         .HasColumnType("datetime2");
@@ -184,16 +182,16 @@ namespace BudgetPlanner.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal>("MonthlyExpense")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("MonthlyIncome")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<DateTime>("ToDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<decimal>("TotalExpenses")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("TotalIncome")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("TotalSum")
                         .HasPrecision(18, 2)
@@ -202,6 +200,122 @@ namespace BudgetPlanner.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Prognoses");
+                });
+
+            modelBuilder.Entity("BudgetPlanner.DomainLayer.Models.RecurringBudgetPostTemplate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<double>("Amount")
+                        .HasColumnType("float");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PostType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Recurring")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("RecurringStartDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("RecurringPosts");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Amount = 28500.0,
+                            CategoryId = 14,
+                            Description = "Lön",
+                            PostType = 0,
+                            Recurring = 3,
+                            RecurringStartDate = new DateTime(2024, 1, 23, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Amount = 8500.0,
+                            CategoryId = 6,
+                            Description = "Hyra",
+                            PostType = 1,
+                            Recurring = 3,
+                            RecurringStartDate = new DateTime(2024, 1, 25, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Amount = 1200.0,
+                            CategoryId = 3,
+                            Description = "Busskort",
+                            PostType = 1,
+                            Recurring = 3,
+                            RecurringStartDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Amount = 750.0,
+                            CategoryId = 3,
+                            Description = "Resor till arbete",
+                            PostType = 1,
+                            Recurring = 3,
+                            RecurringStartDate = new DateTime(2024, 1, 6, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Amount = 900.0,
+                            CategoryId = 15,
+                            Description = "Studiebidrag",
+                            PostType = 0,
+                            Recurring = 3,
+                            RecurringStartDate = new DateTime(2024, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Amount = 3200.0,
+                            CategoryId = 2,
+                            Description = "Veckohandling",
+                            PostType = 1,
+                            Recurring = 2,
+                            RecurringStartDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Amount = 1200.0,
+                            CategoryId = 11,
+                            Description = "Netflix + Spotify",
+                            PostType = 1,
+                            Recurring = 3,
+                            RecurringStartDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Amount = 4500.0,
+                            CategoryId = 3,
+                            Description = "Bilskatt",
+                            PostType = 1,
+                            Recurring = 4,
+                            RecurringStartDate = new DateTime(2024, 3, 12, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("BudgetPlanner.DomainLayer.Models.BudgetPost", b =>
@@ -214,7 +328,19 @@ namespace BudgetPlanner.Migrations
 
                     b.HasOne("BudgetPlanner.DomainLayer.Models.Prognosis", null)
                         .WithMany("BudgetPosts")
-                        .HasForeignKey("PrognosisId");
+                        .HasForeignKey("PrognosisId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("BudgetPlanner.DomainLayer.Models.RecurringBudgetPostTemplate", b =>
+                {
+                    b.HasOne("BudgetPlanner.DomainLayer.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Category");
                 });
