@@ -84,9 +84,9 @@ namespace BudgetPlanner.DataAccessLayer
                 {
                     Id = 1,
                     RecurringId = new Guid("389904d6-c94c-4bd8-8864-27644219f5ad"),
-                    Amount = 28500,
-                    CategoryId = 14,
-                    Description = "Lön",
+                    Amount = 2500,
+                    CategoryId = 8,
+                    Description = "Barnbidrag",
                     Recurring = Recurring.Monthly,
                     PostType = BudgetPostType.Income,
                     RecurringStartDate = new DateTime(2024, 1, 23)

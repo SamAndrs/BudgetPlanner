@@ -15,33 +15,96 @@
        
         <!-- Header -->
         <TextBlock Grid.Row="0" Margin="5,5,0,0"
-                   Text="Inkomster/ utgifter/ differens (total vald månad)" 
+                   Text="Summeringar (vald månad)" 
                    Style="{StaticResource LabelTextStyle}"/>
 
         <Border Grid.Row="1" CornerRadius="12"
                 Padding="5" Margin="5,0,5,5"
                 Background="{StaticResource SecondaryBackground}">
 
-            <StackPanel>
-                <!-- Total sum (income)-->
-                <TextBlock HorizontalAlignment="Center" Margin="5,25,5,5"
-                           Text="{Binding TotalIncome, StringFormat='+{0:C}'}"
-                           Style="{StaticResource SummaryCardStyle}"
-                           Foreground="{StaticResource IncomeBackground}" />
 
-                <!-- Total sum (expenses) -->
-                <TextBlock HorizontalAlignment="Center" Margin="5,0,5,5"
-                    Text="{Binding TotalExpense, StringFormat='-{0:C}'}"
-                    Style="{StaticResource SummaryCardStyle}"
-                    Foreground="{StaticResource ExpenseBackground}" />
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
 
-                <!-- Total difference -->
-                <TextBlock HorizontalAlignment="Center" Margin="5,0,5,5"
-                    Style="{StaticResource SummaryDiffCardStyle}"
-                    Text="{Binding TotalDifference, StringFormat={}{0:+# ##0.00 kr;-# ##0.00 kr}}"/>
-            </StackPanel>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
 
 
+                <!-- COLUMN LEFT (Actual values) -->
+
+                <!-- Total sum (salary + income) -->
+                <StackPanel Grid.Row="0" Grid.Column="0" Margin="5">
+                    
+                    <TextBlock Text="Månadslön + andra inkomster" Style="{StaticResource LabelTextStyle}"
+                               FontSize="12" />
+
+                    <TextBlock Margin="0,5,0,0" 
+                               Text="{Binding TotalIncome, StringFormat='+{0:C0}'}"
+                               Style="{StaticResource SummaryCardStyle}"
+                               Foreground="{StaticResource IncomeBackground}" />
+                </StackPanel>
+
+                <!-- Total sum: expenses -->
+                <StackPanel Grid.Row="1" Grid.Column="0" Margin="5">
+                    
+                    <TextBlock Text="Utgifter" Style="{StaticResource LabelTextStyle}"
+                               FontSize="12" />
+
+                    <TextBlock Margin="0,5,0,0"
+                               Text="{Binding TotalExpense, StringFormat='-{0:C0}'}"
+                               Style="{StaticResource SummaryCardStyle}"
+                               Foreground="{StaticResource ExpenseBackground}" />
+                </StackPanel>
+
+
+                <!-- Total difference (actual) -->
+                <StackPanel Grid.Row="2" Grid.Column="0" Margin="5">
+                    
+                    <TextBlock Text="Differens (faktisk)" 
+                               Style="{StaticResource LabelTextStyle}"
+                               FontSize="12" Margin="5"/>
+
+                    <TextBlock Margin="5,0,5,5"
+                               Style="{StaticResource TextSummaryActual}"
+                               Text="{Binding ActualDifference, StringFormat={}{0:+# ##0.00 kr;-# ##0.00 kr}}"/>
+                </StackPanel>
+
+
+                <!-- COLUMNRIGHT (Adjusted values) -->
+
+                <!-- Total sum (salary + income) -->
+                <StackPanel Grid.Row="0" Grid.Column="1" Margin="5">
+
+                    <TextBlock Text="Timlön + andra inkomster (justerad)" Style="{StaticResource LabelTextStyle}"
+                               FontSize="12" />
+
+                    <TextBlock Margin="0,5,0,0" 
+                               Text="{Binding AdjustedIncome, StringFormat='+{0:C0}'}"
+                               Style="{StaticResource SummaryCardStyle}"
+                               Foreground="{StaticResource IncomeBackground}" />
+                </StackPanel>
+
+               <!-- Total difference (adjusted) -->
+                <StackPanel Grid.Row="2" Grid.Column="1" Margin="5">
+
+                    <TextBlock Text="Differens (justerad)" 
+                               Style="{StaticResource LabelTextStyle}"
+                               FontSize="12" Margin="5"/>
+
+                    <TextBlock Margin="5,0,5,5"
+                               Style="{StaticResource TextSummaryAdjusted}"
+                               Text="{Binding AdjustedDifference, StringFormat={}{0:+# ##0.00 kr;-# ##0.00 kr}}"/>
+                </StackPanel>
+
+
+
+            </Grid>
         </Border>
 
     </Grid>

@@ -6,6 +6,7 @@ using System.Windows.Input;
 
 namespace BudgetPlanner.PresentationLayer.ViewModels
 {
+
     public class PrognosisViewVM : ViewModelBase
     {
         #region Fields + properties
@@ -22,24 +23,46 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
         private readonly CategoryService _categoryService;
         private readonly PrognosisService _prognosisService;
 
-        private Prognosis _selectedPrognosis; 
+        private Prognosis _selectedPrognosis;
 
         public Prognosis SelectedPrognosis
         {
             get { return _selectedPrognosis; }
-            set 
-            { 
+            set
+            {
                 _selectedPrognosis = value;
                 RaisePropertyChanged();
                 RaisePropertyChanged(nameof(TotalIncome));
                 RaisePropertyChanged(nameof(TotalExpense));
-                RaisePropertyChanged(nameof(TotalDifference));
+
+                RaisePropertyChanged(nameof(AdjustedIncome));
+                RecalculateIncome();
+
+                RecalculateSummaries();
             }
         }
 
-        public decimal TotalIncome => SelectedPrognosis?.MonthlyIncome ?? 0;
-        public decimal TotalExpense => SelectedPrognosis?.MonthlyExpense ?? 0;
-        public decimal TotalDifference => SelectedPrognosis?.TotalSum ?? 0;
+        private double _totalIncome;
+        public double TotalIncome
+        {
+            get { return _totalIncome; }
+            set { _totalIncome = value; RaisePropertyChanged(); }
+        }
+
+
+        public double TotalExpense => (double)SelectedPrognosis?.MonthlyExpense;
+        public double ActualDifference => TotalIncome - TotalExpense;
+
+
+        private double _adjustedIncome;
+        public double AdjustedIncome
+        {
+            get { return _adjustedIncome; }
+            set { _adjustedIncome = value; RaisePropertyChanged(); }
+        }
+
+        public double AdjustedDifference => AdjustedIncome - TotalExpense;
+
 
         public string ViewTitle { get; } = "Månadsprognos";
 
@@ -49,9 +72,26 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
         public ObservableCollection<RecurringBudgetPostTemplate> RecurringPosts { get; private set; } = new();
 
         // Income calculator
-        public double CalculatedMonthlyIncome { get; set; }
-        public double HourlyIncomeYear { get; set; }
-        public double HourlyIncomeMonth { get; set; }
+        public double TaxValue => _settings.TaxRate / 100;
+        public double CalculatedMonthlyIncome { get; set; }  // Månadslön: Årsinkomst/ 12 * (1 - TaxValue)
+        public double HourlySalaryActual { get; set; }    // Timlön (faktisk): Årsinkomst / årsarbetstid
+
+        private int _hourlySalaryAdjustable;
+        public int HourlySalaryAdjustable
+        {
+            get { return _hourlySalaryAdjustable; }
+            set
+            {
+                _hourlySalaryAdjustable = value;
+                RaisePropertyChanged();
+                RecalculateIncome();
+                RecalculateSummaries();
+            }
+        }
+
+        public int HourlyIncomeMonthActual { get; set; } // Månadsinkomst (baserad på faktisk timlön)
+        public int HourlyIncomeMonthAdjustable { get; set; } // Månadsinkomst (baserad på justerbar timlön)
+
 
         // Commands
         public ICommand SelectNextMonthCommand { get; }
@@ -60,7 +100,9 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
         #endregion
 
 
-        // Constructor
+        // ==============================================================================================================
+        //       CONSTRUCTOR
+        // ==============================================================================================================
         public PrognosisViewVM(UserSettingsService settings, BudgetPostService budgetPostService,
             CategoryService categoryService, PrognosisService prognosisService)
         {
@@ -74,9 +116,11 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
             {
                 if (e.PropertyName == nameof(UserSettingsService.YearlyIncome) ||
                     e.PropertyName == nameof(UserSettingsService.YearlyWorkhours) ||
-                    e.PropertyName == nameof(UserSettingsService.WeeklyWorkhours))
+                    //e.PropertyName == nameof(UserSettingsService.WeeklyWorkhours) ||
+                    e.PropertyName == nameof(UserSettingsService.TaxRate))
                 {
                     RecalculateIncome();
+                    RecalculateSummaries();
                 }
             };
 
@@ -87,6 +131,9 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
         }
 
 
+        // ==============================================================================================================
+        //       METHODS
+        // ==============================================================================================================
         private void LoadData()
         {
             // Load categories
@@ -112,13 +159,62 @@ namespace BudgetPlanner.PresentationLayer.ViewModels
 
         private void RecalculateIncome()
         {
-            CalculatedMonthlyIncome = _settings.YearlyIncome / 12;
-            HourlyIncomeYear = _settings.YearlyIncome / _settings.YearlyWorkhours;
-            HourlyIncomeMonth = CalculatedMonthlyIncome / _settings.WeeklyWorkhours;
+
+            // Calculate monthly income based on yearly income
+            CalculatedMonthlyIncome = 
+                (_settings.YearlyIncome / 12d) * (1 - TaxValue);  // Årsinkomst/ 12 * (1 - skattesats)
+
+            // Calculate actual hourly salary based on yearly workhours
+            HourlySalaryActual = 
+                _settings.YearlyIncome / _settings.YearlyWorkhours;  // Inkomst per timme/ år (brutto)
+
+
+
+            // 1. Calculate monthly income based on hourly salary actual
+            HourlyIncomeMonthActual = 
+                (int)(((HourlySalaryActual * _settings.YearlyWorkhours) * (1 - TaxValue)) / 12d);
+
+            // 2. Calculate monthly income based on ADJUSTABLE hourly salary 
+            HourlyIncomeMonthAdjustable = 
+                (int)(((HourlySalaryAdjustable * _settings.YearlyWorkhours) * (1 - TaxValue)) / 12d);
+
 
             RaisePropertyChanged(nameof(CalculatedMonthlyIncome));
-            RaisePropertyChanged(nameof(HourlyIncomeYear));
-            RaisePropertyChanged(nameof(HourlyIncomeMonth));
+            RaisePropertyChanged(nameof(HourlySalaryActual));
+            RaisePropertyChanged(nameof(HourlyIncomeMonthAdjustable));
+            RaisePropertyChanged(nameof(HourlySalaryAdjustable));
+        }
+
+        private void RecalculateSummaries()
+        {
+            if (SelectedPrognosis == null)
+            {
+                TotalIncome = 0;
+                AdjustedIncome = 0;
+                return;
+            }
+
+            bool isNextMonth =
+                    SelectedPrognosis.FromDate.Year == DateTime.Now.AddMonths(1).Year &&
+                        SelectedPrognosis.FromDate.Month == DateTime.Now.AddMonths(1).Month;
+
+            // Next month  (base incomes on calculator values
+            if (isNextMonth)
+            {
+                TotalIncome = CalculatedMonthlyIncome + (double)SelectedPrognosis.MonthlyIncome;
+                AdjustedIncome = HourlyIncomeMonthAdjustable + (double)SelectedPrognosis.MonthlyIncome;
+            }
+
+            // This month or earlier (base incomes on prognosis-object incomes value (historical)
+            else
+            {
+                TotalIncome = (double)SelectedPrognosis.MonthlyIncome;
+                AdjustedIncome = 0;
+            }
+
+            RaisePropertyChanged(nameof(TotalExpense));
+            RaisePropertyChanged(nameof(ActualDifference));
+            RaisePropertyChanged(nameof(AdjustedDifference));
         }
 
         private void PreviousMonth()

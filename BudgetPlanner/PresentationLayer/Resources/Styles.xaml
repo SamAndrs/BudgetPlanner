@@ -13,17 +13,17 @@
     
     <!-- Summary Card style -->
     <Style x:Key="SummaryCardStyle" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="30" />
+        <Setter Property="FontSize" Value="22" />
         <Setter Property="FontWeight" Value="Bold" />
-        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
 
     <!-- Summary Difference, Card style -->
     <Style x:Key="SummaryDiffCardStyle" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="30" />
+        <Setter Property="FontSize" Value="22" />
         <Setter Property="FontWeight" Value="Bold" />
-        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Foreground" Value="{Binding TotalDifference, Converter={StaticResource ValueConverter}}" />
     </Style>
@@ -39,6 +39,20 @@
     <Style x:Key="LabelTextStyle" TargetType="TextBlock">
         <Setter Property="Foreground" Value="{StaticResource SecondaryForeground}" />
         <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+    
+    <!-- Summary label: actual -->
+    <Style x:Key="TextSummaryActual" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{Binding ActualDifference, Converter={StaticResource ValueConverter}}" />
+        <Setter Property="FontSize" Value="22" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+
+    <!-- Summary label: adjusted -->
+    <Style x:Key="TextSummaryAdjusted" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{Binding AdjustedDifference, Converter={StaticResource ValueConverter}}" />
+        <Setter Property="FontSize" Value="22" />
         <Setter Property="FontWeight" Value="SemiBold" />
     </Style>
 

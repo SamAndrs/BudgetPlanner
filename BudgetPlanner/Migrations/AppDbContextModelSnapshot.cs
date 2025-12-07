@@ -242,9 +242,9 @@ namespace BudgetPlanner.Migrations
                         new
                         {
                             Id = 1,
-                            Amount = 28500.0,
-                            CategoryId = 14,
-                            Description = "Lön",
+                            Amount = 2500.0,
+                            CategoryId = 8,
+                            Description = "Barnbidrag",
                             PostType = 0,
                             Recurring = 3,
                             RecurringId = new Guid("389904d6-c94c-4bd8-8864-27644219f5ad"),
