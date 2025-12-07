@@ -24,20 +24,19 @@ namespace BudgetPlanner.DomainLayer.Services
         }
 
 
-        private double _weeklyWorkhours;
-        public double WeeklyWorkhours
-        {
-            get { return _weeklyWorkhours; }
-            set { _weeklyWorkhours = value; RaisePropertyChanged(); }
-        }
-
-        //private double _taxRate;
-
-        //public double TaxRate
+        //private double _weeklyWorkhours;
+        //public double WeeklyWorkhours
         //{
-        //    get { return _taxRate; }
-        //    set { _taxRate = value; RaisePropertyChanged(); }
+        //    get { return _weeklyWorkhours; }
+        //    set { _weeklyWorkhours = value; RaisePropertyChanged(); }
         //}
+
+        private double _taxRate;
+        public double TaxRate
+        {
+            get { return _taxRate; }
+            set { _taxRate = value; RaisePropertyChanged(); }
+        }
 
     }
 }

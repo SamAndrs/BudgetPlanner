@@ -6,32 +6,35 @@
              xmlns:local="clr-namespace:BudgetPlanner.PresentationLayer.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    
-    <StackPanel Background="{StaticResource PrimaryBackground}"
-                Margin="20" VerticalAlignment="Top">
 
-        <TextBlock Text="Inställningar"
-                   Style="{StaticResource HeaderTextStyle}" Margin="0,0,0,20"/>
+    <Border Background="{StaticResource PrimaryBackground}" Padding="20"
+            MaxWidth="450">
+        <StackPanel VerticalAlignment="Top">
+
+            <TextBlock Text="Inställningar" HorizontalAlignment="Center"
+                       Style="{StaticResource HeaderTextStyle}" Margin="0,0,0,20"/>
+
+            <!-- YEARLY INCOME -->
+            <TextBlock Text="Årsinkomst (40h vecka med 180kr/h ger 356.400kr)" Style="{StaticResource LabelTextStyle}"/>
+            <TextBox Text="{Binding Settings.YearlyIncome, UpdateSourceTrigger=PropertyChanged}"
+                     Margin="0,5,0,15" Foreground="{StaticResource SecondaryBackground}"/>
+
+            <!-- YEARLY WORKHOURS -->
+            <TextBlock Text="Årsarbetstid (40h vecka ger 1980 timmar/år)"  Style="{StaticResource LabelTextStyle}"/>
+            <TextBox Text="{Binding Settings.YearlyWorkhours, UpdateSourceTrigger=PropertyChanged}"
+                     Margin="0,5,0,15" Foreground="{StaticResource SecondaryBackground}"/>
+
+            <!-- WEEKLY WORKHOURS 
+            <TextBlock Text="Veckoarbetstid (WeeklyWorkhours)"  Style="{StaticResource LabelTextStyle}"/>
+            <TextBox Text="{Binding Settings.WeeklyWorkhours, UpdateSourceTrigger=PropertyChanged}"
+                     Margin="0,5,0,15" Foreground="{StaticResource SecondaryBackground}"/> -->
+
+            <!-- TAX RATE -->
+            <TextBlock Text="Skattesats (Format: 33 för 33%)"  Style="{StaticResource LabelTextStyle}"/>
+            <TextBox Text="{Binding Settings.TaxRate, UpdateSourceTrigger=PropertyChanged}"
+                     Margin="0,5,0,15" Foreground="{StaticResource SecondaryBackground}"/>
+           
+        </StackPanel>
+    </Border>
         
-        <!-- YEARLY INCOME -->
-        <TextBlock Text="Årsinkomst (YearlyIncome)" Style="{StaticResource LabelTextStyle}"/>
-        <TextBox Text="{Binding Settings.YearlyIncome, UpdateSourceTrigger=PropertyChanged}"
-                   Margin="0,5,0,15" Foreground="{StaticResource SecondaryBackground}"/>
-
-        <!-- YEARLY WORKHOURS -->
-        <TextBlock Text="Årsarbetstid (YearlyWorkhhours)"  Style="{StaticResource LabelTextStyle}"/>
-        <TextBox Text="{Binding Settings.YearlyWorkhours, UpdateSourceTrigger=PropertyChanged}"
-                   Margin="0,5,0,15" Foreground="{StaticResource SecondaryBackground}"/>
-
-        <!-- WEEKLY WORKHOURS -->
-        <TextBlock Text="Veckoarbetstid (WeeklyWorkhours)"  Style="{StaticResource LabelTextStyle}"/>
-        <TextBox Text="{Binding Settings.WeeklyWorkhours, UpdateSourceTrigger=PropertyChanged}"
-                   Margin="0,5,0,15" Foreground="{StaticResource SecondaryBackground}"/>
-
-        <!-- TAX RATE 
-        <TextBlock Text="Skattesats (TaxRate)"  Style="{StaticResource LabelTextStyle}"/>
-        <TextBox Text="{Binding Settings.TaxRate, UpdateSourceTrigger=PropertyChanged}"
-                   Margin="0,5,0,15" Foreground="{StaticResource SecondaryBackground}"/> -->
-
-    </StackPanel>
 </UserControl>
