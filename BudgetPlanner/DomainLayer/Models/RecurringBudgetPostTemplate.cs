@@ -2,9 +2,11 @@
 
 namespace BudgetPlanner.DomainLayer.Models
 {
+    // Template class for copying recurring post data over to new Budgetpost next month.
     public class RecurringBudgetPostTemplate
     {
         public int Id { get; set; }
+        public Guid RecurringId { get; set; }
 
         public double Amount { get; set; }
 

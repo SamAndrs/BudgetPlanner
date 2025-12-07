@@ -5,6 +5,7 @@ namespace BudgetPlanner.DomainLayer.Models
     public class BudgetPost
     {
         public int Id { get; set; }
+        public Guid? RecurringId { get; set; } // Id tied to recurringpost template
 
         public double Amount { get; set; } = 0;
 
@@ -14,8 +15,6 @@ namespace BudgetPlanner.DomainLayer.Models
         public string Description { get; set; } = string.Empty;
 
         public Recurring Recurring { get; set; } = Recurring.None;
-
-        public string? RecurringGroupID { get; set; }
 
         public DateTime? Date { get; set; } = DateTime.UtcNow;
 
