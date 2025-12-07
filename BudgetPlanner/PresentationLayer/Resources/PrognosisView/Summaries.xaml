@@ -45,7 +45,7 @@
                                FontSize="12" />
 
                     <TextBlock Margin="0,5,0,0" 
-                               Text="{Binding TotalIncome, StringFormat='+{0:C0}kr'}"
+                               Text="{Binding TotalIncome, StringFormat='+{0:C0}'}"
                                Style="{StaticResource SummaryCardStyle}"
                                Foreground="{StaticResource IncomeBackground}" />
                 </StackPanel>
@@ -57,7 +57,7 @@
                                FontSize="12" />
 
                     <TextBlock Margin="0,5,0,0"
-                               Text="{Binding TotalExpense, StringFormat='-{0:C0}kr'}"
+                               Text="{Binding TotalExpense, StringFormat='-{0:C0}'}"
                                Style="{StaticResource SummaryCardStyle}"
                                Foreground="{StaticResource ExpenseBackground}" />
                 </StackPanel>
@@ -71,7 +71,7 @@
                                FontSize="12" Margin="5"/>
 
                     <TextBlock Margin="5,0,5,5"
-                               Style="{StaticResource SummaryDiffCardStyle}"
+                               Style="{StaticResource TextSummaryActual}"
                                Text="{Binding ActualDifference, StringFormat={}{0:+# ##0.00 kr;-# ##0.00 kr}}"/>
                 </StackPanel>
 
@@ -85,7 +85,7 @@
                                FontSize="12" />
 
                     <TextBlock Margin="0,5,0,0" 
-                               Text="{Binding AdjustedIncome, StringFormat='+{0:C0}kr'}"
+                               Text="{Binding AdjustedIncome, StringFormat='+{0:C0}'}"
                                Style="{StaticResource SummaryCardStyle}"
                                Foreground="{StaticResource IncomeBackground}" />
                 </StackPanel>
@@ -98,7 +98,7 @@
                                FontSize="12" Margin="5"/>
 
                     <TextBlock Margin="5,0,5,5"
-                               Style="{StaticResource SummaryDiffCardStyle}"
+                               Style="{StaticResource TextSummaryAdjusted}"
                                Text="{Binding AdjustedDifference, StringFormat={}{0:+# ##0.00 kr;-# ##0.00 kr}}"/>
                 </StackPanel>
 

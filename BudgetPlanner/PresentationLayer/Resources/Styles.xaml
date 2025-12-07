@@ -25,9 +25,7 @@
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="VerticalAlignment" Value="Center" />
-        <!-- <Setter Property="Foreground" Value="{Binding TotalDifference, Converter={StaticResource ValueConverter}}" /> -->
-        <Setter Property="Foreground" Value="{Binding ActualDifference, Converter={StaticResource ValueConverter}}" />
-        <Setter Property="Foreground" Value="{Binding AdjustedDifference, Converter={StaticResource ValueConverter}}" />
+        <Setter Property="Foreground" Value="{Binding TotalDifference, Converter={StaticResource ValueConverter}}" />
     </Style>
 
     <!-- Header Text -->
@@ -41,6 +39,20 @@
     <Style x:Key="LabelTextStyle" TargetType="TextBlock">
         <Setter Property="Foreground" Value="{StaticResource SecondaryForeground}" />
         <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+    
+    <!-- Summary label: actual -->
+    <Style x:Key="TextSummaryActual" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{Binding ActualDifference, Converter={StaticResource ValueConverter}}" />
+        <Setter Property="FontSize" Value="22" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+
+    <!-- Summary label: adjusted -->
+    <Style x:Key="TextSummaryAdjusted" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{Binding AdjustedDifference, Converter={StaticResource ValueConverter}}" />
+        <Setter Property="FontSize" Value="22" />
         <Setter Property="FontWeight" Value="SemiBold" />
     </Style>
 

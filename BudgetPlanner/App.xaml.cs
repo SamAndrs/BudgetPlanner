@@ -73,8 +73,8 @@ namespace BudgetPlanner
             }
 
             // 4. Start MainWindow
-            var mainWindow = new MainWindow();
-            mainWindow.Show();
+            //var mainWindow = new MainWindow();
+            //mainWindow.Show();
         }
     }
 
