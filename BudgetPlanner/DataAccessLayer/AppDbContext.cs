@@ -10,6 +10,7 @@ namespace BudgetPlanner.DataAccessLayer
         public DbSet<Category> Categories { get; set; }
         public DbSet<Prognosis> Prognoses { get; set; }
         public DbSet<RecurringBudgetPostTemplate> RecurringPosts { get; set; }
+        public DbSet<StoppedRecurring> StoppedRecurringPosts { get; set; }
 
         public AppDbContext(DbContextOptions options) : base(options)
         {
@@ -79,19 +80,21 @@ namespace BudgetPlanner.DataAccessLayer
 
             // Seed templates
             modelBuilder.Entity<RecurringBudgetPostTemplate>().HasData(
-    new RecurringBudgetPostTemplate
-    {
-        Id = 1,
-        Amount = 28500,
-        CategoryId = 14,
-        Description = "Lön",
-        Recurring = Recurring.Monthly,
-        PostType = BudgetPostType.Income,
-        RecurringStartDate = new DateTime(2024, 1, 23)
-    },
+                new RecurringBudgetPostTemplate
+                {
+                    Id = 1,
+                    RecurringId = new Guid("389904d6-c94c-4bd8-8864-27644219f5ad"),
+                    Amount = 28500,
+                    CategoryId = 14,
+                    Description = "Lön",
+                    Recurring = Recurring.Monthly,
+                    PostType = BudgetPostType.Income,
+                    RecurringStartDate = new DateTime(2024, 1, 23)
+                },
                 new RecurringBudgetPostTemplate
                 {
                     Id = 2,
+                    RecurringId = new Guid("704d48ad-aa50-44fd-a0ca-8f0b59266f30"),
                     Amount = 8500,
                     CategoryId = 6,
                     Description = "Hyra",
@@ -102,6 +105,7 @@ namespace BudgetPlanner.DataAccessLayer
                 new RecurringBudgetPostTemplate
                 {
                     Id = 3,
+                    RecurringId = new Guid("783157fe-c960-43cc-b490-66ac6ca8fad7"),
                     Amount = 1200,
                     CategoryId = 3,
                     Description = "Busskort",
@@ -112,6 +116,7 @@ namespace BudgetPlanner.DataAccessLayer
                 new RecurringBudgetPostTemplate
                 {
                     Id = 4,
+                    RecurringId = new Guid("30d8676b-de2f-4cf9-90af-18adf034feb5"),
                     Amount = 750,
                     CategoryId = 3,
                     Description = "Resor till arbete",
@@ -122,6 +127,7 @@ namespace BudgetPlanner.DataAccessLayer
                 new RecurringBudgetPostTemplate
                 {
                     Id = 5,
+                    RecurringId = new Guid("5a36fbcd-47f9-4753-9c16-91d1dbd9eaab"),
                     Amount = 900,
                     CategoryId = 15,
                     Description = "Studiebidrag",
@@ -132,6 +138,7 @@ namespace BudgetPlanner.DataAccessLayer
                 new RecurringBudgetPostTemplate
                 {
                     Id = 6,
+                    RecurringId = new Guid("810421e0-9578-4959-a5e6-0af399ab0cdf"),
                     Amount = 3200,
                     CategoryId = 2,
                     Description = "Veckohandling",
@@ -142,6 +149,7 @@ namespace BudgetPlanner.DataAccessLayer
                 new RecurringBudgetPostTemplate
                 {
                     Id = 7,
+                    RecurringId = new Guid("19cf7680-db76-4047-bb8b-79217df278c1"),
                     Amount = 1200,
                     CategoryId = 11,
                     Description = "Netflix + Spotify",
@@ -152,6 +160,7 @@ namespace BudgetPlanner.DataAccessLayer
                 new RecurringBudgetPostTemplate
                 {
                     Id = 8,
+                    RecurringId = new Guid("67f4ec7c-13a9-4973-a884-80b009b9f3b0"),
                     Amount = 4500,
                     CategoryId = 3,
                     Description = "Bilskatt",

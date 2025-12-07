@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BudgetPlanner.PresentationLayer.Views"
              xmlns:controls="clr-namespace:BudgetPlanner.PresentationLayer.Resources.Dashboard"
-             xmlns:wpf="clr-namespace:ScottPlot.WPF;assembly=ScottPlot.WPF" xmlns:wpf1="clr-namespace:ScottPlot;assembly=ScottPlot.WPF"
+             xmlns:wpf="clr-namespace:ScottPlot.WPF;assembly=ScottPlot.WPF"
              mc:Ignorable="d"
              >
     <Border Background="{StaticResource PrimaryBackground}" Padding="15">

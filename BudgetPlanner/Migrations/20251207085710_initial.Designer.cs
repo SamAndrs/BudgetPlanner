@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BudgetPlanner.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251206162524_initial")]
+    [Migration("20251207085710_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -56,8 +56,8 @@ namespace BudgetPlanner.Migrations
                     b.Property<int>("Recurring")
                         .HasColumnType("int");
 
-                    b.Property<string>("RecurringGroupID")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid?>("RecurringId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -229,6 +229,9 @@ namespace BudgetPlanner.Migrations
                     b.Property<int>("Recurring")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("RecurringId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("RecurringStartDate")
                         .HasColumnType("datetime2");
 
@@ -247,6 +250,7 @@ namespace BudgetPlanner.Migrations
                             Description = "Lön",
                             PostType = 0,
                             Recurring = 3,
+                            RecurringId = new Guid("389904d6-c94c-4bd8-8864-27644219f5ad"),
                             RecurringStartDate = new DateTime(2024, 1, 23, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -257,6 +261,7 @@ namespace BudgetPlanner.Migrations
                             Description = "Hyra",
                             PostType = 1,
                             Recurring = 3,
+                            RecurringId = new Guid("704d48ad-aa50-44fd-a0ca-8f0b59266f30"),
                             RecurringStartDate = new DateTime(2024, 1, 25, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -267,6 +272,7 @@ namespace BudgetPlanner.Migrations
                             Description = "Busskort",
                             PostType = 1,
                             Recurring = 3,
+                            RecurringId = new Guid("783157fe-c960-43cc-b490-66ac6ca8fad7"),
                             RecurringStartDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -277,6 +283,7 @@ namespace BudgetPlanner.Migrations
                             Description = "Resor till arbete",
                             PostType = 1,
                             Recurring = 3,
+                            RecurringId = new Guid("30d8676b-de2f-4cf9-90af-18adf034feb5"),
                             RecurringStartDate = new DateTime(2024, 1, 6, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -287,6 +294,7 @@ namespace BudgetPlanner.Migrations
                             Description = "Studiebidrag",
                             PostType = 0,
                             Recurring = 3,
+                            RecurringId = new Guid("5a36fbcd-47f9-4753-9c16-91d1dbd9eaab"),
                             RecurringStartDate = new DateTime(2024, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -297,6 +305,7 @@ namespace BudgetPlanner.Migrations
                             Description = "Veckohandling",
                             PostType = 1,
                             Recurring = 2,
+                            RecurringId = new Guid("810421e0-9578-4959-a5e6-0af399ab0cdf"),
                             RecurringStartDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -307,6 +316,7 @@ namespace BudgetPlanner.Migrations
                             Description = "Netflix + Spotify",
                             PostType = 1,
                             Recurring = 3,
+                            RecurringId = new Guid("19cf7680-db76-4047-bb8b-79217df278c1"),
                             RecurringStartDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -317,8 +327,26 @@ namespace BudgetPlanner.Migrations
                             Description = "Bilskatt",
                             PostType = 1,
                             Recurring = 4,
+                            RecurringId = new Guid("67f4ec7c-13a9-4973-a884-80b009b9f3b0"),
                             RecurringStartDate = new DateTime(2024, 3, 12, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
+                });
+
+            modelBuilder.Entity("BudgetPlanner.DomainLayer.Models.StoppedRecurring", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RecurringId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("StoppedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StoppedRecurringPosts");
                 });
 
             modelBuilder.Entity("BudgetPlanner.DomainLayer.Models.BudgetPost", b =>

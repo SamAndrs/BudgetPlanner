@@ -44,11 +44,25 @@ namespace BudgetPlanner.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "StoppedRecurringPosts",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RecurringId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    StoppedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StoppedRecurringPosts", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "RecurringPosts",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    RecurringId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Amount = table.Column<double>(type: "float", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -73,11 +87,11 @@ namespace BudgetPlanner.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    RecurringId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Amount = table.Column<double>(type: "float(18)", precision: 18, scale: 2, nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Recurring = table.Column<int>(type: "int", nullable: false),
-                    RecurringGroupID = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     PostType = table.Column<int>(type: "int", nullable: false),
                     PrognosisId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
@@ -125,17 +139,17 @@ namespace BudgetPlanner.Migrations
 
             migrationBuilder.InsertData(
                 table: "RecurringPosts",
-                columns: new[] { "Id", "Amount", "CategoryId", "Description", "PostType", "Recurring", "RecurringStartDate" },
+                columns: new[] { "Id", "Amount", "CategoryId", "Description", "PostType", "Recurring", "RecurringId", "RecurringStartDate" },
                 values: new object[,]
                 {
-                    { 1, 28500.0, 14, "Lön", 0, 3, new DateTime(2024, 1, 23, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 2, 8500.0, 6, "Hyra", 1, 3, new DateTime(2024, 1, 25, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 3, 1200.0, 3, "Busskort", 1, 3, new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 4, 750.0, 3, "Resor till arbete", 1, 3, new DateTime(2024, 1, 6, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 5, 900.0, 15, "Studiebidrag", 0, 3, new DateTime(2024, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 6, 3200.0, 2, "Veckohandling", 1, 2, new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 7, 1200.0, 11, "Netflix + Spotify", 1, 3, new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 8, 4500.0, 3, "Bilskatt", 1, 4, new DateTime(2024, 3, 12, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                    { 1, 28500.0, 14, "Lön", 0, 3, new Guid("389904d6-c94c-4bd8-8864-27644219f5ad"), new DateTime(2024, 1, 23, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, 8500.0, 6, "Hyra", 1, 3, new Guid("704d48ad-aa50-44fd-a0ca-8f0b59266f30"), new DateTime(2024, 1, 25, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 3, 1200.0, 3, "Busskort", 1, 3, new Guid("783157fe-c960-43cc-b490-66ac6ca8fad7"), new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 4, 750.0, 3, "Resor till arbete", 1, 3, new Guid("30d8676b-de2f-4cf9-90af-18adf034feb5"), new DateTime(2024, 1, 6, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 5, 900.0, 15, "Studiebidrag", 0, 3, new Guid("5a36fbcd-47f9-4753-9c16-91d1dbd9eaab"), new DateTime(2024, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 6, 3200.0, 2, "Veckohandling", 1, 2, new Guid("810421e0-9578-4959-a5e6-0af399ab0cdf"), new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 7, 1200.0, 11, "Netflix + Spotify", 1, 3, new Guid("19cf7680-db76-4047-bb8b-79217df278c1"), new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 8, 4500.0, 3, "Bilskatt", 1, 4, new Guid("67f4ec7c-13a9-4973-a884-80b009b9f3b0"), new DateTime(2024, 3, 12, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.CreateIndex(
@@ -162,6 +176,9 @@ namespace BudgetPlanner.Migrations
 
             migrationBuilder.DropTable(
                 name: "RecurringPosts");
+
+            migrationBuilder.DropTable(
+                name: "StoppedRecurringPosts");
 
             migrationBuilder.DropTable(
                 name: "Prognoses");

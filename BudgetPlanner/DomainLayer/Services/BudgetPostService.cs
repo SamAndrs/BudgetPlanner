@@ -18,74 +18,6 @@ namespace BudgetPlanner.DomainLayer.Services
         public List<BudgetPost> GetAllPosts() => _db.BudgetPosts.Include(p => p.Category).ToList();
 
 
-        public async Task GenerateRecurringPostsAsync()
-        {
-            // Generate recurring posts for coming months
-            var posts = await _db.BudgetPosts
-                .Where(p => p.Recurring != Recurring.None)
-                .ToListAsync();
-
-            var now = DateTime.Today;
-
-            var limit = now.AddMonths(12);
-
-            foreach(var post in posts)
-            {
-                if (!post.Date.HasValue)
-                    continue;
-
-                var nextDate = GetNextOccurence(post.Date, post.Recurring);
-
-                // If post doesn't belong to a recurring group....
-                if (string.IsNullOrEmpty(post.RecurringGroupID))
-                    post.RecurringGroupID = Guid.NewGuid().ToString();
-
-                // Skip if already set for future
-                while (nextDate <= limit)
-                {
-                    bool exists = _db.BudgetPosts.Any(p =>
-                       p.RecurringGroupID == post.RecurringGroupID &&
-                        p.Date.Value.Date == nextDate.Date
-                    );
-
-                    if(!exists)
-                    {
-                        _db.BudgetPosts.Add(new BudgetPost
-                        {
-                            Amount = post.Amount,
-                            CategoryId = post.CategoryId,
-                            Description = post.Description,
-                            Date = nextDate,
-                            PostType = post.PostType,
-                            Recurring = post.Recurring,
-                            RecurringGroupID = post.RecurringGroupID
-                        });
-                    }
-
-                    nextDate = GetNextOccurence(nextDate, post.Recurring);
-                }
-            }
-
-            await _db.SaveChangesAsync();
-        }
-
-        private DateTime GetNextOccurence(DateTime? date, Recurring recurring)
-        {
-            if(date == null)
-                throw new InvalidOperationException("Recurring posts must have a Date value.");
-
-            var d = date.Value;
-
-            return recurring switch
-            {
-                Recurring.Weekly => d.AddDays(7),
-                Recurring.Monthly => d.AddMonths(1),
-                Recurring.Yearly => d.AddYears(1),
-                _ => d
-            };
-        }
-
-
         #region == DASHBOARD VIEW_MODEL =================================
         public List<BudgetPost> GetPostsForMonth(int year, int month)
         {
@@ -212,9 +144,13 @@ namespace BudgetPlanner.DomainLayer.Services
         {
             if (post.Recurring != Recurring.None)
             {
+                // 1. Create recurring post template
+                var recurringId = Guid.NewGuid();
+                
                 _db.RecurringPosts.Add(
                     new RecurringBudgetPostTemplate
                     {
+                        RecurringId = recurringId,
                         Amount = post.Amount,
                         CategoryId = post.CategoryId,
                         Category = post.Category,
@@ -223,9 +159,29 @@ namespace BudgetPlanner.DomainLayer.Services
                         PostType = post.PostType,
                         RecurringStartDate = (DateTime)post.Date
                     });
+
+                // 2. Create new BudgetPost (tied to template above)
+                _db.BudgetPosts.Add(
+                    new BudgetPost
+                    {
+                        RecurringId = recurringId,
+                        Amount = post.Amount,
+                        CategoryId = post.CategoryId,
+                        Category = post.Category,
+                        Description = post.Description,
+                        Recurring = post.Recurring,
+                        PostType = post.PostType,
+                        Date = post.Date,
+                    });
+
+                _db.SaveChanges();
             }
-            _db.BudgetPosts.Add(post);
-            _db.SaveChanges();
+            else
+            {
+                _db.BudgetPosts.Add(post);
+                _db.SaveChanges();
+            }
+                
         }
 
         public void UpdatePost(BudgetPost post)
@@ -236,6 +192,17 @@ namespace BudgetPlanner.DomainLayer.Services
 
         public void DeletePost(BudgetPost post)
         {
+            // If recurring post, add it to list of posts to be stopped from recurring henceforth
+            if(post.RecurringId != null)
+            {
+                _db.StoppedRecurringPosts.Add(new StoppedRecurring
+                {
+                    Id = Guid.NewGuid(),
+                    RecurringId = post.RecurringId.Value,
+                    StoppedAt = DateTime.Now,
+                });
+            }
+
             _db.BudgetPosts.Remove(post);
             _db.SaveChanges();
         }

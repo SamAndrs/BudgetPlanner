@@ -113,7 +113,16 @@ namespace BudgetPlanner.DomainLayer.Services
 
         private List<BudgetPost> GenerateRecurringPosts(int year, int month)
         {
-            var templates = _context.RecurringPosts.ToList();
+            // 1. Fetch list of stopped recurring-IDs
+            var stoppedPosts = _context.StoppedRecurringPosts
+                .Select(p => p.RecurringId)
+                .ToHashSet();
+
+            // 2. Fetch all currently NOT stopped templates
+            var templates = _context.RecurringPosts
+                .Where(t => !stoppedPosts.Contains(t.RecurringId))
+                .ToList();
+
             var list = new List<BudgetPost>();
 
             // Loop through list of recurring BudgetPost templates,
@@ -122,34 +131,30 @@ namespace BudgetPlanner.DomainLayer.Services
             {
                 var current = new DateTime(year, month, template.RecurringStartDate.Day);
 
+                Action<DateTime> addPost = date =>
+                {
+                    list.Add(new BudgetPost
+                    {
+                        Amount = template.Amount,
+                        CategoryId = template.CategoryId,
+                        Recurring = template.Recurring,
+                        Date = date,
+                        PostType = template.PostType,
+                        RecurringId = template.RecurringId
+                    });
+                };
+
                 switch (template.Recurring)
                 {
                     case Recurring.Monthly:
-                        list.Add(new BudgetPost
-                        {
-                            Amount = template.Amount,
-                            CategoryId = template.CategoryId,
-                            Description = template.Description,
-                            Recurring = template.Recurring,
-                            Date = new DateTime(year, month, template.RecurringStartDate.Day),
-                            PostType = template.PostType,
-                        });
+                        addPost(new DateTime(year, month, template.RecurringStartDate.Day));
                         break;
 
                     case Recurring.Weekly:
 
                         while (current.Month == month)
                         {
-                            list.Add(new BudgetPost
-                            {
-                                Amount = template.Amount,
-                                CategoryId = template.CategoryId,
-                                Description = template.Description,
-                                Recurring = template.Recurring,
-                                Date = current,
-                                PostType = template.PostType,
-                            });
-
+                            addPost(current);
                             current = current.AddDays(7);
                         }
                         break;
@@ -158,16 +163,7 @@ namespace BudgetPlanner.DomainLayer.Services
 
                         while (current.Month == month)
                         {
-                            list.Add(new BudgetPost
-                            {
-                                Amount = template.Amount,
-                                CategoryId = template.CategoryId,
-                                Description = template.Description,
-                                Recurring = template.Recurring,
-                                Date = current,
-                                PostType = template.PostType,
-                            });
-
+                            addPost(current);
                             current = current.AddDays(1);
                         }
                         break;
@@ -175,15 +171,7 @@ namespace BudgetPlanner.DomainLayer.Services
                     case Recurring.Yearly:
                         if (template.RecurringStartDate.Month == month)
                         {
-                            list.Add(new BudgetPost
-                            {
-                                Amount = template.Amount,
-                                CategoryId = template.CategoryId,
-                                Description = template.Description,
-                                Recurring = template.Recurring,
-                                Date = new DateTime(year, month, template.RecurringStartDate.Day),
-                                PostType = template.PostType,
-                            });
+                            addPost(new DateTime(year, month, template.RecurringStartDate.Day));
                         }
                         break;
                 }
